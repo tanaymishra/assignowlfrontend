@@ -19,12 +19,12 @@ export default function HeroSection() {
     <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden">
       {/* Full screen background ripple effect */}
       <div className="absolute inset-0 w-full h-full">
-        <BackgroundRippleEffect rows={12} cols={40} cellSize={48} />
+        <BackgroundRippleEffect rows={25} cols={60} cellSize={32} />
       </div>
 
       {/* Content Grid: Left content, Right empty */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-screen py-20">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center h-full py-8">
           {/* Left Side - Content */}
           <div className="space-y-8 text-left">
             {/* Badge */}
