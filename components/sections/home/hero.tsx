@@ -28,7 +28,7 @@ export default function HeroSection() {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-16 lg:py-20 min-h-[600px]">
           {/* Left Side - Content */}
-          <div className="space-y-8 text-left">
+          <div className="space-y-4 text-left">
             {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -71,7 +71,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-4 pt-8"
+              className="flex flex-col sm:flex-row gap-4 pt-4"
             >
               {/* Primary Button */}
               <motion.div
@@ -110,7 +110,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.8 }}
-              className="grid grid-cols-3 gap-8 pt-16 max-w-md"
+              className="grid grid-cols-3 gap-8 pt-6 max-w-md"
             >
               {[
                 { number: "50K+", label: "Students Helped" },
