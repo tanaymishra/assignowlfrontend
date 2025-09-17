@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Play } from "lucide-react";
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
+import { ContainerTextFlip } from "@/components/ui/container-text-flip";
+
 
 export default function HeroSection() {
   const scrollToSection = (href: string) => {
@@ -45,12 +47,14 @@ export default function HeroSection() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-4xl md:text-5xl lg:text-6xl font-bold"
             >
-              <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+              <span className="text-white">
                 AI Assignment
               </span>
               <br />
-              <span className="text-foreground">Writer</span>
-            </motion.h1>
+              <ContainerTextFlip
+                words={["Writer", "Helper", "Referencer"]}
+                className="text-4xl md:text-5xl lg:text-6xl font-bold mt-5"
+              />            </motion.h1>
 
             {/* Description */}
             <motion.p
