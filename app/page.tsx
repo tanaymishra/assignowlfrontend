@@ -8,7 +8,7 @@ export default function Home() {
      <HeroSection/>
 
       {/* Features Section */}
-      <section id="features" className="min-h-screen flex items-center justify-center bg-muted/30">
+      <section id="features" className="flex items-center justify-center bg-muted/30 py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center space-y-6"
@@ -26,7 +26,7 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="min-h-screen flex items-center justify-center">
+      <section id="about" className="flex items-center justify-center py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center space-y-6"
@@ -44,7 +44,7 @@ export default function Home() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="min-h-screen flex items-center justify-center bg-muted/30">
+      <section id="pricing" className="flex items-center justify-center bg-muted/30 py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center space-y-6"

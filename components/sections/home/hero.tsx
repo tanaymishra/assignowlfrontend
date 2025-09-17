@@ -16,15 +16,15 @@ export default function HeroSection() {
   };
 
   return (
-    <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden">
+    <div className="relative w-full overflow-hidden">
       {/* Full screen background ripple effect */}
       <div className="absolute inset-0 w-full h-full">
-        <BackgroundRippleEffect rows={25} cols={60} cellSize={32} />
+        <BackgroundRippleEffect rows={30} cols={80} cellSize={28} />
       </div>
 
       {/* Content Grid: Left content, Right empty */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center h-full py-8">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-16 lg:py-20 min-h-[600px]">
           {/* Left Side - Content */}
           <div className="space-y-8 text-left">
             {/* Badge */}
