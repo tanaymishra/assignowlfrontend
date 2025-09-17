@@ -159,8 +159,8 @@ export function ProcessDemo() {
                 initial={{ opacity: 0 }}
                 animate={{
                   opacity: index === currentStep ? 1 : 0.6,
-                  top: y > 0 ? 'auto' : '-2rem',
-                  bottom: y < 0 ? 'auto' : '-2rem',
+                  top: y > 0 ? '5rem' : '-3rem',
+                  bottom: y < 0 ? '5rem' : '-3rem',
                   left: '50%',
                   x: '-50%',
                 }}
