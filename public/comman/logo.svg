@@ -139,9 +139,9 @@
 <path d="M261.209 63C263.209 64 263.209 64 263.209 64L261.209 63Z" fill="url(#paint136_linear_1017_145)"/>
 </mask>
 <g mask="url(#mask0_1017_145)">
-<path d="M558 -18H401V192H558V-18Z" fill="white"/>
-<path d="M746 -13H558V169H746V-13Z" fill="white"/>
-<path d="M410 -9H-281V173H410V-9Z" fill="white"/>
+<path d="M558 -18H401V192H558V-18Z" fill="#FAFAFA"/>
+<path d="M746 -13H558V169H746V-13Z" fill="#FAFAFA"/>
+<path d="M410 -9H-281V173H410V-9Z" fill="#FAFAFA"/>
 </g>
 <defs>
 <linearGradient id="paint0_linear_1017_145" x1="410.417" y1="79.2684" x2="639.209" y2="79.2684" gradientUnits="userSpaceOnUse">
