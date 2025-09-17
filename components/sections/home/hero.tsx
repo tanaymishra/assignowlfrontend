@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Play } from "lucide-react";
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
 import { ContainerTextFlip } from "@/components/ui/container-text-flip";
+import { ProcessDemo } from "@/components/ui/process-demo";
 import { AnimatedTooltip } from "@/components/ui/animated-tooltip";
 const people = [
   {
@@ -182,12 +183,9 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Right Side - Empty for future content */}
-          <div className="hidden lg:flex items-center justify-center">
-            {/* This space is intentionally left empty for future additions */}
-            <div className="w-full h-96 flex items-center justify-center text-muted-foreground/30">
-              {/* Placeholder - will be replaced with actual content later */}
-            </div>
+          {/* Right Side - Process Demo */}
+          <div className="flex items-center justify-center lg:justify-end">
+            <ProcessDemo />
           </div>
         </div>
       </div>
