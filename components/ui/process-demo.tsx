@@ -91,7 +91,21 @@ export function ProcessDemo() {
                 className="text-3xl font-bold mb-1"
               >
                 {isCompleted ? (
-                  <span className='text-white'>Done!</span>
+                  <motion.span
+                    className='text-white'
+                    initial={{ backgroundPosition: "-200% 0" }}
+                    animate={{ backgroundPosition: "200% 0" }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                    style={{
+                      background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0) 100%)',
+                      backgroundSize: '200% 100%',
+                      backgroundClip: 'text',
+                      WebkitBackgroundClip: 'text',
+                      color: 'transparent',
+                    }}
+                  >
+                    Done!
+                  </motion.span>
                 ) : (
                   <span className="text-white">{percentage}%</span>
                 )}
