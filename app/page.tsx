@@ -1,88 +1,92 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 
 export default function Home() {
   return (
-    <div className="min-h-screen p-8 flex items-center justify-center">
-      <div className="max-w-2xl mx-auto space-y-8">
-        <motion.div 
-          className="text-center space-y-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h1 className="text-4xl font-bold">Welcome to AssignOwl</h1>
-          <p className="text-muted-foreground text-lg">
-            Your project is now set up with shadcn/ui, Radix UI, and Framer Motion!
-          </p>
-        </motion.div>
-
-        <motion.div 
-          className="grid gap-6 md:grid-cols-2"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 300 }}
+    <div className="pt-16">
+      {/* Home Section */}
+      <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div 
+            className="text-center space-y-6 max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
           >
-            <Card>
-              <CardHeader>
-                <CardTitle>shadcn/ui Installed</CardTitle>
-                <CardDescription>
-                  Beautiful, accessible components built with Radix UI and Tailwind CSS
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button className="w-full">Get Started</Button>
-              </CardContent>
-            </Card>
+            <motion.h1 
+              className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              AI Assignment Writer
+            </motion.h1>
+            <motion.p 
+              className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              Create high-quality assignments with AI assistance. Professional, fast, and reliable academic writing service.
+            </motion.p>
           </motion.div>
+        </div>
+      </section>
 
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 300 }}
+      {/* Features Section */}
+      <section id="features" className="min-h-screen flex items-center justify-center bg-muted/30">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div 
+            className="text-center space-y-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
           >
-            <Card>
-              <CardHeader>
-                <CardTitle>Framer Motion Ready</CardTitle>
-                <CardDescription>
-                  Production-ready motion library for React with smooth animations
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button variant="outline" className="w-full">
-                  Learn More
-                </Button>
-              </CardContent>
-            </Card>
+            <h2 className="text-3xl md:text-5xl font-bold">Features</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Discover the powerful features that make AssignOwl the best choice for your academic writing needs.
+            </p>
           </motion.div>
-        </motion.div>
+        </div>
+      </section>
 
-        <motion.div 
-          className="flex gap-4 justify-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button variant="default">Primary Button</Button>
+      {/* About Section */}
+      <section id="about" className="min-h-screen flex items-center justify-center">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div 
+            className="text-center space-y-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-5xl font-bold">About</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Learn more about our mission to revolutionize academic writing with AI technology.
+            </p>
           </motion.div>
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button variant="secondary">Secondary</Button>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="min-h-screen flex items-center justify-center bg-muted/30">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div 
+            className="text-center space-y-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-5xl font-bold">Pricing</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Choose the perfect plan for your academic writing needs.
+            </p>
           </motion.div>
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button variant="outline">Outline</Button>
-          </motion.div>
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button variant="ghost">Ghost</Button>
-          </motion.div>
-        </motion.div>
-      </div>
+        </div>
+      </section>
     </div>
   );
 }
