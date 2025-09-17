@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { Upload, Loader2, Download, CheckCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -37,17 +37,21 @@ export function ProcessDemo() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentStep((prev) => (prev + 1) % steps.length)
+      setCurrentStep((prev) => (prev + 1) % (steps.length + 1))
     }, 3000)
 
     return () => clearInterval(timer)
   }, [])
 
+  const percentage = currentStep > 0 ? Math.round(((currentStep) / steps.length) * 100) : 0;
+  const strokeDashoffset = 364 - (364 * percentage) / 100;
+  const isCompleted = currentStep === steps.length
+
   return (
     <div className="relative w-80 h-80 mx-auto">
-      {/* Central Circle with 0% */}
+      {/* Central Circle with dynamic percentage */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 backdrop-blur-sm border border-primary/20 flex items-center justify-center relative">
+        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 backdrop-blur-sm border border-white/20 flex items-center justify-center relative">
           {/* Progress Ring */}
           <svg className="absolute inset-0 w-32 h-32 transform -rotate-90">
             <circle
@@ -59,25 +63,40 @@ export function ProcessDemo() {
               fill="none"
               className="text-muted/20"
             />
-            <circle
+            <motion.circle
               cx="64"
               cy="64"
               r="58"
               stroke="currentColor"
               strokeWidth="3"
               fill="none"
-              className="text-primary"
+              className="text-white"
               strokeLinecap="round"
               strokeDasharray="364"
-              strokeDashoffset="364"
+              initial={{ strokeDashoffset: 364 }}
+              animate={{ strokeDashoffset }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
             />
           </svg>
 
-          {/* Center Content - Static 0% */}
+          {/* Center Content - Dynamic Percentage */}
           <div className="text-center z-10">
-            <div className="text-3xl font-bold text-primary mb-1">
-              0%
-            </div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentStep}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.3 }}
+                className="text-3xl font-bold mb-1"
+              >
+                {isCompleted ? (
+                  <span className='text-white'>Done!</span>
+                ) : (
+                  <span className="text-white">{percentage}%</span>
+                )}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </div>
@@ -102,16 +121,16 @@ export function ProcessDemo() {
             <motion.div
               className={cn(
                 "w-16 h-16 rounded-full flex items-center justify-center transition-all duration-500",
-                index === currentStep
-                  ? "bg-primary text-primary-foreground shadow-lg scale-110"
-                  : index < currentStep
+                isCompleted || index < currentStep
                   ? "bg-green-500/20 text-green-500 border border-green-500/30"
+                  : index === currentStep
+                  ? "bg-primary text-primary-foreground shadow-lg scale-110"
                   : "bg-muted/50 text-muted-foreground border border-border/30"
               )}
               whileHover={{ scale: 1.1 }}
             >
               {React.createElement(
-                index < currentStep ? CheckCircle : step.icon,
+                isCompleted || index < currentStep ? CheckCircle : step.icon,
                 {
                   className: cn(
                     "w-6 h-6",
