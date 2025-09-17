@@ -1,38 +1,11 @@
 "use client";
-
 import { motion } from "framer-motion";
-
+import HeroSection from "@/components/sections/home/hero";
 export default function Home() {
   return (
     <div className="pt-16">
       {/* Home Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            className="text-center space-y-6 max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <motion.h1 
-              className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              AI Assignment Writer
-            </motion.h1>
-            <motion.p 
-              className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              Create high-quality assignments with AI assistance. Professional, fast, and reliable academic writing service.
-            </motion.p>
-          </motion.div>
-        </div>
-      </section>
+     <HeroSection/>
 
       {/* Features Section */}
       <section id="features" className="min-h-screen flex items-center justify-center bg-muted/30">
