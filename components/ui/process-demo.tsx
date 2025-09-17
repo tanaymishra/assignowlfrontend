@@ -158,7 +158,13 @@ export function ProcessDemo() {
             <motion.div
               className="absolute text-center w-20"
               initial={{ opacity: 0 }}
-              animate={{ opacity: index === currentStep ? 1 : 0.6 }}
+              animate={{
+                opacity: index === currentStep ? 1 : 0.6,
+                top: y > 0 ? 'auto' : '-2rem',
+                bottom: y < 0 ? 'auto' : '-2rem',
+                left: x > 0 ? 'auto' : '-2rem',
+                right: x < 0 ? 'auto' : '-2rem',
+              }}
             >
               <p className="text-xs font-medium text-foreground">
                 {step.title}
