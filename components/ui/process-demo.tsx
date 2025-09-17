@@ -154,18 +154,17 @@ export function ProcessDemo() {
               )}
             </motion.div>
 
-            {/* Step Label - Positioned based on angle */}
             <motion.div
-              className="absolute text-center w-20"
-              initial={{ opacity: 0 }}
-              animate={{
-                opacity: index === currentStep ? 1 : 0.6,
-                top: y > 0 ? 'auto' : '-2rem',
-                bottom: y < 0 ? 'auto' : '-2rem',
-                left: x > 0 ? 'auto' : '-2rem',
-                right: x < 0 ? 'auto' : '-2rem',
-              }}
-            >
+                className="absolute text-center w-20"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: index === currentStep ? 1 : 0.6,
+                  top: y > 0 ? 'auto' : '-2rem',
+                  bottom: y < 0 ? 'auto' : '-2rem',
+                  left: '50%',
+                  x: '-50%',
+                }}
+              >
               <p className="text-xs font-medium text-foreground">
                 {step.title}
               </p>
