@@ -1,0 +1,140 @@
+.drawerOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: flex;
+    opacity: 1;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    //Background blur
+    backdrop-filter: blur(5px);
+    //For safari
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.drawerOverlay.fadeOut {
+    opacity: 0;
+}
+
+.drawer {
+    background: white;
+    box-shadow: -2px 0 4px rgba(0, 0, 0, 0.25);
+    position: fixed;
+    // padding: 20px;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: slideInRight 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.drawer.enter {
+    transform: translateX(0);
+    @media screen and (max-width: 768px) {
+        transform: translateY(0);
+    }
+}
+
+.animationNone{
+    animation: none;
+}
+
+.drawer.exit {
+    transform: translateX(100%);
+}
+
+.right {
+    top: 0;
+    right: 0;
+    height: 100%;
+}
+
+.right {
+    @media screen and (max-width: 768px) {
+        bottom: 0;
+        left: 0;
+        width: 100%;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+
+
+/* Add new keyframes for bottom position */
+@keyframes slideInBottom {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+
+.animNone{
+    animation: none !important;
+}
+
+/* Media query for phones */
+@media (max-width: 768px) {
+    .drawer {
+        width: 100% !important;
+        height: 100% !important;
+        animation: slideInBottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .drawer.right {
+        transform: translateY(0%);
+    }
+
+    .drawer.right.enter {
+        transform: translateY(0%);
+    }
+    .drawer.right.exit {
+        transform: translateY(100%);
+        animation: none;
+    }
+
+    .bottom {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+
+
+.dragger {
+    display: none;
+    cursor: grab;
+
+    &:active {
+        cursor: grabbing;
+    }
+
+    @media screen and (max-width:768px) {
+        width: 100%;
+        height: 20px;
+        background-color: var(--activeColor);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .point {
+            width: 40px;
+            height: 8px;
+            background-color: white;
+            border-radius: 200px;
+        }
+    }
+}
