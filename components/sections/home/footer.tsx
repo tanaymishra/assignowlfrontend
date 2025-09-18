@@ -1,112 +1,91 @@
-import { ReactNode } from "react";
-
-import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
-
-import LaunchUI from "@/components/logos/launch-ui";
+import { Separator } from "@/components/ui/separator";
 import {
-  Footer,
-  FooterBottom,
-  FooterColumn,
-  FooterContent,
-} from "@/components/ui/footer";
-import { ModeToggle } from "@/components/ui/mode-toggle";
+  DribbbleIcon,
+  GithubIcon,
+  TwitchIcon,
+  TwitterIcon,
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+const footerLinks = [
+  {
+    title: "Overview",
+    href: "#",
+  },
+  {
+    title: "Features",
+    href: "#",
+  },
+  {
+    title: "Pricing",
+    href: "#",
+  },
+  {
+    title: "Careers",
+    href: "#",
+  },
+  {
+    title: "Help",
+    href: "#",
+  },
+  {
+    title: "Privacy",
+    href: "#",
+  },
+];
 
-interface FooterLink {
-  text: string;
-  href: string;
-}
-
-interface FooterColumnProps {
-  title: string;
-  links: FooterLink[];
-}
-
-interface FooterProps {
-  logo?: ReactNode;
-  name?: string;
-  columns?: FooterColumnProps[];
-  copyright?: string;
-  policies?: FooterLink[];
-  showModeToggle?: boolean;
-  className?: string;
-}
-
-export default function FooterSection({
-  logo = <LaunchUI />,
-  name = "Launch UI",
-  columns = [
-    {
-      title: "Product",
-      links: [
-        { text: "Changelog", href: siteConfig.url },
-        { text: "Documentation", href: siteConfig.url },
-      ],
-    },
-    {
-      title: "Company",
-      links: [
-        { text: "About", href: siteConfig.url },
-        { text: "Careers", href: siteConfig.url },
-        { text: "Blog", href: siteConfig.url },
-      ],
-    },
-    {
-      title: "Contact",
-      links: [
-        { text: "Discord", href: siteConfig.url },
-        { text: "Twitter", href: siteConfig.url },
-        { text: "Github", href: siteConfig.links.github },
-      ],
-    },
-  ],
-  copyright = "© 2025 Mikołaj Dobrucki. All rights reserved",
-  policies = [
-    { text: "Privacy Policy", href: siteConfig.url },
-    { text: "Terms of Service", href: siteConfig.url },
-  ],
-  showModeToggle = true,
-  className,
-}: FooterProps) {
+const Footer05Page = () => {
   return (
-    <footer className={cn("bg-background w-full px-4", className)}>
-      <div className="max-w-container mx-auto">
-        <Footer>
-          <FooterContent>
-            <FooterColumn className="col-span-2 sm:col-span-3 md:col-span-1">
-              <div className="flex items-center gap-2">
-                {logo}
-                <h3 className="text-xl font-bold">{name}</h3>
-              </div>
-            </FooterColumn>
-            {columns.map((column, index) => (
-              <FooterColumn key={index}>
-                <h3 className="text-md pt-1 font-semibold">{column.title}</h3>
-                {column.links.map((link, linkIndex) => (
-                  <a
-                    key={linkIndex}
-                    href={link.href}
-                    className="text-muted-foreground text-sm"
+    <div className="min-h-screen flex flex-col">
+      <div className="grow bg-muted" />
+      <footer className="border-t">
+        <div className="max-w-(--breakpoint-xl) mx-auto">
+          <div className="py-12 flex flex-col justify-start items-center">
+            {/* Logo */}
+            <Image alt="" src={'/comman/logo.svg'} width={80} height={30}/>
+            <ul className="mt-6 flex items-center gap-4 flex-wrap">
+              {footerLinks.map(({ title, href }) => (
+                <li key={title}>
+                  <Link
+                    href={href}
+                    className="text-muted-foreground hover:text-foreground"
                   >
-                    {link.text}
-                  </a>
-                ))}
-              </FooterColumn>
-            ))}
-          </FooterContent>
-          <FooterBottom>
-            <div>{copyright}</div>
-            <div className="flex items-center gap-4">
-              {policies.map((policy, index) => (
-                <a key={index} href={policy.href}>
-                  {policy.text}
-                </a>
+                    {title}
+                  </Link>
+                </li>
               ))}
-              {showModeToggle && <ModeToggle />}
+            </ul>
+          </div>
+          <Separator />
+          <div className="py-8 flex flex-col-reverse sm:flex-row items-center justify-between gap-x-2 gap-y-5 px-6 xl:px-0">
+            {/* Copyright */}
+            <span className="text-muted-foreground">
+              &copy; {new Date().getFullYear()}{" "}
+              <Link href="/" target="_blank">
+                Assignowl
+              </Link>
+              . All rights reserved.
+            </span>
+
+            <div className="flex items-center gap-5 text-muted-foreground">
+              <Link href="#" target="_blank">
+                <TwitterIcon className="h-5 w-5" />
+              </Link>
+              <Link href="#" target="_blank">
+                <DribbbleIcon className="h-5 w-5" />
+              </Link>
+              <Link href="#" target="_blank">
+                <TwitchIcon className="h-5 w-5" />
+              </Link>
+              <Link href="#" target="_blank">
+                <GithubIcon className="h-5 w-5" />
+              </Link>
             </div>
-          </FooterBottom>
-        </Footer>
-      </div>
-    </footer>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
-}
+};
+
+export default Footer05Page;
