@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { motion, MotionValue } from "motion/react";
+import { motion, MotionValue, useTransform } from "framer-motion"
 import React from "react";
 
 const transition = {
@@ -13,14 +13,26 @@ export const GoogleGeminiEffect = ({
   title,
   description,
   className,
+  scrollProgress,
 }: {
   pathLengths: MotionValue[];
   title?: string;
   description?: string;
   className?: string;
+  scrollProgress?: MotionValue;
 }) => {
+  // Transform to unpin at the end
+  const shouldUnpin = scrollProgress ? useTransform(scrollProgress, [0.9, 1], [0, 1]) : null;
+  
   return (
-    <div className={cn("sticky top-80", className)}>
+    <motion.div 
+      className={cn("sticky top-80", className)}
+      style={shouldUnpin ? {
+        position: useTransform(shouldUnpin, [0, 1], ["sticky", "absolute"]),
+        top: useTransform(shouldUnpin, [0, 1], ["20rem", "auto"]),
+        bottom: useTransform(shouldUnpin, [0, 1], ["auto", "0"]),
+      } : {}}
+    >
       <p className="text-lg md:text-7xl font-normal pb-4 text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-100 to-neutral-300">
         {title || `Build with Aceternity UI`}
       </p>
@@ -156,6 +168,6 @@ export const GoogleGeminiEffect = ({
           </filter>
         </defs>
       </svg>
-    </div>
+    </motion.div>
   );
 };

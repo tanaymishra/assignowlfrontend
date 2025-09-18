@@ -30,7 +30,6 @@ export default function BuildWithUs() {
           pathLengthFifth,
         ]}
         title="Build With AssignOwl"
-
       />
     </div>
   );
