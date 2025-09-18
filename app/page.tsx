@@ -5,6 +5,7 @@ import { FeatureSection } from "@/components/sections/home/features";
 import About from "@/components/sections/home/about";
 import Reviews from "@/components/sections/home/movingCards";
 import Footer from "@/components/sections/home/footer";
+import BuildWithUs from "@/components/sections/home/buildWithUs";
 export default function Home() {
   return (
     <div className="pt-16">
@@ -18,8 +19,10 @@ export default function Home() {
       <About />
       {/* Reviews Section */}
       <Reviews />
+      {/* Build with Us */}
+      <BuildWithUs/>
       {/* Footer */}
-      <Footer/>
+      <Footer />
     </div>
   );
 }
