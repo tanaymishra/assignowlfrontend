@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/sections/home/hero";
 import { FeatureSection } from "@/components/sections/home/features";
-import About  from "@/components/sections/home/about";
+import About from "@/components/sections/home/about";
 export default function Home() {
   return (
     <div className="pt-16">
@@ -13,7 +13,7 @@ export default function Home() {
       <FeatureSection />
 
       {/* About Section */}
-     <About/>
+      <About />
 
       {/* Pricing Section */}
       <section id="pricing" className="flex items-center justify-center bg-muted/30 py-20">

@@ -4,11 +4,11 @@ import { Timeline } from "@/components/ui/timeline";
 export default function About() {
   const data = [
     {
-      title: "2024",
+      title: "Step 1: Problem Statement & Drafting",
       content: (
         <div>
           <p className="mb-8 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
-            Built and launched Aceternity UI and Aceternity UI Pro from scratch
+            Every great assignment begins with understanding the problem. Our AI analyzes your assignment requirements, identifies key themes, and creates a comprehensive outline with clear problem statements and initial drafts.
           </p>
           <div className="grid grid-cols-2 gap-4">
             <img
@@ -44,16 +44,14 @@ export default function About() {
       ),
     },
     {
-      title: "Early 2023",
+      title: "Step 2: Research & Literature Review",
       content: (
         <div>
           <p className="mb-8 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
-            I usually run out of copy, but when I see content this big, I try to
-            integrate lorem ipsum.
+            Our AI scours through millions of academic papers, journals, and credible sources to gather relevant information for your topic. It identifies key research gaps and builds a solid foundation of evidence.
           </p>
           <p className="mb-8 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
-            Lorem ipsum is for people who are too lazy to write copy. But we are
-            not. Here are some more example of beautiful designs I built.
+            The system analyzes citation patterns, extracts key findings, and organizes research materials in a structured format that supports your argument development and ensures academic rigor.
           </p>
           <div className="grid grid-cols-2 gap-4">
             <img
@@ -89,27 +87,27 @@ export default function About() {
       ),
     },
     {
-      title: "Changelog",
+      title: "Step 3: Generation & Paraphrasing",
       content: (
         <div>
           <p className="mb-4 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
-            Deployed 5 new components on Aceternity today
+            The final stage combines research insights with intelligent content generation and sophisticated paraphrasing techniques to create original, high-quality assignments.
           </p>
           <div className="mb-8">
             <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Card grid component
+              AI-powered content generation with academic tone
             </div>
             <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Startup template Aceternity
+              Advanced paraphrasing to ensure originality
             </div>
             <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Random file upload lol
+              Proper citation integration and formatting
             </div>
             <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Himesh Reshammiya Music CD
+              Grammar and style optimization
             </div>
             <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Salman Bhai Fan Club registrations open
+              Plagiarism-free content verification
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
