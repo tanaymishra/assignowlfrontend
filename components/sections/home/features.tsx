@@ -330,8 +330,7 @@ const SkeletonFive = () => {
           className="rounded-full h-10 w-10"
         />
         <p className="text-xs text-neutral-500">
-          There are a lot of cool framerworks out there like React, Angular,
-          Vue, Svelte that can make your life ....
+          Make My mangement assignment 
         </p>
       </motion.div>
       <motion.div
