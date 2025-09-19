@@ -4,12 +4,14 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import {
-  IconBrandGithub,
   IconBrandGoogle,
-  IconBrandApple,
 } from "@tabler/icons-react";
 
-export function LoginFormCore() {
+interface LoginFormCoreProps {
+  onSwitchToSignup?: () => void;
+}
+
+export function LoginFormCore({ onSwitchToSignup }: LoginFormCoreProps) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Login form submitted");
@@ -64,32 +66,14 @@ export function LoginFormCore() {
 
         <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-border to-transparent" />
 
-        <div className="flex flex-col space-y-4">
-          <button
-            className="group/btn shadow-sm relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-secondary hover:bg-secondary/80 px-4 font-medium text-secondary-foreground transition-colors"
-            type="button"
-          >
-            <IconBrandGoogle className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm">Continue with Google</span>
-            <BottomGradient />
-          </button>
-          <button
-            className="group/btn shadow-sm relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-secondary hover:bg-secondary/80 px-4 font-medium text-secondary-foreground transition-colors"
-            type="button"
-          >
-            <IconBrandGithub className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm">Continue with GitHub</span>
-            <BottomGradient />
-          </button>
-          <button
-            className="group/btn shadow-sm relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-secondary hover:bg-secondary/80 px-4 font-medium text-secondary-foreground transition-colors"
-            type="button"
-          >
-            <IconBrandApple className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm">Continue with Apple</span>
-            <BottomGradient />
-          </button>
-        </div>
+        <button
+          className="group/btn shadow-sm relative flex h-10 w-full items-center justify-center space-x-2 rounded-md bg-secondary hover:bg-secondary/80 px-4 font-medium text-secondary-foreground transition-colors"
+          type="button"
+        >
+          <IconBrandGoogle className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm">Continue with Google</span>
+          <BottomGradient />
+        </button>
 
         <div className="mt-6 text-center">
           <p className="text-sm text-muted-foreground">
@@ -97,10 +81,7 @@ export function LoginFormCore() {
             <button
               type="button"
               className="text-primary hover:text-primary/80 transition-colors font-medium"
-              onClick={() => {
-                // TODO: Add signup drawer functionality
-                console.log("Switch to signup");
-              }}
+              onClick={onSwitchToSignup}
             >
               Sign up here
             </button>
