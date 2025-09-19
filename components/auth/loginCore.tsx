@@ -1,20 +1,63 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
-import {
-  IconBrandGoogle,
-} from "@tabler/icons-react";
+import { IconBrandGoogle } from "@tabler/icons-react";
+import { useAuthActions, useAuth } from "@/lib/store";
+import { customToast } from "../ui/custom-toast";
+import { AuthError } from "@/lib/auth";
 
 interface LoginFormCoreProps {
   onSwitchToSignup?: () => void;
+  onLoginSuccess?: () => void;
 }
 
-export function LoginFormCore({ onSwitchToSignup }: LoginFormCoreProps) {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+export function LoginFormCore({ onSwitchToSignup, onLoginSuccess }: LoginFormCoreProps) {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    rememberMe: false,
+  });
+
+  const { login } = useAuthActions();
+  const { isLoading } = useAuth();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Login form submitted");
+    
+    if (!formData.email || !formData.password) {
+      customToast.error("Please fill in all fields");
+      return;
+    }
+
+    try {
+      await login({
+        email: formData.email,
+        password: formData.password,
+      });
+      
+      customToast.success("Welcome back! Login successful.");
+      onLoginSuccess?.();
+    } catch (error) {
+      if (error instanceof AuthError) {
+        if (error.status === 401) {
+          customToast.error("Invalid email or password. Please try again.");
+        } else {
+          customToast.error(error.message);
+        }
+      } else {
+        customToast.error("Login failed. Please try again.");
+      }
+    }
   };
 
   return (
@@ -29,22 +72,43 @@ export function LoginFormCore({ onSwitchToSignup }: LoginFormCoreProps) {
       <form className="my-8" onSubmit={handleSubmit}>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Email Address</Label>
-          <Input id="email" placeholder="student@university.edu" type="email" />
+          <Input 
+            id="email" 
+            name="email"
+            placeholder="student@university.edu" 
+            type="email" 
+            value={formData.email}
+            onChange={handleChange}
+            required
+            disabled={isLoading}
+          />
         </LabelInputContainer>
         <LabelInputContainer className="mb-6">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" placeholder="••••••••" type="password" />
+          <Input 
+            id="password" 
+            name="password"
+            placeholder="••••••••" 
+            type="password" 
+            value={formData.password}
+            onChange={handleChange}
+            required
+            disabled={isLoading}
+          />
         </LabelInputContainer>
 
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center">
             <input
-              id="remember-me"
-              name="remember-me"
+              id="rememberMe"
+              name="rememberMe"
               type="checkbox"
+              checked={formData.rememberMe}
+              onChange={handleChange}
+              disabled={isLoading}
               className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
             />
-            <label htmlFor="remember-me" className="ml-2 block text-sm text-muted-foreground">
+            <label htmlFor="rememberMe" className="ml-2 block text-sm text-muted-foreground">
               Remember me
             </label>
           </div>
@@ -57,10 +121,11 @@ export function LoginFormCore({ onSwitchToSignup }: LoginFormCoreProps) {
         </div>
 
         <button
-          className="group/btn relative block h-10 w-full rounded-md bg-primary font-medium text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors"
+          className="group/btn relative block h-10 w-full rounded-md bg-primary font-medium text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           type="submit"
+          disabled={isLoading}
         >
-          Sign In
+          {isLoading ? "Signing In..." : "Sign In"}
           <BottomGradient />
         </button>
 

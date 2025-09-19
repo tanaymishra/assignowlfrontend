@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import { ArrowLeft } from "lucide-react";
 import { customToast } from "../ui/custom-toast";
+import { useAuthActions, useAuth } from "@/lib/store";
+import { AuthError } from "@/lib/auth";
 
 interface SignupFormCoreProps {
   onSwitchToLogin?: () => void;
@@ -20,7 +22,9 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
     password: "",
     confirmPassword: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { signup } = useAuthActions();
+  const { isLoading } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -48,18 +52,26 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
       return;
     }
 
-    setIsLoading(true);
-
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const result = await signup({
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        password: formData.password,
+      });
       
-      customToast.success("Account created! Please verify your email.");
-      onSignupSuccess?.(formData.email, formData);
+      if (result.requiresVerification) {
+        customToast.success("Account created! Please verify your email by clicking the link sent to your email.");
+        onSignupSuccess?.(formData.email, {
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+        });
+      }
     } catch (error) {
-      customToast.error("Failed to create account. Please try again.");
-    } finally {
-      setIsLoading(false);
+      if (error instanceof AuthError) {
+        customToast.error(error.message);
+      } else {
+        customToast.error("Failed to create account. Please try again.");
+      }
     }
   };
   return (
@@ -95,6 +107,7 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
               type="text" 
               value={formData.firstName}
               onChange={handleChange}
+              disabled={isLoading}
               required
             />
           </LabelInputContainer>
@@ -107,6 +120,7 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
               type="text" 
               value={formData.lastName}
               onChange={handleChange}
+              disabled={isLoading}
               required
             />
           </LabelInputContainer>
@@ -121,6 +135,7 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
             type="email" 
             value={formData.email}
             onChange={handleChange}
+            disabled={isLoading}
             required
           />
         </LabelInputContainer>
@@ -134,6 +149,7 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
             type="password" 
             value={formData.password}
             onChange={handleChange}
+            disabled={isLoading}
             required
           />
         </LabelInputContainer>
@@ -147,6 +163,7 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
             type="password" 
             value={formData.confirmPassword}
             onChange={handleChange}
+            disabled={isLoading}
             required
           />
         </LabelInputContainer>

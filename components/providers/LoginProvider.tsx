@@ -68,9 +68,13 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
     setCurrentStep('otp');
   };
 
+  const handleLoginSuccess = () => {
+    closeLogin();
+  };
+
   const handleOtpVerify = (otp: string) => {
     // Handle successful verification
-    customToast.success(`Welcome ${userData?.firstName}! Your account is ready.`);
+    customToast.success(`Welcome ${userData?.name}! Your account is ready.`);
     closeLogin();
   };
 
@@ -81,7 +85,12 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 'login':
-        return <LoginFormCore onSwitchToSignup={switchToSignup} />;
+        return (
+          <LoginFormCore 
+            onSwitchToSignup={switchToSignup}
+            onLoginSuccess={handleLoginSuccess}
+          />
+        );
       case 'signup':
         return (
           <SignupFormCore 
