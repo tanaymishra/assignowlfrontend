@@ -5,7 +5,7 @@ import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import { ArrowLeft } from "lucide-react";
-import toast from "react-hot-toast";
+import { customToast } from "../ui/custom-toast";
 
 interface SignupFormCoreProps {
   onSwitchToLogin?: () => void;
@@ -34,17 +34,17 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
     
     // Validation
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
-      toast.error("Please fill in all fields");
+      customToast.error("Please fill in all fields");
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords don't match");
+      customToast.error("Passwords don't match");
       return;
     }
 
     if (formData.password.length < 6) {
-      toast.error("Password must be at least 6 characters");
+      customToast.error("Password must be at least 6 characters");
       return;
     }
 
@@ -54,10 +54,10 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      toast.success("Account created! Please verify your email.");
+      customToast.success("Account created! Please verify your email.");
       onSignupSuccess?.(formData.email, formData);
     } catch (error) {
-      toast.error("Failed to create account. Please try again.");
+      customToast.error("Failed to create account. Please try again.");
     } finally {
       setIsLoading(false);
     }

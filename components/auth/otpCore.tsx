@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { ArrowLeft, Mail } from "lucide-react";
-import toast from "react-hot-toast";
+import { customToast } from "../ui/custom-toast";
 
 interface OtpCoreProps {
   email: string;
@@ -59,7 +59,7 @@ export function OtpCore({ email, onBack, onVerify }: OtpCoreProps) {
     const otpString = otp.join("");
     
     if (otpString.length !== 6) {
-      toast.error("Please enter all 6 digits");
+      customToast.error("Please enter all 6 digits");
       return;
     }
 
@@ -70,15 +70,15 @@ export function OtpCore({ email, onBack, onVerify }: OtpCoreProps) {
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       if (otpString === "123456") {
-        toast.success("Account verified successfully!");
+        customToast.success("Account verified successfully!");
         onVerify(otpString);
       } else {
-        toast.error("Invalid OTP. Please try again.");
+        customToast.error("Invalid OTP. Please try again.");
         setOtp(["", "", "", "", "", ""]);
         inputRefs.current[0]?.focus();
       }
     } catch (error) {
-      toast.error("Verification failed. Please try again.");
+      customToast.error("Verification failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -88,9 +88,9 @@ export function OtpCore({ email, onBack, onVerify }: OtpCoreProps) {
     try {
       // Simulate resend API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      toast.success("OTP sent successfully!");
+      customToast.success("OTP sent successfully!");
     } catch (error) {
-      toast.error("Failed to resend OTP");
+      customToast.error("Failed to resend OTP");
     }
   };
 

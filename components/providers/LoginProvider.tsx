@@ -5,7 +5,7 @@ import Drawer from '../custom-Components/drawer/Drawer';
 import { LoginFormCore } from '../auth/loginCore';
 import { SignupFormCore } from '../auth/signUpCore';
 import { OtpCore } from '../auth/otpCore';
-import toast from 'react-hot-toast';
+import { customToast } from '../ui/custom-toast';
 import './auth-transitions.css';
 
 type AuthStep = 'login' | 'signup' | 'otp';
@@ -70,7 +70,7 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
 
   const handleOtpVerify = (otp: string) => {
     // Handle successful verification
-    toast.success(`Welcome ${userData?.firstName}! Your account is ready.`);
+    customToast.success(`Welcome ${userData?.firstName}! Your account is ready.`);
     closeLogin();
   };
 
