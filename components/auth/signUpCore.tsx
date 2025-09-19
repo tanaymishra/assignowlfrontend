@@ -15,13 +15,12 @@ export function SignupFormCore() {
     console.log("Form submitted");
   };
   return (
-    <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
-      <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
-        Welcome to Aceternity
+    <div className="mx-auto w-full max-w-md rounded-none bg-background p-4 md:rounded-2xl md:p-8">
+      <h2 className="text-xl font-bold text-foreground">
+        Join AI Assignment Writer
       </h2>
-      <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
-        Login to aceternity if you can because we don&apos;t have a login flow
-        yet
+      <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+        Create your account to start generating high-quality assignments with AI assistance.
       </p>
 
       <form className="my-8" onSubmit={handleSubmit}>

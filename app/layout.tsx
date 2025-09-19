@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "./customAnimation.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { LoginProvider } from "@/components/providers/LoginProvider";
 import { Navbar } from "@/components/layout/navbar";
 
 const geistSans = Geist({
@@ -31,10 +32,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider defaultTheme="light" storageKey="assignowl-theme">
-          <Navbar />
-          <main className="min-h-screen">
-            {children}
-          </main>
+          <LoginProvider>
+            <Navbar />
+            <main className="min-h-screen">
+              {children}
+            </main>
+          </LoginProvider>
         </ThemeProvider>
       </body>
     </html>

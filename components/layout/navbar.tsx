@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { SignInButton } from "@/components/ui/signin-button"
 import { ThemeToggle } from "@/components/theme/theme-toggle"
 import { cn } from "@/lib/utils"
 import Image from "next/image"
@@ -96,13 +97,11 @@ export function Navbar({ className }: NavbarProps) {
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
             <ThemeToggle />
-            <Button
+            <SignInButton
               variant="outline"
               size="sm"
               className="border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
-            >
-              Sign In
-            </Button>
+            />
             <Button size="sm" className="bg-primary hover:bg-primary/90">
               Get Started
             </Button>
@@ -169,12 +168,10 @@ export function Navbar({ className }: NavbarProps) {
                   </motion.button>
                 ))}
                 <div className="pt-4 pb-2 space-y-2">
-                  <Button
+                  <SignInButton
                     variant="outline"
                     className="w-full border-border/40 bg-background/95"
-                  >
-                    Sign In
-                  </Button>
+                  />
                   <Button className="w-full bg-primary hover:bg-primary/90">
                     Get Started
                   </Button>

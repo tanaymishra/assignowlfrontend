@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, CSSProperties } from 'react';
-import css from "./drawer.module.scss";
+import { CSSTransition } from 'react-transition-group';
+import { cn } from "@/lib/utils";
+import './drawer-transitions.css';
 
 interface DrawerProps {
   isOpen: boolean;
@@ -28,20 +30,21 @@ const Drawer: React.FC<DrawerProps> = ({
   className = '',
   incomingStyles
 }) => {
-  const [mounted, setMounted] = useState(isOpen);
-  const [visible, setVisible] = useState(isOpen);
+  const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const draggerRef = useRef<HTMLDivElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   const [isPressed, setIsPressed] = useState<pressState>({
     isPressed: false,
     time: 0,
     position: 0
   });
   const [draggerPercentage, setDraggerPercentage] = useState(0);
-  const [animationNone, setAnimationNone] = useState(false);
 
 
   const decideState = (velocity: number, draggerPercentage: number) => {
-    if(!window || window.innerWidth>=768){return}
+    if (!window || window.innerWidth >= 768) { return }
     if (velocity < -2) {
       onClose();
     }
@@ -122,57 +125,89 @@ const Drawer: React.FC<DrawerProps> = ({
   }, [isPressed.isPressed]);
 
   useEffect(() => {
-    if (isOpen) {
-      setMounted(true);
-      requestAnimationFrame(() => setVisible(true));
-    } else {
-      setVisible(false);
-    }
+    setMounted(isOpen);
+
+    // Check if mobile on mount and resize
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
   }, [isOpen]);
-  useEffect(() => {
-    let timeout = setTimeout(() => {
-      setAnimationNone(true);
-    }, 300);
-    return () => { clearTimeout(timeout) }
-  }, [])
-
-  const handleAnimationEnd = () => {
-    if (!visible) {
-      setMounted(false);
-    }
-  };
-
-  if (!mounted) return null;
 
   return (
-    <div
-      className={`${css.drawerOverlay} ${!visible ? css.fadeOut : ''}`}
-      onClick={onClose}
-      style={incomingStyles}
-    >
-      <div
-        className={`${css.drawer} ${css[position]} ${visible ? css.enter : css.exit} ${animationNone ? css.animNone : null} ${className}`}
-        style={isPressed.isPressed ? {
-          width, height,
-          transform: `translateY(${draggerPercentage}%)`,
-          animation: 'none',
-          transition: 'none',
-
-        } : {
-          width,
-          height,
-        }}
-        onAnimationEnd={handleAnimationEnd}
-        onClick={(e)=>{
-          e.stopPropagation();
-        }}
+    <>
+      {/* Overlay */}
+      <CSSTransition
+        in={isOpen}
+        timeout={300}
+        classNames="drawer-overlay"
+        unmountOnExit
+        nodeRef={overlayRef}
       >
-        <div className={css.dragger} ref={draggerRef}>
-          <span className={css.point}></span>
+        <div
+          ref={overlayRef}
+          className="fixed inset-0 z-50 backdrop-blur-sm bg-black/20"
+          style={incomingStyles}
+          onClick={onClose}
+        />
+      </CSSTransition>
+
+      {/* Drawer */}
+      <CSSTransition
+        in={isOpen}
+        timeout={400}
+        classNames={isMobile ? "drawer-mobile" : `drawer-${position}`}
+        unmountOnExit
+        nodeRef={drawerRef}
+      >
+        <div
+          ref={drawerRef}
+          className={cn(
+            "fixed bg-background shadow-xl overflow-hidden z-50",
+            // Desktop positioning and borders
+            !isMobile && position === 'right' && "top-0 right-0 h-full border-l border-border",
+            !isMobile && position === 'left' && "top-0 left-0 h-full border-r border-border",
+            // Mobile positioning and styling
+            isMobile && "bottom-0 left-0 w-full h-full border-t border-border rounded-t-2xl",
+            // Ensure mobile takes full width
+            isMobile && "!w-full !max-w-none",
+            className
+          )}
+          style={isPressed.isPressed ? {
+            ...(isMobile ? {} : { width, height }),
+            transform: `translateY(${draggerPercentage}%)`,
+          } : {
+            ...(isMobile ? {} : { width, height }),
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          {/* Mobile dragger */}
+          <div
+            className={cn(
+              "hidden max-md:flex w-full h-5 bg-muted justify-center items-center cursor-grab active:cursor-grabbing"
+            )}
+            ref={draggerRef}
+          >
+            <span className="w-10 h-2 bg-muted-foreground rounded-full drawer-dragger-handle" />
+          </div>
+
+          {/* Content */}
+          <div className="drawer-content">
+            {children}
+          </div>
         </div>
-        {children}
-      </div>
-    </div>
+      </CSSTransition>
+
+
+    </>
   );
 };
 
