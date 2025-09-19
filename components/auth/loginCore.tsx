@@ -4,7 +4,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { IconBrandGoogle } from "@tabler/icons-react";
-import { useAuthActions, useAuth } from "@/lib/store";
+import { useAuth } from "@/lib/store";
 import { customToast } from "../ui/custom-toast";
 import { AuthError } from "@/lib/auth";
 
@@ -20,8 +20,7 @@ export function LoginFormCore({ onSwitchToSignup, onLoginSuccess }: LoginFormCor
     rememberMe: false,
   });
 
-  const { login } = useAuthActions();
-  const { isLoading } = useAuth();
+  const { login, isLoading } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;

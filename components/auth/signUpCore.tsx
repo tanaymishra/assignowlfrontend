@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import { ArrowLeft } from "lucide-react";
 import { customToast } from "../ui/custom-toast";
-import { useAuthActions, useAuth } from "@/lib/store";
+import { useAuth } from "@/lib/store";
 import { AuthError } from "@/lib/auth";
 
 interface SignupFormCoreProps {
@@ -23,8 +23,7 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
     confirmPassword: "",
   });
 
-  const { signup } = useAuthActions();
-  const { isLoading } = useAuth();
+  const { signup, isLoading } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({

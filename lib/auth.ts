@@ -28,7 +28,6 @@ export interface User {
 export interface LoginResponse {
   message: string;
   user: User;
-  token?: string;
   timestamp: string;
 }
 

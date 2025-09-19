@@ -6,7 +6,9 @@ import { Menu, X, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SignInButton } from "@/components/ui/signin-button"
 import { ThemeToggle } from "@/components/theme/theme-toggle"
+import { useAuth } from "@/lib/store"
 import { cn } from "@/lib/utils"
+import { User, LogOut, Settings } from "lucide-react"
 import Image from "next/image"
 
 interface NavItem {
@@ -29,6 +31,12 @@ const navItems: NavItem[] = [
 export function Navbar({ className }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const { user, isAuthenticated, isHydrated, logout } = useAuth()
+  
+  const handleLogout = () => {
+    logout()
+    setIsOpen(false)
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -97,14 +105,47 @@ export function Navbar({ className }: NavbarProps) {
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
             <ThemeToggle />
-            <SignInButton
-              variant="outline"
-              size="sm"
-              className="border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
-            />
-            <Button size="sm" className="bg-primary hover:bg-primary/90">
-              Get Started
-            </Button>
+            
+            {!isHydrated ? (
+              // Loading state during hydration
+              <div className="flex items-center space-x-4">
+                <div className="h-8 w-16 bg-muted animate-pulse rounded" />
+                <div className="h-8 w-20 bg-muted animate-pulse rounded" />
+              </div>
+            ) : isAuthenticated && user ? (
+              // Authenticated state
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-muted/50">
+                  <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center">
+                    <User className="h-4 w-4 text-primary" />
+                  </div>
+                  <span className="text-sm font-medium text-foreground">
+                    {user.name}
+                  </span>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleLogout}
+                  className="border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              // Unauthenticated state
+              <>
+                <SignInButton
+                  variant="outline"
+                  size="sm"
+                  className="border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+                />
+                <Button size="sm" className="bg-primary hover:bg-primary/90">
+                  Get Started
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -168,13 +209,45 @@ export function Navbar({ className }: NavbarProps) {
                   </motion.button>
                 ))}
                 <div className="pt-4 pb-2 space-y-2">
-                  <SignInButton
-                    variant="outline"
-                    className="w-full border-border/40 bg-background/95"
-                  />
-                  <Button className="w-full bg-primary hover:bg-primary/90">
-                    Get Started
-                  </Button>
+                  {!isHydrated ? (
+                    // Loading state during hydration
+                    <div className="space-y-2">
+                      <div className="h-10 w-full bg-muted animate-pulse rounded" />
+                      <div className="h-10 w-full bg-muted animate-pulse rounded" />
+                    </div>
+                  ) : isAuthenticated && user ? (
+                    // Authenticated state
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-3 p-3 rounded-lg bg-muted/50">
+                        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                          <User className="h-5 w-5 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-medium text-foreground">{user.name}</div>
+                          <div className="text-sm text-muted-foreground">{user.email}</div>
+                        </div>
+                      </div>
+                      <Button
+                        variant="outline"
+                        className="w-full border-border/40 bg-background/95"
+                        onClick={handleLogout}
+                      >
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Logout
+                      </Button>
+                    </div>
+                  ) : (
+                    // Unauthenticated state
+                    <>
+                      <SignInButton
+                        variant="outline"
+                        className="w-full border-border/40 bg-background/95"
+                      />
+                      <Button className="w-full bg-primary hover:bg-primary/90">
+                        Get Started
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </motion.div>

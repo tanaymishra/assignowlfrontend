@@ -13,10 +13,10 @@ import {
 interface AuthState {
   // State
   user: User | null;
-  token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  _hasHydrated: boolean;
 
   // Actions
   login: (credentials: LoginRequest) => Promise<void>;
@@ -24,7 +24,7 @@ interface AuthState {
   logout: () => void;
   clearError: () => void;
   setUser: (user: User) => void;
-  setToken: (token: string) => void;
+  setHasHydrated: (hasHydrated: boolean) => void;
 }
 
 // Create the auth store with persistence
@@ -33,10 +33,10 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       // Initial state
       user: null,
-      token: null,
       isAuthenticated: false,
       isLoading: false,
       error: null,
+      _hasHydrated: false,
 
       // Login action
       login: async (credentials: LoginRequest) => {
@@ -47,7 +47,6 @@ export const useAuthStore = create<AuthState>()(
           
           set({
             user: response.user,
-            token: response.token || null,
             isAuthenticated: true,
             isLoading: false,
             error: null,
@@ -59,7 +58,6 @@ export const useAuthStore = create<AuthState>()(
           
           set({
             user: null,
-            token: null,
             isAuthenticated: false,
             isLoading: false,
             error: errorMessage,
@@ -76,9 +74,10 @@ export const useAuthStore = create<AuthState>()(
         try {
           const response = await signupUser(userData);
           
-          // For signup, we don't automatically log the user in
-          // They need to verify their email first
+          // Store the user data from signup response
           set({
+            user: response.user,
+            isAuthenticated: true,
             isLoading: false,
             error: null,
           });
@@ -90,6 +89,8 @@ export const useAuthStore = create<AuthState>()(
             : 'Signup failed. Please try again.';
           
           set({
+            user: null,
+            isAuthenticated: false,
             isLoading: false,
             error: errorMessage,
           });
@@ -102,7 +103,6 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         set({
           user: null,
-          token: null,
           isAuthenticated: false,
           isLoading: false,
           error: null,
@@ -119,9 +119,9 @@ export const useAuthStore = create<AuthState>()(
         set({ user, isAuthenticated: true });
       },
 
-      // Set token action (for when token is refreshed)
-      setToken: (token: string) => {
-        set({ token });
+      // Set hydration status
+      setHasHydrated: (hasHydrated: boolean) => {
+        set({ _hasHydrated: hasHydrated });
       },
     }),
     {
@@ -130,25 +130,41 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({
         // Only persist these fields
         user: state.user,
-        token: state.token,
         isAuthenticated: state.isAuthenticated,
       }),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );
 
-// Selector hooks for easier usage
+// Enhanced useAuth hook with hydration checking
 export const useAuth = () => {
   const store = useAuthStore();
+  
   return {
+    // User data
     user: store.user,
-    token: store.token,
-    isAuthenticated: store.isAuthenticated,
+    isAuthenticated: store.isAuthenticated && store._hasHydrated,
+    
+    // Loading states
     isLoading: store.isLoading,
+    isHydrated: store._hasHydrated,
+    
+    // Error handling
     error: store.error,
+    
+    // Actions
+    login: store.login,
+    signup: store.signup,
+    logout: store.logout,
+    clearError: store.clearError,
+    setUser: store.setUser,
   };
 };
 
+// Separate actions hook (optional, for cleaner separation)
 export const useAuthActions = () => {
   const store = useAuthStore();
   return {
@@ -157,6 +173,5 @@ export const useAuthActions = () => {
     logout: store.logout,
     clearError: store.clearError,
     setUser: store.setUser,
-    setToken: store.setToken,
   };
 };
