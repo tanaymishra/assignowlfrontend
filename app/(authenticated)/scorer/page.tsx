@@ -91,13 +91,17 @@ export default function AssignmentScorer() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="bg-background/80 backdrop-blur-md border border-border/40 rounded-xl p-6 shadow-lg"
+        className="bg-background/20 backdrop-blur-xl border border-border/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden"
       >
+        {/* Glassy overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-background/30 via-background/10 to-background/30 rounded-2xl" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-2xl" />
+        <div className="relative z-10">
         <h2 className="text-xl font-semibold text-foreground mb-4">Upload Assignment</h2>
         
         {/* File Upload */}
         <div className="space-y-4">
-          <div className="border-2 border-dashed border-border/40 rounded-lg p-8 text-center hover:border-primary/40 transition-colors">
+          <div className="border-2 border-dashed border-border/30 rounded-xl p-8 text-center hover:border-primary/50 hover:bg-background/20 backdrop-blur-sm transition-all duration-300">
             <input
               type="file"
               id="file-upload"
@@ -130,7 +134,7 @@ export default function AssignmentScorer() {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="flex items-center space-x-3 p-3 bg-accent/20 rounded-lg"
+              className="flex items-center space-x-3 p-3 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20"
             >
               <FileText className="h-5 w-5 text-primary" />
               <div className="flex-1">
@@ -149,6 +153,7 @@ export default function AssignmentScorer() {
             </motion.div>
           )}
         </div>
+        </div>
       </motion.div>
 
       {/* Rubric Section */}
@@ -156,8 +161,12 @@ export default function AssignmentScorer() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="bg-background/80 backdrop-blur-md border border-border/40 rounded-xl p-6 shadow-lg"
+        className="bg-background/20 backdrop-blur-xl border border-border/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden"
       >
+        {/* Glassy overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-background/30 via-background/10 to-background/30 rounded-2xl" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-2xl" />
+        <div className="relative z-10">
         <h2 className="text-xl font-semibold text-foreground mb-4">Scoring Rubric</h2>
         <textarea
           value={rubricText}
@@ -171,7 +180,7 @@ Example:
 - Citations & References (20 points): Proper formatting and credible sources
 
 Total: 100 points"
-          className="w-full h-48 p-4 bg-background/50 backdrop-blur-sm border border-border/40 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all text-sm"
+          className="w-full h-48 p-4 bg-background/30 backdrop-blur-sm border border-border/30 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all text-sm placeholder:text-muted-foreground/70"
         />
         
         <div className="flex justify-end mt-4">
@@ -184,6 +193,7 @@ Total: 100 points"
             Score Assignment
           </Button>
         </div>
+        </div>
       </motion.div>
 
       {/* Previous Scores Table */}
@@ -191,8 +201,12 @@ Total: 100 points"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="bg-background/80 backdrop-blur-md border border-border/40 rounded-xl p-6 shadow-lg"
+        className="bg-background/20 backdrop-blur-xl border border-border/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden"
       >
+        {/* Glassy overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-background/30 via-background/10 to-background/30 rounded-2xl" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-2xl" />
+        <div className="relative z-10">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-foreground">Previous Scores</h2>
           <div className="flex items-center space-x-3">
@@ -201,7 +215,7 @@ Total: 100 points"
               <input
                 type="text"
                 placeholder="Search assignments..."
-                className="pl-10 pr-4 py-2 bg-background/50 backdrop-blur-sm border border-border/40 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all"
+                className="pl-10 pr-4 py-2 bg-background/30 backdrop-blur-sm border border-border/30 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all placeholder:text-muted-foreground/70"
               />
             </div>
             <Button variant="outline" size="sm">
@@ -210,7 +224,7 @@ Total: 100 points"
           </div>
         </div>
 
-        <div className="rounded-lg border border-border/40 bg-background/50 backdrop-blur-sm">
+        <div className="rounded-xl border border-border/30 bg-background/20 backdrop-blur-sm overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>
@@ -228,7 +242,7 @@ Total: 100 points"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.1 * index }}
-                  className="border-b transition-colors hover:bg-muted/50"
+                  className="border-b border-border/20 transition-colors hover:bg-background/30 hover:backdrop-blur-sm"
                 >
                   <TableCell className="font-medium">
                     <div className="flex items-center space-x-2">
@@ -284,6 +298,7 @@ Total: 100 points"
             <p className="text-muted-foreground">No assignments scored yet</p>
           </div>
         )}
+        </div>
       </motion.div>
     </div>
   );
