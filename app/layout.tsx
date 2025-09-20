@@ -4,7 +4,7 @@ import "./globals.css";
 import "./customAnimation.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { LoginProvider } from "@/components/providers/LoginProvider";
-import { Navbar } from "@/components/layout/navbar";
+import { ConditionalNavbar } from "@/components/layout/conditional-navbar";
 import { CustomToaster } from "@/components/ui/custom-toast";
 
 const geistSans = Geist({
@@ -34,7 +34,7 @@ export default function RootLayout({
       >
         <ThemeProvider defaultTheme="light" storageKey="assignowl-theme">
           <LoginProvider>
-            <Navbar />
+            <ConditionalNavbar />
             <main className="min-h-screen">
               {children}
             </main>
