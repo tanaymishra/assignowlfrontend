@@ -88,11 +88,15 @@ export const DesktopSidebar = ({
     <>
       <motion.div
         className={cn(
-          "h-full px-4 py-4 hidden  md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] shrink-0",
+          "h-full px-4 py-6 hidden md:flex md:flex-col bg-background/95 backdrop-blur-md border-r border-border/40 w-[280px] shrink-0 shadow-sm",
           className
         )}
         animate={{
-          width: animate ? (open ? "300px" : "60px") : "300px",
+          width: animate ? (open ? "280px" : "70px") : "280px",
+        }}
+        transition={{
+          duration: 0.3,
+          ease: "easeInOut",
         }}
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
@@ -114,15 +118,20 @@ export const MobileSidebar = ({
     <>
       <div
         className={cn(
-          "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full"
+          "h-16 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-background/95 backdrop-blur-md border-b border-border/40 w-full"
         )}
         {...props}
       >
         <div className="flex justify-end z-20 w-full">
-          <IconMenu2
-            className="text-neutral-800 dark:text-neutral-200"
-            onClick={() => setOpen(!open)}
-          />
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <IconMenu2
+              className="text-foreground h-6 w-6 cursor-pointer"
+              onClick={() => setOpen(!open)}
+            />
+          </motion.div>
         </div>
         <AnimatePresence>
           {open && (
@@ -135,16 +144,18 @@ export const MobileSidebar = ({
                 ease: "easeInOut",
               }}
               className={cn(
-                "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
+                "fixed h-full w-full inset-0 bg-background/95 backdrop-blur-md p-10 z-[100] flex flex-col justify-between",
                 className
               )}
             >
-              <div
-                className="absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-200"
+              <motion.div
+                className="absolute right-10 top-10 z-50 text-foreground cursor-pointer"
                 onClick={() => setOpen(!open)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
               >
-                <IconX />
-              </div>
+                <IconX className="h-6 w-6" />
+              </motion.div>
               {children}
             </motion.div>
           )}
@@ -163,26 +174,44 @@ export const SidebarLink = ({
   className?: string;
 }) => {
   const { open, animate } = useSidebar();
+  const isLogout = link.label === "Logout";
+  
   return (
-    <a
+    <motion.a
       href={link.href}
       className={cn(
-        "flex items-center justify-start gap-2  group/sidebar py-2",
+        "flex items-center justify-start gap-3 group/sidebar py-3 px-3 rounded-lg transition-all duration-300 relative",
+        isLogout 
+          ? "hover:bg-destructive/10 text-muted-foreground hover:text-destructive" 
+          : "hover:bg-accent/50 text-muted-foreground hover:text-foreground",
         className
       )}
+      whileHover={{ 
+        scale: 1.02,
+        x: 2
+      }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.2 }}
       {...props}
     >
-      {link.icon}
+      <motion.div
+        whileHover={{ scale: 1.1 }}
+        transition={{ duration: 0.2 }}
+      >
+        {link.icon}
+      </motion.div>
 
       <motion.span
         animate={{
           display: animate ? (open ? "inline-block" : "none") : "inline-block",
           opacity: animate ? (open ? 1 : 0) : 1,
+          x: animate ? (open ? 0 : -10) : 0,
         }}
-        className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="text-sm font-medium whitespace-pre inline-block !p-0 !m-0"
       >
         {link.label}
       </motion.span>
-    </a>
+    </motion.a>
   );
 };
