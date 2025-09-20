@@ -8,6 +8,7 @@ import {
   IconUserBolt,
   IconFileText,
   IconChartBar,
+  IconClipboardCheck,
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -34,6 +35,13 @@ export default function DashboardSidebar() {
       href: "/analytics",
       icon: (
         <IconChartBar className="h-5 w-5 shrink-0 text-muted-foreground group-hover/sidebar:text-primary transition-colors duration-300" />
+      ),
+    },
+    {
+      label: "Assignment Scorer",
+      href: "/scorer",
+      icon: (
+        <IconClipboardCheck className="h-5 w-5 shrink-0 text-muted-foreground group-hover/sidebar:text-primary transition-colors duration-300" />
       ),
     },
     {
