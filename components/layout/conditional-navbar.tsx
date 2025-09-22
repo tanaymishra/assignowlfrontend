@@ -12,7 +12,9 @@ export function ConditionalNavbar() {
                               pathname.startsWith('/settings') ||
                               pathname.startsWith('/assignments') ||
                               pathname.startsWith('/analytics') ||
-                              pathname.startsWith('/scorer')
+                              pathname.startsWith('/scorer') ||
+                              pathname.startsWith('/report') ||
+                              pathname.startsWith('/previous-marks')
   
   // Also don't show on public routes (they have their own navbar in layout)
   const isPublicRoute = pathname === '/' || pathname.startsWith('/public')
