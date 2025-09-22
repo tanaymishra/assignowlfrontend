@@ -1,60 +1,18 @@
 "use client";
-import { motion } from "framer-motion";
-import { Upload, FileText, Download, Eye, Trash2, Plus, Search } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Upload, FileText, Trash2, Brain, Sparkles, CheckCircle, SkipForward, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+type ScoringStep = 'upload' | 'analyzing' | 'rubric' | 'scoring' | 'complete';
 
 export default function AssignmentScorer() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [rubricText, setRubricText] = useState("");
-
-  // Mock data for previous scores
-  const previousScores = [
-    {
-      id: 1,
-      fileName: "React_Component_Analysis.pdf",
-      uploadDate: "2024-01-15",
-      score: 85,
-      maxScore: 100,
-      status: "Completed",
-      feedback: "Excellent understanding of React concepts...",
-    },
-    {
-      id: 2,
-      fileName: "Database_Design_Project.docx",
-      uploadDate: "2024-01-12",
-      score: 92,
-      maxScore: 100,
-      status: "Completed",
-      feedback: "Outstanding database normalization...",
-    },
-    {
-      id: 3,
-      fileName: "API_Documentation.pdf",
-      uploadDate: "2024-01-10",
-      score: 78,
-      maxScore: 100,
-      status: "Completed",
-      feedback: "Good documentation structure...",
-    },
-    {
-      id: 4,
-      fileName: "UI_UX_Research.pdf",
-      uploadDate: "2024-01-08",
-      score: 88,
-      maxScore: 100,
-      status: "Processing",
-      feedback: "Analysis in progress...",
-    },
-  ];
+  const [rubricFile, setRubricFile] = useState<File | null>(null);
+  const [currentStep, setCurrentStep] = useState<ScoringStep>('upload');
+  const [guidelines, setGuidelines] = useState("");
+  const router = useRouter();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -63,306 +21,607 @@ export default function AssignmentScorer() {
     }
   };
 
-  const handleScore = () => {
-    if (!selectedFile || !rubricText.trim()) {
-      alert("Please upload a file and provide rubric guidelines.");
-      return;
+  const handleRubricUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setRubricFile(file);
     }
-    // Here you would integrate with your scoring API
-    console.log("Scoring assignment:", selectedFile.name, "with rubric:", rubricText);
   };
 
+  const startAnalysis = () => {
+    if (!selectedFile) return;
+    setCurrentStep('analyzing');
+    
+    // Simulate AI analysis
+    setTimeout(() => {
+      setCurrentStep('rubric');
+    }, 3000);
+  };
+
+  const proceedWithScoring = () => {
+    setCurrentStep('scoring');
+    
+    // Simulate AI scoring
+    setTimeout(() => {
+      setCurrentStep('complete');
+      // Redirect to report page after a brief moment
+      setTimeout(() => {
+        router.push('/report');
+      }, 1500);
+    }, 4000);
+  };
+
+  const skipRubric = () => {
+    proceedWithScoring();
+  };
+
+  const AIThinkingAnimation = ({ message }: { message: string }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className="bg-background/20 backdrop-blur-xl border border-border/20 rounded-2xl p-8 shadow-2xl relative overflow-hidden text-center"
+    >
+      {/* Glassy overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background/30 via-background/10 to-background/30 rounded-2xl" />
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-2xl" />
+      
+      {/* Subtle animated background particles */}
+      <div className="absolute inset-0 overflow-hidden rounded-2xl">
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-primary/20 rounded-full"
+            animate={{
+              x: [0, Math.random() * 400],
+              y: [0, Math.random() * 200],
+              opacity: [0, 0.6, 0],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 2,
+              repeat: Infinity,
+              delay: i * 0.5,
+              ease: "easeInOut"
+            }}
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+          />
+        ))}
+      </div>
+      
+      <div className="relative z-10">
+        {/* Sophisticated brain animation */}
+        <motion.div
+          className="mx-auto mb-8 relative"
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <motion.div
+            animate={{ 
+              rotate: 360,
+            }}
+            transition={{ 
+              duration: 8,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            className="relative p-6 bg-gradient-to-br from-primary/10 to-primary/5 rounded-full border border-primary/20"
+          >
+            <motion.div
+              animate={{
+                scale: [1, 1.05, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
+              <Brain className="h-12 w-12 text-primary" />
+            </motion.div>
+            
+            {/* Orbital rings */}
+            <motion.div
+              className="absolute inset-0 border border-primary/10 rounded-full"
+              animate={{ rotate: -360 }}
+              transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+            />
+            <motion.div
+              className="absolute inset-2 border border-primary/5 rounded-full"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+            />
+          </motion.div>
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <motion.h3
+            className="text-xl font-semibold text-foreground mb-4"
+            animate={{ opacity: [0.7, 1, 0.7] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            AI Processing
+          </motion.h3>
+          
+          <p className="text-muted-foreground mb-8 max-w-md mx-auto leading-relaxed">
+            {message}
+          </p>
+        </motion.div>
+        
+        {/* Elegant progress indicator */}
+        <motion.div
+          className="flex justify-center items-center space-x-3"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          {[0, 1, 2, 3].map((i) => (
+            <motion.div
+              key={i}
+              className="relative"
+            >
+              <motion.div
+                className="w-2 h-2 bg-primary/30 rounded-full"
+                animate={{ 
+                  scale: [1, 1.5, 1],
+                  opacity: [0.3, 1, 0.3],
+                  backgroundColor: [
+                    "rgba(var(--primary), 0.3)",
+                    "rgba(var(--primary), 1)",
+                    "rgba(var(--primary), 0.3)"
+                  ]
+                }}
+                transition={{ 
+                  duration: 1.5,
+                  repeat: Infinity,
+                  delay: i * 0.15,
+                  ease: [0.22, 1, 0.36, 1]
+                }}
+              />
+              <motion.div
+                className="absolute inset-0 w-2 h-2 bg-primary/20 rounded-full"
+                animate={{ 
+                  scale: [1, 2, 1],
+                  opacity: [0, 0.3, 0]
+                }}
+                transition={{ 
+                  duration: 1.5,
+                  repeat: Infinity,
+                  delay: i * 0.15,
+                  ease: "easeOut"
+                }}
+              />
+            </motion.div>
+          ))}
+        </motion.div>
+        
+        {/* Progress bar */}
+        <motion.div
+          className="mt-8 w-64 mx-auto"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.7, duration: 0.5 }}
+        >
+          <div className="h-1 bg-muted/30 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-primary/50 to-primary rounded-full"
+              animate={{ 
+                x: ["-100%", "100%"],
+                opacity: [0.5, 1, 0.5]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+          </div>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-4xl mx-auto">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="px-1"
+        className="px-1 text-center"
       >
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Assignment Scorer</h1>
         <p className="text-muted-foreground mt-2 text-sm sm:text-base">
-          Upload assignments and get AI-powered scoring with detailed feedback
+          Upload your assignment and get AI-powered scoring with detailed feedback
         </p>
       </motion.div>
 
-      {/* Upload Section */}
+      {/* Progress Steps */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="bg-background/20 backdrop-blur-xl border border-border/20 rounded-2xl p-4 sm:p-6 shadow-2xl relative overflow-hidden"
+        transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+        className="flex justify-center"
       >
-        {/* Glassy overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-background/30 via-background/10 to-background/30 rounded-2xl" />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-2xl" />
-        <div className="relative z-10">
-        <h2 className="text-lg sm:text-xl font-semibold text-foreground mb-4">Upload Assignment</h2>
-        
-        {/* File Upload */}
-        <div className="space-y-4">
-          <div className="border-2 border-dashed border-border/30 rounded-xl p-4 sm:p-8 text-center hover:border-primary/50 hover:bg-background/20 backdrop-blur-sm transition-all duration-300 tap-target">
-            <input
-              type="file"
-              id="file-upload"
-              className="hidden"
-              accept=".pdf,.doc,.docx,.txt"
-              onChange={handleFileUpload}
-            />
-            <label
-              htmlFor="file-upload"
-              className="cursor-pointer flex flex-col items-center space-y-3 sm:space-y-4 tap-target"
-            >
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-3 sm:p-4 bg-primary/10 rounded-full"
-              >
-                <Upload className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
-              </motion.div>
-              <div>
-                <p className="text-base sm:text-lg font-medium text-foreground break-words">
-                  {selectedFile ? selectedFile.name : "Click to upload assignment"}
-                </p>
-                <p className="text-xs sm:text-sm text-muted-foreground">
-                  Supports PDF, DOC, DOCX, TXT files up to 10MB
-                </p>
-              </div>
-            </label>
-          </div>
-
-          {selectedFile && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="flex items-center space-x-3 p-3 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20"
-            >
-              <FileText className="h-5 w-5 text-primary flex-shrink-0" />
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-foreground truncate">{selectedFile.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-                </p>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setSelectedFile(null)}
-                className="tap-target flex-shrink-0"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </motion.div>
-          )}
-        </div>
-        </div>
-      </motion.div>
-
-      {/* Rubric Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="bg-background/20 backdrop-blur-xl border border-border/20 rounded-2xl p-4 sm:p-6 shadow-2xl relative overflow-hidden"
-      >
-        {/* Glassy overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-background/30 via-background/10 to-background/30 rounded-2xl" />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-2xl" />
-        <div className="relative z-10">
-        <h2 className="text-lg sm:text-xl font-semibold text-foreground mb-4">Scoring Rubric</h2>
-        <textarea
-          value={rubricText}
-          onChange={(e) => setRubricText(e.target.value)}
-          placeholder="Enter your scoring rubric and guidelines here...
-
-Example:
-- Content Quality (40 points): Accuracy, depth, and relevance of information
-- Structure & Organization (20 points): Clear introduction, body, and conclusion
-- Writing Quality (20 points): Grammar, spelling, and clarity
-- Citations & References (20 points): Proper formatting and credible sources
-
-Total: 100 points"
-          className="w-full h-40 sm:h-48 p-3 sm:p-4 bg-background/30 backdrop-blur-sm border border-border/30 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all text-sm placeholder:text-muted-foreground/70 mobile-scroll"
-        />
-        
-        <div className="flex justify-end mt-4">
-          <Button
-            onClick={handleScore}
-            disabled={!selectedFile || !rubricText.trim()}
-            className="bg-primary hover:bg-primary/90 tap-target w-full sm:w-auto"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Score Assignment
-          </Button>
-        </div>
-        </div>
-      </motion.div>
-
-      {/* Previous Scores Table */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-        className="bg-background/20 backdrop-blur-xl border border-border/20 rounded-2xl p-4 sm:p-6 shadow-2xl relative overflow-hidden"
-      >
-        {/* Glassy overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-background/30 via-background/10 to-background/30 rounded-2xl" />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-2xl" />
-        <div className="relative z-10">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 space-y-4 sm:space-y-0">
-          <h2 className="text-lg sm:text-xl font-semibold text-foreground">Previous Scores</h2>
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder="Search assignments..."
-                className="w-full sm:w-auto pl-10 pr-4 py-2 bg-background/30 backdrop-blur-sm border border-border/30 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all placeholder:text-muted-foreground/70"
-              />
-            </div>
-            <Button variant="outline" size="sm" className="tap-target">
-              Export All
-            </Button>
-          </div>
-        </div>
-
-        {/* Mobile-friendly table */}
-        <div className="rounded-xl border border-border/30 bg-background/20 backdrop-blur-sm overflow-hidden">
-          {/* Desktop table */}
-          <div className="hidden sm:block overflow-x-auto mobile-scroll">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>File Name</TableHead>
-                  <TableHead>Upload Date</TableHead>
-                  <TableHead>Score</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {previousScores.map((score, index) => (
-                  <motion.tr
-                    key={score.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 0.1 * index }}
-                    className="border-b border-border/20 transition-colors hover:bg-background/30 hover:backdrop-blur-sm"
+        <div className="relative bg-background/20 backdrop-blur-xl border border-border/20 rounded-2xl p-6 shadow-lg">
+          {/* Progress line background */}
+          <div className="absolute top-1/2 left-6 right-6 h-0.5 bg-muted/30 -translate-y-1/2 rounded-full" />
+          
+          <div className="relative flex items-center justify-between space-x-8">
+            {[
+              { step: 'upload', label: 'Upload', icon: Upload },
+              { step: 'analyzing', label: 'Analyzing', icon: Brain },
+              { step: 'rubric', label: 'Rubric', icon: FileText },
+              { step: 'scoring', label: 'Scoring', icon: Sparkles },
+              { step: 'complete', label: 'Complete', icon: CheckCircle }
+            ].map((item, index) => {
+              const stepIndex = ['upload', 'analyzing', 'rubric', 'scoring', 'complete'].indexOf(currentStep);
+              const isActive = currentStep === item.step;
+              const isCompleted = stepIndex > index;
+              const isUpcoming = stepIndex < index;
+              
+              return (
+                <motion.div 
+                  key={item.step} 
+                  className="flex flex-col items-center relative z-10"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 + (index * 0.1), duration: 0.5 }}
+                >
+                  <motion.div
+                    className={`relative p-3 rounded-full border-2 transition-all duration-500 ${
+                      isCompleted 
+                        ? 'bg-primary border-primary text-primary-foreground shadow-lg shadow-primary/25' 
+                        : isActive 
+                        ? 'bg-primary/10 border-primary text-primary shadow-lg shadow-primary/10' 
+                        : 'bg-background border-muted text-muted-foreground'
+                    }`}
+                    animate={{
+                      scale: isActive ? 1.1 : 1,
+                      rotateY: isActive ? [0, 360] : 0,
+                    }}
+                    transition={{
+                      scale: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
+                      rotateY: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
+                    }}
                   >
-                    <TableCell className="font-medium">
-                      <div className="flex items-center space-x-2">
-                        <FileText className="h-4 w-4 text-primary flex-shrink-0" />
-                        <span className="truncate max-w-[200px]">{score.fileName}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>{score.uploadDate}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-2">
-                        <span className={`font-semibold ${
-                          score.score >= 90 ? 'text-green-500' :
-                          score.score >= 80 ? 'text-blue-500' :
-                          score.score >= 70 ? 'text-orange-500' :
-                          'text-red-500'
-                        }`}>
-                          {score.score}
-                        </span>
-                        <span className="text-muted-foreground">/ {score.maxScore}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        score.status === 'Completed' 
-                          ? 'bg-green-500/10 text-green-500 border border-green-500/20' 
-                          : 'bg-orange-500/10 text-orange-500 border border-orange-500/20'
-                      }`}>
-                        {score.status}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-1">
-                        <Button variant="ghost" size="sm" className="tap-target">
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" className="tap-target">
-                          <Download className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive tap-target">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </motion.tr>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Mobile cards */}
-          <div className="sm:hidden space-y-3 p-3">
-            {previousScores.map((score, index) => (
-              <motion.div
-                key={score.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 * index }}
-                className="bg-background/30 backdrop-blur-sm border border-border/20 rounded-xl p-4 space-y-3"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center space-x-2 flex-1 min-w-0">
-                    <FileText className="h-4 w-4 text-primary flex-shrink-0" />
-                    <div className="min-w-0 flex-1">
-                      <p className="font-medium text-foreground truncate">{score.fileName}</p>
-                      <p className="text-sm text-muted-foreground">{score.uploadDate}</p>
-                    </div>
-                  </div>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium flex-shrink-0 ml-2 ${
-                    score.status === 'Completed' 
-                      ? 'bg-green-500/10 text-green-500 border border-green-500/20' 
-                      : 'bg-orange-500/10 text-orange-500 border border-orange-500/20'
-                  }`}>
-                    {score.status}
-                  </span>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className={`font-semibold ${
-                      score.score >= 90 ? 'text-green-500' :
-                      score.score >= 80 ? 'text-blue-500' :
-                      score.score >= 70 ? 'text-orange-500' :
-                      'text-red-500'
-                    }`}>
-                      {score.score}
-                    </span>
-                    <span className="text-muted-foreground">/ {score.maxScore}</span>
-                  </div>
+                    {/* Pulse effect for active step */}
+                    {isActive && (
+                      <motion.div
+                        className="absolute inset-0 rounded-full border-2 border-primary"
+                        animate={{
+                          scale: [1, 1.5],
+                          opacity: [0.5, 0],
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity,
+                          ease: "easeOut"
+                        }}
+                      />
+                    )}
+                    
+                    <motion.div
+                      animate={{
+                        rotate: isActive ? [0, 5, -5, 0] : 0,
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: isActive ? Infinity : 0,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      <item.icon className="h-5 w-5" />
+                    </motion.div>
+                  </motion.div>
                   
-                  <div className="flex items-center space-x-1">
-                    <Button variant="ghost" size="sm" className="tap-target">
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm" className="tap-target">
-                      <Download className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive tap-target">
+                  <motion.span 
+                    className={`mt-3 text-sm font-medium transition-colors duration-300 ${
+                      isCompleted || isActive ? 'text-foreground' : 'text-muted-foreground'
+                    }`}
+                    animate={{
+                      y: isActive ? [0, -2, 0] : 0,
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: isActive ? Infinity : 0,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    {item.label}
+                  </motion.span>
+                  
+                  {/* Progress line segment */}
+                  {index < 4 && (
+                    <motion.div
+                      className="absolute top-1/2 left-full w-8 h-0.5 -translate-y-1/2 rounded-full"
+                      initial={{ scaleX: 0, backgroundColor: "rgb(var(--muted))" }}
+                      animate={{
+                        scaleX: isCompleted ? 1 : 0,
+                        backgroundColor: isCompleted ? "rgb(var(--primary))" : "rgb(var(--muted))"
+                      }}
+                      transition={{ duration: 0.5, delay: isCompleted ? 0.3 : 0 }}
+                      style={{ originX: 0 }}
+                    />
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </motion.div>
+
+      <AnimatePresence mode="wait">
+        {/* Step 1: Upload Assignment */}
+        {currentStep === 'upload' && (
+          <motion.div
+            key="upload"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className="bg-background/20 backdrop-blur-xl border border-border/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden"
+          >
+            {/* Glassy overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-background/30 via-background/10 to-background/30 rounded-2xl" />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-2xl" />
+            
+            <div className="relative z-10">
+              <h2 className="text-xl font-semibold text-foreground mb-6 text-center">Upload Your Assignment</h2>
+              
+              {/* File Upload */}
+              <div className="space-y-6">
+                <div className="border-2 border-dashed border-border/30 rounded-xl p-8 text-center hover:border-primary/50 hover:bg-background/20 backdrop-blur-sm transition-all duration-300">
+                  <input
+                    type="file"
+                    id="file-upload"
+                    className="hidden"
+                    accept=".pdf,.doc,.docx,.txt"
+                    onChange={handleFileUpload}
+                  />
+                  <label
+                    htmlFor="file-upload"
+                    className="cursor-pointer flex flex-col items-center space-y-4"
+                  >
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="p-4 bg-primary/10 rounded-full"
+                    >
+                      <Upload className="h-8 w-8 text-primary" />
+                    </motion.div>
+                    <div>
+                      <p className="text-lg font-medium text-foreground">
+                        {selectedFile ? selectedFile.name : "Click to upload assignment"}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Supports PDF, DOC, DOCX, TXT files up to 10MB
+                      </p>
+                    </div>
+                  </label>
+                </div>
+
+                {selectedFile && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="flex items-center space-x-3 p-4 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20"
+                  >
+                    <FileText className="h-5 w-5 text-primary flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-foreground truncate">{selectedFile.name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setSelectedFile(null)}
+                      className="flex-shrink-0"
+                    >
                       <Trash2 className="h-4 w-4" />
                     </Button>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+                  </motion.div>
+                )}
 
-        {previousScores.length === 0 && (
-          <div className="text-center py-12">
-            <FileText className="h-8 w-8 sm:h-12 sm:w-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-muted-foreground text-sm sm:text-base">No assignments scored yet</p>
-          </div>
+                {/* Guidelines */}
+                <div className="space-y-3">
+                  <label className="text-sm font-medium text-foreground">
+                    Scoring Guidelines (Optional)
+                  </label>
+                  <textarea
+                    value={guidelines}
+                    onChange={(e) => setGuidelines(e.target.value)}
+                    placeholder="Enter any specific guidelines or criteria for scoring this assignment..."
+                    className="w-full h-32 p-4 bg-background/30 backdrop-blur-sm border border-border/30 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all text-sm placeholder:text-muted-foreground/70"
+                  />
+                </div>
+                
+                <div className="flex justify-center">
+                  <Button
+                    onClick={startAnalysis}
+                    disabled={!selectedFile}
+                    className="bg-primary hover:bg-primary/90 px-8 py-3 text-lg"
+                  >
+                    <Brain className="h-5 w-5 mr-2" />
+                    Start AI Analysis
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         )}
-        </div>
-      </motion.div>
+
+        {/* Step 2: AI Analyzing */}
+        {currentStep === 'analyzing' && (
+          <motion.div
+            key="analyzing"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <AIThinkingAnimation message="Analyzing your assignment content, structure, and quality..." />
+          </motion.div>
+        )}
+
+        {/* Step 3: Rubric Option */}
+        {currentStep === 'rubric' && (
+          <motion.div
+            key="rubric"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className="bg-background/20 backdrop-blur-xl border border-border/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden"
+          >
+            {/* Glassy overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-background/30 via-background/10 to-background/30 rounded-2xl" />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-2xl" />
+            
+            <div className="relative z-10 text-center">
+              <h2 className="text-xl font-semibold text-foreground mb-4">Do you have a rubric file?</h2>
+              <p className="text-muted-foreground mb-8">
+                Upload a rubric file for more accurate scoring, or skip to use AI's general assessment
+              </p>
+              
+              {/* Rubric Upload */}
+              <div className="space-y-6">
+                <div className="border-2 border-dashed border-border/30 rounded-xl p-6 hover:border-primary/50 hover:bg-background/20 backdrop-blur-sm transition-all duration-300">
+                  <input
+                    type="file"
+                    id="rubric-upload"
+                    className="hidden"
+                    accept=".pdf,.doc,.docx,.txt"
+                    onChange={handleRubricUpload}
+                  />
+                  <label
+                    htmlFor="rubric-upload"
+                    className="cursor-pointer flex flex-col items-center space-y-3"
+                  >
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="p-3 bg-primary/10 rounded-full"
+                    >
+                      <FileText className="h-6 w-6 text-primary" />
+                    </motion.div>
+                    <div>
+                      <p className="font-medium text-foreground">
+                        {rubricFile ? rubricFile.name : "Upload Rubric File"}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        PDF, DOC, DOCX, TXT
+                      </p>
+                    </div>
+                  </label>
+                </div>
+
+                {rubricFile && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="flex items-center justify-center space-x-3 p-3 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20"
+                  >
+                    <FileText className="h-5 w-5 text-primary" />
+                    <span className="font-medium text-foreground">{rubricFile.name}</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setRubricFile(null)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </motion.div>
+                )}
+                
+                <div className="flex justify-center space-x-4">
+                  <Button
+                    onClick={skipRubric}
+                    variant="outline"
+                    className="px-6"
+                  >
+                    <SkipForward className="h-4 w-4 mr-2" />
+                    Skip Rubric
+                  </Button>
+                  <Button
+                    onClick={proceedWithScoring}
+                    disabled={!rubricFile}
+                    className="bg-primary hover:bg-primary/90 px-6"
+                  >
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    Score with Rubric
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Step 4: AI Scoring */}
+        {currentStep === 'scoring' && (
+          <motion.div
+            key="scoring"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <AIThinkingAnimation message="Scoring your assignment and generating detailed feedback report..." />
+          </motion.div>
+        )}
+
+        {/* Step 5: Complete */}
+        {currentStep === 'complete' && (
+          <motion.div
+            key="complete"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.5 }}
+            className="bg-background/20 backdrop-blur-xl border border-border/20 rounded-2xl p-8 shadow-2xl relative overflow-hidden text-center"
+          >
+            {/* Glassy overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-background/30 via-background/10 to-background/30 rounded-2xl" />
+            <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-transparent rounded-2xl" />
+            
+            <div className="relative z-10">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                className="mx-auto mb-6 p-4 bg-green-500/10 rounded-full w-fit"
+              >
+                <CheckCircle className="h-12 w-12 text-green-500" />
+              </motion.div>
+              
+              <h3 className="text-2xl font-semibold text-foreground mb-4">
+                Scoring Complete!
+              </h3>
+              
+              <p className="text-muted-foreground mb-6">
+                Your assignment has been scored and a detailed report has been generated.
+              </p>
+              
+              <motion.div
+                animate={{ opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="text-sm text-muted-foreground"
+              >
+                Redirecting to your report...
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

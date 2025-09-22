@@ -48,6 +48,13 @@ export default function DashboardSidebar() {
       ),
     },
     {
+      label: "Previous Marks",
+      href: "/previous-marks",
+      icon: (
+        <IconChartBar className="h-5 w-5 shrink-0 text-muted-foreground group-hover/sidebar:text-primary transition-colors duration-300" />
+      ),
+    },
+    {
       label: "Profile",
       href: "/profile",
       icon: (
