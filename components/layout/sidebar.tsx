@@ -12,9 +12,12 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/store";
 import Image from "next/image";
 
 export default function DashboardSidebar() {
+  const { user, logout } = useAuth();
+  
   const links = [
     {
       label: "Dashboard",
@@ -58,24 +61,22 @@ export default function DashboardSidebar() {
         <IconSettings className="h-5 w-5 shrink-0 text-muted-foreground group-hover/sidebar:text-primary transition-colors duration-300" />
       ),
     },
-    {
-      label: "Logout",
-      href: "#",
-      icon: (
-        <IconArrowLeft className="h-5 w-5 shrink-0 text-muted-foreground group-hover/sidebar:text-destructive transition-colors duration-300" />
-      ),
-    },
   ];
 
   const [open, setOpen] = useState(false);
 
+  const handleLogout = () => {
+    logout();
+    // Redirect will be handled by the auth system
+  };
+
   return (
     <Sidebar open={open} setOpen={setOpen}>
-      <SidebarBody className="justify-between gap-10">
+      <SidebarBody className="justify-between gap-6 lg:gap-10">
         <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
           {open ? <Logo /> : <LogoIcon />}
           <motion.div 
-            className="mt-8 flex flex-col gap-1"
+            className="mt-6 lg:mt-8 flex flex-col gap-1"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.2 }}
@@ -90,30 +91,83 @@ export default function DashboardSidebar() {
                 <SidebarLink link={link} />
               </motion.div>
             ))}
-          </motion.div>
-        </div>
-        <motion.div 
-          className="border-t border-border/40 pt-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          <SidebarLink
-            link={{
-              label: "John Doe",
-              href: "#",
-              icon: (
-                <motion.div 
-                  className="h-8 w-8 shrink-0 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center border border-primary/20"
+            
+            {/* Logout button */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: 0.1 * links.length }}
+            >
+              <motion.button
+                onClick={handleLogout}
+                className={cn(
+                  "flex items-center justify-start gap-3 group/sidebar py-3 px-3 rounded-xl transition-all duration-300 relative overflow-hidden min-h-[44px] touch-manipulation w-full",
+                  "hover:bg-destructive/20 hover:backdrop-blur-sm text-muted-foreground hover:text-destructive hover:shadow-lg hover:shadow-destructive/10 active:bg-destructive/30"
+                )}
+                whileHover={{ 
+                  scale: 1.02,
+                  x: 4
+                }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.2 }}
+              >
+                {/* Glassy hover effect */}
+                <motion.div
+                  className="absolute inset-0 rounded-xl opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-destructive/10 via-destructive/5 to-transparent"
+                  initial={{ scale: 0.8 }}
+                  whileHover={{ scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+                
+                <motion.div
+                  className="relative z-10 flex-shrink-0"
                   whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <IconUserBolt className="h-4 w-4 text-primary" />
+                  <IconArrowLeft className="h-5 w-5 shrink-0 text-muted-foreground group-hover/sidebar:text-destructive transition-colors duration-300" />
                 </motion.div>
-              ),
-            }}
-          />
-        </motion.div>
+
+                <motion.span
+                  animate={{
+                    display: open ? "inline-block" : "none",
+                    opacity: open ? 1 : 0,
+                    x: open ? 0 : -10,
+                  }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="text-sm font-medium whitespace-pre inline-block !p-0 !m-0 relative z-10 flex-1 min-w-0"
+                >
+                  Logout
+                </motion.span>
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        </div>
+        
+        {/* User info at bottom */}
+        {user && (
+          <motion.div 
+            className="border-t border-border/40 pt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <SidebarLink
+              link={{
+                label: user.name,
+                href: "/profile",
+                icon: (
+                  <motion.div 
+                    className="h-8 w-8 shrink-0 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center border border-primary/20"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <IconUserBolt className="h-4 w-4 text-primary" />
+                  </motion.div>
+                ),
+              }}
+            />
+          </motion.div>
+        )}
       </SidebarBody>
     </Sidebar>
   );

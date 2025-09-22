@@ -88,7 +88,7 @@ export const DesktopSidebar = ({
     <>
       <motion.div
         className={cn(
-          "h-screen px-6 py-6 hidden md:flex md:flex-col bg-background/20 backdrop-blur-xl border-r border-border/20 w-[280px] shrink-0 shadow-2xl relative sticky top-0",
+          "h-screen px-4 lg:px-6 py-4 lg:py-6 hidden md:flex md:flex-col bg-background/20 backdrop-blur-xl border-r border-border/20 shrink-0 shadow-2xl relative sticky top-0",
           className
         )}
         animate={{
@@ -105,7 +105,7 @@ export const DesktopSidebar = ({
         {/* Glassy overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/10 to-background/30 rounded-r-2xl" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-r-2xl" />
-        <div className="relative z-10">
+        <div className="relative z-10 overflow-hidden">
           {children}
         </div>
       </motion.div>
@@ -121,26 +121,21 @@ export const MobileSidebar = ({
   const { open, setOpen } = useSidebar();
   return (
     <>
-      <div
-        className={cn(
-          "h-16 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-background/20 backdrop-blur-xl border-b border-border/20 w-full relative"
-        )}
-        {...props}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-background/30 to-background/10" />
-        <div className="flex justify-end z-20 w-full relative">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <IconMenu2
-              className="text-foreground h-6 w-6 cursor-pointer"
-              onClick={() => setOpen(!open)}
+      {/* Mobile sidebar overlay - triggered from header */}
+      <AnimatePresence>
+        {open && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[90] md:hidden"
+              onClick={() => setOpen(false)}
             />
-          </motion.div>
-        </div>
-        <AnimatePresence>
-          {open && (
+            
+            {/* Sidebar */}
             <motion.div
               initial={{ x: "-100%", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -150,26 +145,32 @@ export const MobileSidebar = ({
                 ease: "easeInOut",
               }}
               className={cn(
-                "fixed h-full w-full inset-0 bg-background/20 backdrop-blur-xl p-10 z-[100] flex flex-col justify-between relative",
+                "fixed left-0 top-0 h-full w-[280px] bg-background/95 backdrop-blur-xl border-r border-border/40 z-[100] flex flex-col justify-between p-6 md:hidden shadow-2xl",
                 className
               )}
+              {...props}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-background/30 via-background/10 to-background/30" />
+              {/* Glassy overlay */}
+              <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/10 to-background/30" />
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent" />
+              
+              {/* Close button */}
               <motion.div
-                className="absolute right-10 top-10 z-50 text-foreground cursor-pointer"
-                onClick={() => setOpen(!open)}
+                className="absolute right-4 top-4 z-50 text-foreground cursor-pointer p-2 rounded-lg hover:bg-muted/50 transition-colors"
+                onClick={() => setOpen(false)}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <IconX className="h-6 w-6" />
+                <IconX className="h-5 w-5" />
               </motion.div>
-              <div className="relative z-10">
+              
+              <div className="relative z-10 pt-8">
                 {children}
               </div>
             </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 };
@@ -189,10 +190,10 @@ export const SidebarLink = ({
     <motion.a
       href={link.href}
       className={cn(
-        "flex items-center justify-start gap-3 group/sidebar py-3 px-3 rounded-xl transition-all duration-300 relative overflow-hidden",
+        "flex items-center justify-start gap-3 group/sidebar py-3 px-3 rounded-xl transition-all duration-300 relative overflow-hidden min-h-[44px] touch-manipulation",
         isLogout 
-          ? "hover:bg-destructive/20 hover:backdrop-blur-sm text-muted-foreground hover:text-destructive hover:shadow-lg hover:shadow-destructive/10" 
-          : "hover:bg-background/30 hover:backdrop-blur-sm text-muted-foreground hover:text-foreground hover:shadow-lg hover:shadow-primary/10",
+          ? "hover:bg-destructive/20 hover:backdrop-blur-sm text-muted-foreground hover:text-destructive hover:shadow-lg hover:shadow-destructive/10 active:bg-destructive/30" 
+          : "hover:bg-background/30 hover:backdrop-blur-sm text-muted-foreground hover:text-foreground hover:shadow-lg hover:shadow-primary/10 active:bg-background/40",
         className
       )}
       whileHover={{ 
@@ -217,7 +218,7 @@ export const SidebarLink = ({
       />
       
       <motion.div
-        className="relative z-10"
+        className="relative z-10 flex-shrink-0"
         whileHover={{ scale: 1.1 }}
         transition={{ duration: 0.2 }}
       >
@@ -231,7 +232,7 @@ export const SidebarLink = ({
           x: animate ? (open ? 0 : -10) : 0,
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="text-sm font-medium whitespace-pre inline-block !p-0 !m-0 relative z-10"
+        className="text-sm font-medium whitespace-pre inline-block !p-0 !m-0 relative z-10 flex-1 min-w-0"
       >
         {link.label}
       </motion.span>
