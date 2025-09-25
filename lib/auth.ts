@@ -69,6 +69,7 @@ async function apiRequest<T>(
       'Content-Type': 'application/json',
       ...options.headers,
     },
+    credentials: 'include', // This is crucial for httpOnly cookies
     ...options,
   };
 
@@ -138,12 +139,19 @@ export async function logoutUser(): Promise<{ message: string }> {
   });
 }
 
-// Get current user function (for future use)
-export async function getCurrentUser(token: string): Promise<User> {
+// Get current user function (works with httpOnly cookies)
+export async function getCurrentUser(): Promise<User> {
   return apiRequest<User>('/auth/me', {
     method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   });
+}
+
+// Check if user is authenticated (test the httpOnly cookie)
+export async function checkAuthStatus(): Promise<boolean> {
+  try {
+    await getCurrentUser();
+    return true;
+  } catch (error) {
+    return false;
+  }
 }
