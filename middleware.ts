@@ -1,67 +1,59 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-// Array of exempted routes that don't require authentication
+// Array of exempted route patterns that don't require authentication
 const exemptedRoutes = [
-  '/',                    // Home page
-  '/auth/signup',         // Signup page
-  '/auth/login',          // Login page (if exists)
-  '/auth/verify',         // Email verification (if exists)
-  '/auth/forgot-password', // Forgot password (if exists)
-  '/auth/reset-password',  // Reset password (if exists)
-  '/api/auth/login',      // Login API
-  '/api/auth/signup',     // Signup API
-  '/api/auth/verify',     // Verification API
-  '/api/auth/logout',     // Logout API
-  '/favicon.ico',         // Favicon
-  '/_next',               // Next.js static assets
-  '/public',              // Public assets
+  '/',              // Home page
+  '/auth/*',        // All auth routes
+  '/api/*',         // All API routes
+  '/_next/*',       // Next.js static assets
+  '/public/*',      // Public assets
+  '/favicon.ico',   // Favicon
+  '/comman/*'
 ]
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Check if the current route is in the exempted routes
-  const isExemptedRoute = exemptedRoutes.some(route => {
-    // Handle exact matches
-    if (route === pathname) return true
-    
-    // Handle routes that start with certain patterns (like /_next, /api)
-    if (route.endsWith('/') && pathname.startsWith(route)) return true
-    if (pathname.startsWith(route + '/')) return true
-    
-    return false
+  console.log('🔍 Middleware checking path:', pathname)
+
+  // Check if the current route matches any exempted pattern
+  const isExemptedRoute = exemptedRoutes.some(pattern => {
+    if (pattern.endsWith('/*')) {
+      // Handle wildcard patterns like /auth/* or /api/*
+      const basePattern = pattern.slice(0, -2) // Remove /*
+      return pathname.startsWith(basePattern)
+    } else {
+      // Handle exact matches
+      return pathname === pattern
+    }
   })
 
-  // If the route is exempted, let it proceed
   if (isExemptedRoute) {
+    console.log('✅ Route is exempted, allowing access')
     return NextResponse.next()
   }
 
   // Check if the token cookie exists
   const token = request.cookies.get('token')
-
-  // If no token exists, redirect to home page
-  if (!token) {
+  console.log(request.cookies , "Cookies")
+  if (token && token.value) {
+    console.log('🔑 Token found:', token.value)
+    console.log('✅ Token present, allowing access')
+    return NextResponse.next()
+  } else {
+    console.log('❌ No token found, redirecting to home')
     const homeUrl = new URL('/', request.url)
     return NextResponse.redirect(homeUrl)
   }
-
-  // If token exists, let the request proceed
-  return NextResponse.next()
 }
 
 // Configure which routes the middleware should run on
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
+     * Match all request paths
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
+    '/(.*)',
   ],
 }
