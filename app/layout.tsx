@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme/theme-provider";
 import { LoginProvider } from "@/components/providers/LoginProvider";
 import { ConditionalNavbar } from "@/components/layout/conditional-navbar";
 import { CustomToaster } from "@/components/ui/custom-toast";
+import { SocketProvider } from "@/lib/socket";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,11 +35,13 @@ export default function RootLayout({
       >
         <ThemeProvider defaultTheme="light" storageKey="assignowl-theme">
           <LoginProvider>
-            <ConditionalNavbar />
-            <main className="min-h-screen">
-              {children}
-            </main>
-            <CustomToaster />
+            <SocketProvider>
+              <ConditionalNavbar />
+              <main className="min-h-screen">
+                {children}
+              </main>
+              <CustomToaster />
+            </SocketProvider>
           </LoginProvider>
         </ThemeProvider>
       </body>
