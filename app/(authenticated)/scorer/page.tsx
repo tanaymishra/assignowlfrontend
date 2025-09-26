@@ -149,8 +149,8 @@ export default function AssignmentScorer() {
   }, [socket, setError, setCurrentStep, setProcessing, setProgress]);
 
   const startAnalysis = async () => {
-    if (!assignmentFile || !assignmentFile.uploaded || !assignmentFile.savedAs) return;
-    if (!guidelinesFile || !guidelinesFile.uploaded || !guidelinesFile.savedAs) {
+    if (!assignmentFile || !assignmentFile.uploaded || !assignmentFile.downloadUrl) return;
+    if (!guidelinesFile || !guidelinesFile.uploaded || !guidelinesFile.downloadUrl) {
       setError('Please upload guidelines file before starting analysis');
       return;
     }
@@ -164,16 +164,15 @@ export default function AssignmentScorer() {
       setProcessing(true);
       setError(null);
       
-      // Build the URLs using NEXT_PUBLIC_UPLOAD_URL and savedAs filenames
-      const uploadBaseUrl = process.env.NEXT_PUBLIC_UPLOAD_URL || '';
-      const assignmentUrl = [`${uploadBaseUrl}/assignments/${assignmentFile.savedAs}`];
+      // Build the URLs using downloadUrl from uploaded files
+      const assignmentUrl = [assignmentFile.downloadUrl!];
       
       // Build guidelines URLs - include guidelines file and rubric file
       const guidelinesUrl: string[] = [];
-      guidelinesUrl.push(`${uploadBaseUrl}/guidelines/${guidelinesFile.savedAs}`);
+      guidelinesUrl.push(guidelinesFile.downloadUrl!);
       
-      if (rubricFile?.uploaded && rubricFile.savedAs) {
-        guidelinesUrl.push(`${uploadBaseUrl}/rubrics/${rubricFile.savedAs}`);
+      if (rubricFile?.uploaded && rubricFile.downloadUrl) {
+        guidelinesUrl.push(rubricFile.downloadUrl);
       }
       
       // Trigger grading via socket
@@ -212,15 +211,12 @@ export default function AssignmentScorer() {
       setError(null);
       
       // Check if user provided a rubric file
-      if (rubricFile?.uploaded && rubricFile.savedAs) {
+      if (rubricFile?.uploaded && rubricFile.downloadUrl) {
         // User provided a rubric file - submit it
-        const uploadBaseUrl = process.env.NEXT_PUBLIC_UPLOAD_URL || '';
-        const rubricUrl = `${uploadBaseUrl}/rubrics/${rubricFile.savedAs}`;
-        
         socket.emit('assignment:submit-rubric', {
           assignmentId: assignmentId,
           action: 'provide',
-          rubricUrl: rubricUrl
+          rubricUrl: rubricFile.downloadUrl
         });
       } else {
         // No rubric file provided - skip rubric

@@ -12,6 +12,7 @@ export interface ScoringFile {
   uploadedAt: Date;
   // Upload metadata (populated after successful upload)
   savedAs?: string;
+  downloadUrl?: string;
   uploaded?: boolean;
   uploadError?: string;
 }
@@ -158,10 +159,13 @@ export const useScorerStore = create<ScorerState>()(
       markAssignmentUploaded: (savedAs: string) => {
         const current = get().assignmentFile;
         if (current) {
+          const downloadBaseUrl = process.env.NEXT_PUBLIC_DOWNLOAD_URL || '';
+          const downloadUrl = `${downloadBaseUrl}/assignments/${savedAs}`;
           set({
             assignmentFile: {
               ...current,
               savedAs,
+              downloadUrl,
               uploaded: true,
               uploadError: undefined,
             }
@@ -172,10 +176,13 @@ export const useScorerStore = create<ScorerState>()(
       markGuidelinesUploaded: (savedAs: string) => {
         const current = get().guidelinesFile;
         if (current) {
+          const downloadBaseUrl = process.env.NEXT_PUBLIC_DOWNLOAD_URL || '';
+          const downloadUrl = `${downloadBaseUrl}/guidelines/${savedAs}`;
           set({
             guidelinesFile: {
               ...current,
               savedAs,
+              downloadUrl,
               uploaded: true,
               uploadError: undefined,
             }
@@ -186,10 +193,13 @@ export const useScorerStore = create<ScorerState>()(
       markRubricUploaded: (savedAs: string) => {
         const current = get().rubricFile;
         if (current) {
+          const downloadBaseUrl = process.env.NEXT_PUBLIC_DOWNLOAD_URL || '';
+          const downloadUrl = `${downloadBaseUrl}/rubrics/${savedAs}`;
           set({
             rubricFile: {
               ...current,
               savedAs,
+              downloadUrl,
               uploaded: true,
               uploadError: undefined,
             }
