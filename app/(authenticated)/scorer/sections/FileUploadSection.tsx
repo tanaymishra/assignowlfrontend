@@ -16,19 +16,22 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
   const { 
     assignmentFile, 
     setAssignmentFile, 
+    guidelinesFile,
+    setGuidelinesFile,
     error, 
     setError,
     canProceed,
     markAssignmentUploaded,
     setAssignmentUploadError,
-    guidelines,
-    setGuidelines
+    markGuidelinesUploaded,
+    setGuidelinesUploadError
   } = useScorer();
 
-  const [isUploading, setIsUploading] = useState(false);
+  const [isUploadingAssignment, setIsUploadingAssignment] = useState(false);
+  const [isUploadingGuidelines, setIsUploadingGuidelines] = useState(false);
 
   // Check for upload-specific errors
-  const displayError = error || assignmentFile?.uploadError;
+  const displayError = error || assignmentFile?.uploadError || guidelinesFile?.uploadError;
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -47,7 +50,7 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
     setAssignmentUploadError(null);
 
     // Upload immediately
-    setIsUploading(true);
+    setIsUploadingAssignment(true);
     try {
       const uploadedFile = await uploadFile('assignments', file);
       markAssignmentUploaded(uploadedFile.savedAs);
@@ -55,12 +58,46 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
       const errorMessage = error instanceof Error ? error.message : 'Upload failed';
       setAssignmentUploadError(errorMessage);
     } finally {
-      setIsUploading(false);
+      setIsUploadingAssignment(false);
     }
   };
 
-  const removeFile = () => {
+  const handleGuidelinesUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file (same validation as assignment)
+    const validation = validateAssignmentFile(file); // reuse assignment validation
+    if (!validation.valid) {
+      setError(validation.error || 'Invalid guidelines file');
+      return;
+    }
+
+    // Add file to state first
+    setGuidelinesFile(file);
+    setError(null);
+    setGuidelinesUploadError(null);
+
+    // Upload immediately
+    setIsUploadingGuidelines(true);
+    try {
+      const uploadedFile = await uploadFile('guidelines', file);
+      markGuidelinesUploaded(uploadedFile.savedAs);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Upload failed';
+      setGuidelinesUploadError(errorMessage);
+    } finally {
+      setIsUploadingGuidelines(false);
+    }
+  };
+
+  const removeAssignmentFile = () => {
     setAssignmentFile(null);
+    setError(null);
+  };
+
+  const removeGuidelinesFile = () => {
+    setGuidelinesFile(null);
     setError(null);
   };
 
@@ -83,7 +120,7 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
             Upload Assignment & Guidelines
           </h2>
           <p className="text-muted-foreground text-sm">
-            Upload your assignment file and provide any specific guidelines for AI-powered scoring
+            Upload your assignment file and guidelines document for AI-powered scoring
           </p>
         </div>
 
@@ -139,7 +176,7 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
                     <span>{formatFileSize(assignmentFile.size)}</span>
                     <span>•</span>
                     <span>Added {assignmentFile.uploadedAt.toLocaleTimeString()}</span>
-                    {isUploading && (
+                    {isUploadingAssignment && (
                       <>
                         <span>•</span>
                         <span className="text-blue-600 dark:text-blue-400 flex items-center space-x-1">
@@ -148,7 +185,7 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
                         </span>
                       </>
                     )}
-                    {!isUploading && assignmentFile.uploaded && (
+                    {!isUploadingAssignment && assignmentFile.uploaded && (
                       <>
                         <span>•</span>
                         <span className="text-green-600 dark:text-green-400">Uploaded to server</span>
@@ -159,7 +196,7 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={removeFile}
+                  onClick={removeAssignmentFile}
                   className="text-muted-foreground hover:text-destructive"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -168,27 +205,91 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
             </motion.div>
           )}
 
-          {/* Guidelines Section */}
-          <div className="space-y-3">
-            <label htmlFor="guidelines" className="block text-sm font-medium text-foreground">
-              Guidelines (Optional)
-            </label>
-            <textarea
-              id="guidelines"
-              value={guidelines}
-              onChange={(e) => setGuidelines(e.target.value)}
-              placeholder="Enter any specific guidelines or criteria for scoring this assignment...
-
-Examples:
-• Focus on critical thinking and analysis
-• Penalize for lack of supporting evidence
-• Reward creative solutions and original insights
-• Consider formatting and presentation
-• Emphasize clarity and conciseness"
-              className="w-full h-32 p-3 bg-background/50 backdrop-blur-sm border border-border/20 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 text-sm"
-            />
+          {/* Guidelines File Upload Section */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-medium text-foreground">Guidelines Document (Optional)</h3>
+            
+            {!guidelinesFile ? (
+              <div className="border-2 border-dashed border-border/30 rounded-xl p-6 text-center hover:border-primary/50 transition-colors">
+                <input
+                  type="file"
+                  id="guidelines-upload"
+                  className="hidden"
+                  accept=".pdf,.doc,.docx,.txt,.rtf"
+                  onChange={handleGuidelinesUpload}
+                />
+                <label
+                  htmlFor="guidelines-upload"
+                  className="cursor-pointer flex flex-col items-center space-y-3"
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="p-3 bg-primary/10 rounded-full"
+                  >
+                    <FileText className="h-5 w-5 text-primary" />
+                  </motion.div>
+                  <div>
+                    <p className="font-medium text-foreground">
+                      Upload Guidelines Document
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      PDF, DOC, DOCX, TXT, RTF (max 10MB)
+                    </p>
+                  </div>
+                </label>
+              </div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-background/30 backdrop-blur-sm border border-border/20 rounded-xl p-4"
+              >
+                <div className="flex items-start space-x-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <FileText className="h-4 w-4 text-primary" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-medium text-foreground truncate">
+                      {guidelinesFile.name}
+                    </h4>
+                    <div className="flex items-center space-x-3 mt-1 text-sm text-muted-foreground">
+                      <span>{getFileTypeDisplay(guidelinesFile.type)}</span>
+                      <span>•</span>
+                      <span>{formatFileSize(guidelinesFile.size)}</span>
+                      <span>•</span>
+                      <span>Added {guidelinesFile.uploadedAt.toLocaleTimeString()}</span>
+                      {isUploadingGuidelines && (
+                        <>
+                          <span>•</span>
+                          <span className="text-blue-600 dark:text-blue-400 flex items-center space-x-1">
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                            <span>Uploading...</span>
+                          </span>
+                        </>
+                      )}
+                      {!isUploadingGuidelines && guidelinesFile.uploaded && (
+                        <>
+                          <span>•</span>
+                          <span className="text-green-600 dark:text-green-400">Uploaded to server</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={removeGuidelinesFile}
+                    className="text-muted-foreground hover:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+            
             <p className="text-xs text-muted-foreground">
-              Provide specific instructions to guide the AI scoring process
+              Upload a document containing specific guidelines or criteria for scoring this assignment
             </p>
           </div>
 
@@ -209,7 +310,7 @@ Examples:
         <div className="flex justify-center pt-4">
           <Button
             onClick={onStartAnalysis}
-            disabled={!assignmentFile?.uploaded || isUploading}
+            disabled={!assignmentFile?.uploaded || isUploadingAssignment || isUploadingGuidelines}
             className="bg-primary hover:bg-primary/90 px-8 py-2"
             size="lg"
           >

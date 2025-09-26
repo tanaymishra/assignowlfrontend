@@ -36,14 +36,14 @@ export interface ScoringResult {
 export interface ScorerState {
   // File management
   assignmentFile: ScoringFile | null;
+  guidelinesFile: ScoringFile | null;
   rubricFile: ScoringFile | null;
   
   // Scoring process
   currentStep: ScoringStep;
   isProcessing: boolean;
   
-  // Guidelines and rubric
-  guidelines: string;
+  // Custom rubric text (optional)
   customRubric: string;
   
   // Results
@@ -55,10 +55,10 @@ export interface ScorerState {
   
   // Actions
   setAssignmentFile: (file: File | null) => void;
+  setGuidelinesFile: (file: File | null) => void;
   setRubricFile: (file: File | null) => void;
   setCurrentStep: (step: ScoringStep) => void;
   setProcessing: (processing: boolean) => void;
-  setGuidelines: (guidelines: string) => void;
   setCustomRubric: (rubric: string) => void;
   setScoringResult: (result: ScoringResult | null) => void;
   setError: (error: string | null) => void;
@@ -66,8 +66,10 @@ export interface ScorerState {
   
   // Upload status actions
   markAssignmentUploaded: (savedAs: string) => void;
+  markGuidelinesUploaded: (savedAs: string) => void;
   markRubricUploaded: (savedAs: string) => void;
   setAssignmentUploadError: (error: string | null) => void;
+  setGuidelinesUploadError: (error: string | null) => void;
   setRubricUploadError: (error: string | null) => void;
   
   // Complex actions
@@ -79,10 +81,10 @@ export interface ScorerState {
 // Initial state
 const initialState = {
   assignmentFile: null,
+  guidelinesFile: null,
   rubricFile: null,
   currentStep: 'upload' as ScoringStep,
   isProcessing: false,
-  guidelines: '',
   customRubric: '',
   scoringResult: null,
   error: null,
@@ -112,6 +114,22 @@ export const useScorerStore = create<ScorerState>()(
         }
       },
 
+      setGuidelinesFile: (file) => {
+        if (file) {
+          const scoringFile: ScoringFile = {
+            file,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            uploadedAt: new Date(),
+            uploaded: false,
+          };
+          set({ guidelinesFile: scoringFile, error: null });
+        } else {
+          set({ guidelinesFile: null });
+        }
+      },
+
       setRubricFile: (file) => {
         if (file) {
           const scoringFile: ScoringFile = {
@@ -131,7 +149,6 @@ export const useScorerStore = create<ScorerState>()(
       // State setters
       setCurrentStep: (step) => set({ currentStep: step }),
       setProcessing: (processing) => set({ isProcessing: processing }),
-      setGuidelines: (guidelines) => set({ guidelines }),
       setCustomRubric: (rubric) => set({ customRubric: rubric }),
       setScoringResult: (result) => set({ scoringResult: result }),
       setError: (error) => set({ error }),
@@ -143,6 +160,20 @@ export const useScorerStore = create<ScorerState>()(
         if (current) {
           set({
             assignmentFile: {
+              ...current,
+              savedAs,
+              uploaded: true,
+              uploadError: undefined,
+            }
+          });
+        }
+      },
+
+      markGuidelinesUploaded: (savedAs: string) => {
+        const current = get().guidelinesFile;
+        if (current) {
+          set({
+            guidelinesFile: {
               ...current,
               savedAs,
               uploaded: true,
@@ -179,6 +210,19 @@ export const useScorerStore = create<ScorerState>()(
         }
       },
 
+      setGuidelinesUploadError: (error: string | null) => {
+        const current = get().guidelinesFile;
+        if (current) {
+          set({
+            guidelinesFile: {
+              ...current,
+              uploaded: false,
+              uploadError: error || undefined,
+            }
+          });
+        }
+      },
+
       setRubricUploadError: (error: string | null) => {
         const current = get().rubricFile;
         if (current) {
@@ -196,8 +240,7 @@ export const useScorerStore = create<ScorerState>()(
       resetScorer: () => {
         set({
           ...initialState,
-          // Keep guidelines and custom rubric as they might be reused
-          guidelines: get().guidelines,
+          // Keep custom rubric as it might be reused
           customRubric: get().customRubric,
         });
       },
@@ -205,7 +248,6 @@ export const useScorerStore = create<ScorerState>()(
       startNewScoring: () => {
         set({
           ...initialState,
-          guidelines: get().guidelines,
           customRubric: get().customRubric,
         });
       },
@@ -223,7 +265,6 @@ export const useScorerStore = create<ScorerState>()(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         // Only persist certain fields (not files or processing state)
-        guidelines: state.guidelines,
         customRubric: state.customRubric,
         // Don't persist files, processing state, or results
       }),
@@ -238,10 +279,10 @@ export const useScorer = () => {
   return {
     // State
     assignmentFile: store.assignmentFile,
+    guidelinesFile: store.guidelinesFile,
     rubricFile: store.rubricFile,
     currentStep: store.currentStep,
     isProcessing: store.isProcessing,
-    guidelines: store.guidelines,
     customRubric: store.customRubric,
     scoringResult: store.scoringResult,
     error: store.error,
@@ -254,10 +295,10 @@ export const useScorer = () => {
     
     // Actions
     setAssignmentFile: store.setAssignmentFile,
+    setGuidelinesFile: store.setGuidelinesFile,
     setRubricFile: store.setRubricFile,
     setCurrentStep: store.setCurrentStep,
     setProcessing: store.setProcessing,
-    setGuidelines: store.setGuidelines,
     setCustomRubric: store.setCustomRubric,
     setScoringResult: store.setScoringResult,
     setError: store.setError,
@@ -265,8 +306,10 @@ export const useScorer = () => {
     
     // Upload actions
     markAssignmentUploaded: store.markAssignmentUploaded,
+    markGuidelinesUploaded: store.markGuidelinesUploaded,
     markRubricUploaded: store.markRubricUploaded,
     setAssignmentUploadError: store.setAssignmentUploadError,
+    setGuidelinesUploadError: store.setGuidelinesUploadError,
     setRubricUploadError: store.setRubricUploadError,
     
     // Complex actions
@@ -281,10 +324,10 @@ export const useScorerActions = () => {
   const store = useScorerStore();
   return {
     setAssignmentFile: store.setAssignmentFile,
+    setGuidelinesFile: store.setGuidelinesFile,
     setRubricFile: store.setRubricFile,
     setCurrentStep: store.setCurrentStep,
     setProcessing: store.setProcessing,
-    setGuidelines: store.setGuidelines,
     setCustomRubric: store.setCustomRubric,
     setScoringResult: store.setScoringResult,
     setError: store.setError,

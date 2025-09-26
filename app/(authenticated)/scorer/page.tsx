@@ -22,8 +22,8 @@ export default function AssignmentScorer() {
     setProcessing,
     isProcessing,
     assignmentFile,
+    guidelinesFile,
     rubricFile,
-    guidelines,
     customRubric,
     setScoringResult,
     setError,
@@ -150,6 +150,10 @@ export default function AssignmentScorer() {
 
   const startAnalysis = async () => {
     if (!assignmentFile || !assignmentFile.uploaded || !assignmentFile.savedAs) return;
+    if (!guidelinesFile || !guidelinesFile.uploaded || !guidelinesFile.savedAs) {
+      setError('Please upload guidelines file before starting analysis');
+      return;
+    }
     
     if (!socket) {
       setError('Socket connection not available. Please refresh the page.');
@@ -164,27 +168,19 @@ export default function AssignmentScorer() {
       const uploadBaseUrl = process.env.NEXT_PUBLIC_UPLOAD_URL || '';
       const assignmentUrl = [`${uploadBaseUrl}/assignments/${assignmentFile.savedAs}`];
       
-      // Build guidelines URLs - include both guidelines text and rubric file if available
+      // Build guidelines URLs - include guidelines file and rubric file
       const guidelinesUrl: string[] = [];
+      guidelinesUrl.push(`${uploadBaseUrl}/guidelines/${guidelinesFile.savedAs}`);
+      
       if (rubricFile?.uploaded && rubricFile.savedAs) {
         guidelinesUrl.push(`${uploadBaseUrl}/rubrics/${rubricFile.savedAs}`);
-      }
-      if (guidelines?.trim()) {
-        // For text guidelines, we could create a temporary file or pass as metadata
-        // For now, we'll need to handle this in the socket payload
-      }
-      
-      // Ensure we have at least something for guidelines
-      if (guidelinesUrl.length === 0 && !guidelines?.trim()) {
-        guidelinesUrl.push(''); // Backend expects at least one URL, even if empty
       }
       
       // Trigger grading via socket
       socket.emit('assignment:trigger-grading', {
         assignmentUrl,
         guidelinesUrl,
-        title: `Assignment Scoring - ${assignmentFile.name}`,
-        guidelines: guidelines || undefined // Pass text guidelines as metadata
+        title: `Assignment Scoring - ${assignmentFile.name}`
       });
       
       setCurrentStep('analyzing');
