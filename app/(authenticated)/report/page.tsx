@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Loader2, AlertCircle } from "lucide-react";
 import { useReportStore } from "./store";
@@ -13,15 +13,17 @@ import {
 } from "./sections";
 
 export default function AssignmentReport() {
-  const params = useParams();
+  const searchParams = useSearchParams();
   const { reportData, isLoading, error, fetchReportData } = useReportStore();
 
   useEffect(() => {
-    const id = params?.id as string;
+    const id = searchParams?.get('id');
+    console.log('Report page - ID from URL:', id);
     if (id && !reportData) {
+      console.log('Fetching report data for ID:', id);
       fetchReportData(id);
     }
-  }, [params?.id, reportData, fetchReportData]);
+  }, [searchParams, reportData, fetchReportData]);
 
   if (isLoading) {
     return (
@@ -59,7 +61,7 @@ export default function AssignmentReport() {
           <p className="text-muted-foreground mb-4">{error}</p>
           <button
             onClick={() => {
-              const id = params?.id as string;
+              const id = searchParams?.get('id');
               if (id) fetchReportData(id);
             }}
             className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
