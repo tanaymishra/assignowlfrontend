@@ -1,4 +1,5 @@
-import { ScoringResult } from './store/scorerStore';
+import { ScoringResult, ScoringFile } from './store/scorerStore';
+import { uploadFile, uploadFiles, UploadError, UploadedFile } from '@/lib/upload';
 
 // API endpoints
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -9,13 +10,13 @@ if (!BASE_URL) {
 
 // Types for API requests
 export interface AnalyzeAssignmentRequest {
-  assignmentFile: File;
+  assignmentFileName: string; // savedAs filename from upload
   guidelines?: string;
 }
 
 export interface ScoreAssignmentRequest {
-  assignmentFile: File;
-  rubricFile?: File;
+  assignmentFileName: string; // savedAs filename from upload
+  rubricFileName?: string; // savedAs filename from upload
   guidelines?: string;
   customRubric?: string;
 }
@@ -35,7 +36,8 @@ export class ScorerError extends Error {
   constructor(
     message: string,
     public status: number = 0,
-    public code?: string
+    public code?: string,
+    public details?: any
   ) {
     super(message);
     this.name = 'ScorerError';
@@ -99,6 +101,92 @@ function createFormData(data: Record<string, any>): FormData {
   return formData;
 }
 
+// File upload functions
+
+/**
+ * Upload assignment file to server
+ * @param file - The assignment file to upload
+ * @returns Promise<string> - Returns the savedAs filename
+ */
+export async function uploadAssignmentFile(file: File): Promise<string> {
+  try {
+    const uploadedFile = await uploadFile('assignments', file);
+    return uploadedFile.savedAs;
+  } catch (error) {
+    if (error instanceof UploadError) {
+      throw new ScorerError(`Failed to upload assignment: ${error.message}`, error.status);
+    }
+    throw new ScorerError('Failed to upload assignment file', 0);
+  }
+}
+
+/**
+ * Upload rubric file to server
+ * @param file - The rubric file to upload
+ * @returns Promise<string> - Returns the savedAs filename
+ */
+export async function uploadRubricFile(file: File): Promise<string> {
+  try {
+    const uploadedFile = await uploadFile('rubrics', file);
+    return uploadedFile.savedAs;
+  } catch (error) {
+    if (error instanceof UploadError) {
+      throw new ScorerError(`Failed to upload rubric: ${error.message}`, error.status);
+    }
+    throw new ScorerError('Failed to upload rubric file', 0);
+  }
+}
+
+/**
+ * Upload both assignment and rubric files together
+ * @param assignmentFile - The assignment file
+ * @param rubricFile - The rubric file (optional)
+ * @returns Promise<{assignmentSavedAs: string, rubricSavedAs?: string}>
+ */
+export async function uploadScorerFiles(
+  assignmentFile: File, 
+  rubricFile?: File
+): Promise<{ assignmentSavedAs: string; rubricSavedAs?: string }> {
+  try {
+    const filesToUpload = [assignmentFile];
+    if (rubricFile) {
+      filesToUpload.push(rubricFile);
+    }
+
+    const result = await uploadFiles('assignments', filesToUpload);
+    
+    if (result.successfulUploads !== filesToUpload.length) {
+      throw new ScorerError(
+        `Failed to upload all files. Successful: ${result.successfulUploads}/${result.totalFiles}`,
+        0,
+        undefined,
+        result
+      );
+    }
+
+    // Find assignment and rubric files in response
+    const assignmentUpload = result.files.find(f => f.originalName === assignmentFile.name);
+    const rubricUpload = rubricFile ? result.files.find(f => f.originalName === rubricFile.name) : undefined;
+
+    if (!assignmentUpload) {
+      throw new ScorerError('Assignment file upload not found in response', 0, undefined, result);
+    }
+
+    return {
+      assignmentSavedAs: assignmentUpload.savedAs,
+      rubricSavedAs: rubricUpload?.savedAs,
+    };
+  } catch (error) {
+    if (error instanceof ScorerError) {
+      throw error;
+    }
+    if (error instanceof UploadError) {
+      throw new ScorerError(`Upload failed: ${error.message}`, error.status);
+    }
+    throw new ScorerError('Failed to upload files', 0);
+  }
+}
+
 // API functions
 
 /**
@@ -107,14 +195,15 @@ function createFormData(data: Record<string, any>): FormData {
 export async function analyzeAssignment(
   request: AnalyzeAssignmentRequest
 ): Promise<AnalysisResult> {
-  const formData = createFormData({
-    assignment: request.assignmentFile,
-    guidelines: request.guidelines,
-  });
-
   return apiRequest<AnalysisResult>('/api/scorer/analyze', {
     method: 'POST',
-    body: formData,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      assignmentFileName: request.assignmentFileName,
+      guidelines: request.guidelines,
+    }),
   });
 }
 
@@ -124,16 +213,17 @@ export async function analyzeAssignment(
 export async function scoreAssignment(
   request: ScoreAssignmentRequest
 ): Promise<ScoringResult> {
-  const formData = createFormData({
-    assignment: request.assignmentFile,
-    rubric: request.rubricFile,
-    guidelines: request.guidelines,
-    customRubric: request.customRubric,
-  });
-
   const result = await apiRequest<any>('/api/scorer/score', {
     method: 'POST',
-    body: formData,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      assignmentFileName: request.assignmentFileName,
+      rubricFileName: request.rubricFileName,
+      guidelines: request.guidelines,
+      customRubric: request.customRubric,
+    }),
   });
 
   // Transform API result to match our ScoringResult interface
@@ -281,6 +371,68 @@ export function calculateProgress(step: string): number {
   };
 
   return stepProgress[step] || 0;
+}
+
+/**
+ * Complete workflow: Upload assignment and analyze
+ */
+export async function uploadAndAnalyzeAssignment(
+  assignmentFile: File,
+  guidelines?: string,
+  onProgress?: (progress: number) => void
+): Promise<{ analysisResult: AnalysisResult; savedAs: string }> {
+  try {
+    // Upload file first
+    onProgress?.(25);
+    const savedAs = await uploadAssignmentFile(assignmentFile);
+    
+    // Analyze the uploaded file
+    onProgress?.(75);
+    const analysisResult = await analyzeAssignment({
+      assignmentFileName: savedAs,
+      guidelines,
+    });
+    
+    onProgress?.(100);
+    return { analysisResult, savedAs };
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * Complete workflow: Upload files and score assignment
+ */
+export async function uploadAndScoreAssignment(
+  assignmentFile: File,
+  rubricFile?: File,
+  guidelines?: string,
+  customRubric?: string,
+  onProgress?: (progress: number) => void
+): Promise<{ scoringResult: ScoringResult; assignmentSavedAs: string; rubricSavedAs?: string }> {
+  try {
+    // Upload files first
+    onProgress?.(25);
+    const uploadResult = await uploadScorerFiles(assignmentFile, rubricFile);
+    
+    // Score the uploaded files
+    onProgress?.(75);
+    const scoringResult = await scoreAssignment({
+      assignmentFileName: uploadResult.assignmentSavedAs,
+      rubricFileName: uploadResult.rubricSavedAs,
+      guidelines,
+      customRubric,
+    });
+    
+    onProgress?.(100);
+    return { 
+      scoringResult, 
+      assignmentSavedAs: uploadResult.assignmentSavedAs,
+      rubricSavedAs: uploadResult.rubricSavedAs,
+    };
+  } catch (error) {
+    throw error;
+  }
 }
 
 /**

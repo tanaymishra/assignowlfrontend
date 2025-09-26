@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useScorer } from "./store/scorerStore";
-import { simulateProcessing, analyzeAssignment, scoreAssignment } from "./logic";
+import { uploadAndAnalyzeAssignment, uploadAndScoreAssignment } from "./logic";
 import { 
   ProgressSteps, 
   FileUploadSection, 
@@ -47,14 +47,12 @@ export default function AssignmentScorer() {
       setCurrentStep('analyzing');
       setProgress(25);
       
-      // Simulate analysis with API call
-      await simulateProcessing(2000, 4000);
-      
-      // In real implementation, this would be:
-      // const analysisResult = await analyzeAssignment({
-      //   assignmentFile: assignmentFile.file,
-      //   guidelines: guidelines || undefined,
-      // });
+      // Upload and analyze assignment
+      await uploadAndAnalyzeAssignment(
+        assignmentFile.file,
+        guidelines || undefined,
+        (progress) => setProgress(25 + (progress * 0.25)) // Progress from 25% to 50%
+      );
       
       setProgress(50);
       setCurrentStep('rubric');
@@ -74,18 +72,16 @@ export default function AssignmentScorer() {
       setCurrentStep('scoring');
       setProgress(75);
       
-      // Simulate scoring with API call
-      await simulateProcessing(3000, 6000);
+      // Upload and score assignment
+      const result = await uploadAndScoreAssignment(
+        assignmentFile.file,
+        rubricFile?.file,
+        guidelines || undefined,
+        customRubric || undefined,
+        (progress) => setProgress(75 + (progress * 0.25)) // Progress from 75% to 100%
+      );
       
-      // In real implementation, this would be:
-      // const scoringResult = await scoreAssignment({
-      //   assignmentFile: assignmentFile.file,
-      //   rubricFile: rubricFile?.file,
-      //   guidelines: guidelines || undefined,
-      //   customRubric: customRubric || undefined,
-      // });
-      // setScoringResult(scoringResult);
-      
+      setScoringResult(result.scoringResult);
       setProgress(100);
       setCurrentStep('complete');
     } catch (error) {

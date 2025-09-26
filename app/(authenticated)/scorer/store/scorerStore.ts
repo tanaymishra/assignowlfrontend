@@ -10,6 +10,11 @@ export interface ScoringFile {
   size: number;
   type: string;
   uploadedAt: Date;
+  // Upload metadata (populated after successful upload)
+  savedAs?: string;
+  serverPath?: string;
+  uploaded?: boolean;
+  uploadError?: string;
 }
 
 export interface ScoringResult {
@@ -60,6 +65,12 @@ export interface ScorerState {
   setError: (error: string | null) => void;
   setProgress: (progress: number) => void;
   
+  // Upload status actions
+  markAssignmentUploaded: (savedAs: string, serverPath: string) => void;
+  markRubricUploaded: (savedAs: string, serverPath: string) => void;
+  setAssignmentUploadError: (error: string) => void;
+  setRubricUploadError: (error: string) => void;
+  
   // Complex actions
   resetScorer: () => void;
   startNewScoring: () => void;
@@ -94,6 +105,7 @@ export const useScorerStore = create<ScorerState>()(
             size: file.size,
             type: file.type,
             uploadedAt: new Date(),
+            uploaded: false,
           };
           set({ assignmentFile: scoringFile, error: null });
         } else {
@@ -109,6 +121,7 @@ export const useScorerStore = create<ScorerState>()(
             size: file.size,
             type: file.type,
             uploadedAt: new Date(),
+            uploaded: false,
           };
           set({ rubricFile: scoringFile, error: null });
         } else {
@@ -124,6 +137,63 @@ export const useScorerStore = create<ScorerState>()(
       setScoringResult: (result) => set({ scoringResult: result }),
       setError: (error) => set({ error }),
       setProgress: (progress) => set({ progress }),
+
+      // Upload status actions
+      markAssignmentUploaded: (savedAs, serverPath) => {
+        const current = get().assignmentFile;
+        if (current) {
+          set({
+            assignmentFile: {
+              ...current,
+              savedAs,
+              serverPath,
+              uploaded: true,
+              uploadError: undefined,
+            }
+          });
+        }
+      },
+
+      markRubricUploaded: (savedAs, serverPath) => {
+        const current = get().rubricFile;
+        if (current) {
+          set({
+            rubricFile: {
+              ...current,
+              savedAs,
+              serverPath,
+              uploaded: true,
+              uploadError: undefined,
+            }
+          });
+        }
+      },
+
+      setAssignmentUploadError: (error) => {
+        const current = get().assignmentFile;
+        if (current) {
+          set({
+            assignmentFile: {
+              ...current,
+              uploaded: false,
+              uploadError: error,
+            }
+          });
+        }
+      },
+
+      setRubricUploadError: (error) => {
+        const current = get().rubricFile;
+        if (current) {
+          set({
+            rubricFile: {
+              ...current,
+              uploaded: false,
+              uploadError: error,
+            }
+          });
+        }
+      },
 
       // Complex actions
       resetScorer: () => {
@@ -195,6 +265,14 @@ export const useScorer = () => {
     setScoringResult: store.setScoringResult,
     setError: store.setError,
     setProgress: store.setProgress,
+    
+    // Upload actions
+    markAssignmentUploaded: store.markAssignmentUploaded,
+    markRubricUploaded: store.markRubricUploaded,
+    setAssignmentUploadError: store.setAssignmentUploadError,
+    setRubricUploadError: store.setRubricUploadError,
+    
+    // Complex actions
     resetScorer: store.resetScorer,
     startNewScoring: store.startNewScoring,
     clearFiles: store.clearFiles,

@@ -24,6 +24,9 @@ export function RubricSection({ onProceedWithScoring, onSkipRubric }: RubricSect
     setError 
   } = useScorer();
 
+  // Check for upload-specific errors
+  const displayError = error || rubricFile?.uploadError;
+
   const [activeTab, setActiveTab] = useState<'upload' | 'custom' | 'guidelines'>('upload');
 
   const handleRubricUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -152,6 +155,12 @@ export function RubricSection({ onProceedWithScoring, onSkipRubric }: RubricSect
                         <span>{getFileTypeDisplay(rubricFile.type)}</span>
                         <span>•</span>
                         <span>{formatFileSize(rubricFile.size)}</span>
+                        {rubricFile.uploaded && (
+                          <>
+                            <span>•</span>
+                            <span className="text-green-600 dark:text-green-400">Uploaded to server</span>
+                          </>
+                        )}
                       </div>
                     </div>
                     <Button
@@ -222,14 +231,14 @@ Example:
           )}
 
           {/* Error Display */}
-          {error && (
+          {displayError && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className="flex items-center space-x-2 text-destructive bg-destructive/10 border border-destructive/20 rounded-lg p-3"
             >
               <AlertCircle className="h-4 w-4 flex-shrink-0" />
-              <p className="text-sm">{error}</p>
+              <p className="text-sm">{displayError}</p>
             </motion.div>
           )}
         </div>

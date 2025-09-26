@@ -19,6 +19,9 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
     canProceed 
   } = useScorer();
 
+  // Check for upload-specific errors
+  const displayError = error || assignmentFile?.uploadError;
+
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -113,7 +116,13 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
                     <span>•</span>
                     <span>{formatFileSize(assignmentFile.size)}</span>
                     <span>•</span>
-                    <span>Uploaded {assignmentFile.uploadedAt.toLocaleTimeString()}</span>
+                    <span>Added {assignmentFile.uploadedAt.toLocaleTimeString()}</span>
+                    {assignmentFile.uploaded && (
+                      <>
+                        <span>•</span>
+                        <span className="text-green-600 dark:text-green-400">Uploaded to server</span>
+                      </>
+                    )}
                   </div>
                 </div>
                 <Button
@@ -129,14 +138,14 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
           )}
 
           {/* Error Display */}
-          {error && (
+          {displayError && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className="flex items-center space-x-2 text-destructive bg-destructive/10 border border-destructive/20 rounded-lg p-3"
             >
               <AlertCircle className="h-4 w-4 flex-shrink-0" />
-              <p className="text-sm">{error}</p>
+              <p className="text-sm">{displayError}</p>
             </motion.div>
           )}
         </div>
