@@ -12,7 +12,6 @@ export interface ScoringFile {
   uploadedAt: Date;
   // Upload metadata (populated after successful upload)
   savedAs?: string;
-  serverPath?: string;
   uploaded?: boolean;
   uploadError?: string;
 }
@@ -66,10 +65,10 @@ export interface ScorerState {
   setProgress: (progress: number) => void;
   
   // Upload status actions
-  markAssignmentUploaded: (savedAs: string, serverPath: string) => void;
-  markRubricUploaded: (savedAs: string, serverPath: string) => void;
-  setAssignmentUploadError: (error: string) => void;
-  setRubricUploadError: (error: string) => void;
+  markAssignmentUploaded: (savedAs: string) => void;
+  markRubricUploaded: (savedAs: string) => void;
+  setAssignmentUploadError: (error: string | null) => void;
+  setRubricUploadError: (error: string | null) => void;
   
   // Complex actions
   resetScorer: () => void;
@@ -139,14 +138,13 @@ export const useScorerStore = create<ScorerState>()(
       setProgress: (progress) => set({ progress }),
 
       // Upload status actions
-      markAssignmentUploaded: (savedAs, serverPath) => {
+      markAssignmentUploaded: (savedAs: string) => {
         const current = get().assignmentFile;
         if (current) {
           set({
             assignmentFile: {
               ...current,
               savedAs,
-              serverPath,
               uploaded: true,
               uploadError: undefined,
             }
@@ -154,14 +152,13 @@ export const useScorerStore = create<ScorerState>()(
         }
       },
 
-      markRubricUploaded: (savedAs, serverPath) => {
+      markRubricUploaded: (savedAs: string) => {
         const current = get().rubricFile;
         if (current) {
           set({
             rubricFile: {
               ...current,
               savedAs,
-              serverPath,
               uploaded: true,
               uploadError: undefined,
             }
@@ -169,27 +166,27 @@ export const useScorerStore = create<ScorerState>()(
         }
       },
 
-      setAssignmentUploadError: (error) => {
+      setAssignmentUploadError: (error: string | null) => {
         const current = get().assignmentFile;
         if (current) {
           set({
             assignmentFile: {
               ...current,
               uploaded: false,
-              uploadError: error,
+              uploadError: error || undefined,
             }
           });
         }
       },
 
-      setRubricUploadError: (error) => {
+      setRubricUploadError: (error: string | null) => {
         const current = get().rubricFile;
         if (current) {
           set({
             rubricFile: {
               ...current,
               uploaded: false,
-              uploadError: error,
+              uploadError: error || undefined,
             }
           });
         }

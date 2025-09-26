@@ -1,10 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FileText, Trash2, SkipForward, Sparkles, AlertCircle } from "lucide-react";
+import { FileText, Trash2, SkipForward, Sparkles, AlertCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useScorer } from "../store/scorerStore";
 import { validateRubricFile, formatFileSize, getFileTypeDisplay } from "../logic";
+import { uploadFile } from "@/lib/upload";
 import { useState } from "react";
 
 interface RubricSectionProps {
@@ -21,15 +22,18 @@ export function RubricSection({ onProceedWithScoring, onSkipRubric }: RubricSect
     customRubric,
     setCustomRubric,
     error,
-    setError 
+    setError,
+    markRubricUploaded,
+    setRubricUploadError
   } = useScorer();
 
   // Check for upload-specific errors
   const displayError = error || rubricFile?.uploadError;
 
   const [activeTab, setActiveTab] = useState<'upload' | 'custom' | 'guidelines'>('upload');
+  const [isUploadingRubric, setIsUploadingRubric] = useState(false);
 
-  const handleRubricUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRubricUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -39,8 +43,22 @@ export function RubricSection({ onProceedWithScoring, onSkipRubric }: RubricSect
       return;
     }
 
+    // Add file to state first
     setRubricFile(file);
     setError(null);
+    setRubricUploadError(null);
+
+    // Upload immediately
+    setIsUploadingRubric(true);
+    try {
+      const uploadedFile = await uploadFile('rubrics', file);
+      markRubricUploaded(uploadedFile.savedAs);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Upload failed';
+      setRubricUploadError(errorMessage);
+    } finally {
+      setIsUploadingRubric(false);
+    }
   };
 
   const removeRubricFile = () => {
@@ -155,7 +173,16 @@ export function RubricSection({ onProceedWithScoring, onSkipRubric }: RubricSect
                         <span>{getFileTypeDisplay(rubricFile.type)}</span>
                         <span>•</span>
                         <span>{formatFileSize(rubricFile.size)}</span>
-                        {rubricFile.uploaded && (
+                        {isUploadingRubric && (
+                          <>
+                            <span>•</span>
+                            <span className="text-blue-600 dark:text-blue-400 flex items-center space-x-1">
+                              <Loader2 className="h-3 w-3 animate-spin" />
+                              <span>Uploading...</span>
+                            </span>
+                          </>
+                        )}
+                        {!isUploadingRubric && rubricFile.uploaded && (
                           <>
                             <span>•</span>
                             <span className="text-green-600 dark:text-green-400">Uploaded to server</span>

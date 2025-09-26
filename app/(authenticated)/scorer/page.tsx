@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useScorer } from "./store/scorerStore";
-import { uploadAndAnalyzeAssignment, uploadAndScoreAssignment } from "./logic";
+import { analyzeAssignment, scoreAssignment } from "./logic";
 import { 
   ProgressSteps, 
   FileUploadSection, 
@@ -40,19 +40,18 @@ export default function AssignmentScorer() {
   }, [currentStep, router]);
 
   const startAnalysis = async () => {
-    if (!assignmentFile) return;
+    if (!assignmentFile || !assignmentFile.uploaded || !assignmentFile.savedAs) return;
     
     try {
       setProcessing(true);
       setCurrentStep('analyzing');
       setProgress(25);
       
-      // Upload and analyze assignment
-      await uploadAndAnalyzeAssignment(
-        assignmentFile.file,
-        guidelines || undefined,
-        (progress) => setProgress(25 + (progress * 0.25)) // Progress from 25% to 50%
-      );
+      // Analyze the already uploaded assignment
+      const analysisResult = await analyzeAssignment({
+        assignmentFileName: assignmentFile.savedAs,
+        guidelines: guidelines || undefined,
+      });
       
       setProgress(50);
       setCurrentStep('rubric');
@@ -65,23 +64,22 @@ export default function AssignmentScorer() {
   };
 
   const proceedWithScoring = async () => {
-    if (!assignmentFile) return;
+    if (!assignmentFile || !assignmentFile.uploaded || !assignmentFile.savedAs) return;
     
     try {
       setProcessing(true);
       setCurrentStep('scoring');
       setProgress(75);
       
-      // Upload and score assignment
-      const result = await uploadAndScoreAssignment(
-        assignmentFile.file,
-        rubricFile?.file,
-        guidelines || undefined,
-        customRubric || undefined,
-        (progress) => setProgress(75 + (progress * 0.25)) // Progress from 75% to 100%
-      );
+      // Score the already uploaded assignment
+      const scoringResult = await scoreAssignment({
+        assignmentFileName: assignmentFile.savedAs,
+        rubricFileName: rubricFile?.uploaded ? rubricFile.savedAs : undefined,
+        guidelines: guidelines || undefined,
+        customRubric: customRubric || undefined,
+      });
       
-      setScoringResult(result.scoringResult);
+      setScoringResult(scoringResult);
       setProgress(100);
       setCurrentStep('complete');
     } catch (error) {

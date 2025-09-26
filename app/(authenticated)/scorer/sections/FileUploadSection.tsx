@@ -1,10 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Upload, FileText, Trash2, AlertCircle } from "lucide-react";
+import { Upload, FileText, Trash2, AlertCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useScorer } from "../store/scorerStore";
 import { validateAssignmentFile, formatFileSize, getFileTypeDisplay } from "../logic";
+import { uploadFile } from "@/lib/upload";
+import { useState } from "react";
 
 interface FileUploadSectionProps {
   onStartAnalysis: () => void;
@@ -16,13 +18,17 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
     setAssignmentFile, 
     error, 
     setError,
-    canProceed 
+    canProceed,
+    markAssignmentUploaded,
+    setAssignmentUploadError
   } = useScorer();
+
+  const [isUploading, setIsUploading] = useState(false);
 
   // Check for upload-specific errors
   const displayError = error || assignmentFile?.uploadError;
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -33,8 +39,22 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
       return;
     }
 
+    // Add file to state first
     setAssignmentFile(file);
     setError(null);
+    setAssignmentUploadError(null);
+
+    // Upload immediately
+    setIsUploading(true);
+    try {
+      const uploadedFile = await uploadFile('assignments', file);
+      markAssignmentUploaded(uploadedFile.savedAs);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Upload failed';
+      setAssignmentUploadError(errorMessage);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const removeFile = () => {
@@ -117,7 +137,16 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
                     <span>{formatFileSize(assignmentFile.size)}</span>
                     <span>•</span>
                     <span>Added {assignmentFile.uploadedAt.toLocaleTimeString()}</span>
-                    {assignmentFile.uploaded && (
+                    {isUploading && (
+                      <>
+                        <span>•</span>
+                        <span className="text-blue-600 dark:text-blue-400 flex items-center space-x-1">
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                          <span>Uploading...</span>
+                        </span>
+                      </>
+                    )}
+                    {!isUploading && assignmentFile.uploaded && (
                       <>
                         <span>•</span>
                         <span className="text-green-600 dark:text-green-400">Uploaded to server</span>
@@ -154,7 +183,7 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
         <div className="flex justify-center pt-4">
           <Button
             onClick={onStartAnalysis}
-            disabled={!canProceed}
+            disabled={!canProceed || isUploading || !assignmentFile?.uploaded}
             className="bg-primary hover:bg-primary/90 px-8 py-2"
             size="lg"
           >
