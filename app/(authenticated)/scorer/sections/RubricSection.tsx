@@ -17,8 +17,6 @@ export function RubricSection({ onProceedWithScoring, onSkipRubric }: RubricSect
   const { 
     rubricFile, 
     setRubricFile, 
-    guidelines,
-    setGuidelines,
     customRubric,
     setCustomRubric,
     error,
@@ -30,7 +28,7 @@ export function RubricSection({ onProceedWithScoring, onSkipRubric }: RubricSect
   // Check for upload-specific errors
   const displayError = error || rubricFile?.uploadError;
 
-  const [activeTab, setActiveTab] = useState<'upload' | 'custom' | 'guidelines'>('upload');
+  const [activeTab, setActiveTab] = useState<'upload' | 'custom'>('upload');
   const [isUploadingRubric, setIsUploadingRubric] = useState(false);
 
   const handleRubricUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,7 +64,7 @@ export function RubricSection({ onProceedWithScoring, onSkipRubric }: RubricSect
     setError(null);
   };
 
-  const canProceed = rubricFile || customRubric.trim() || guidelines.trim();
+  const canProceed = rubricFile || customRubric.trim();
 
   return (
     <motion.div
@@ -97,7 +95,6 @@ export function RubricSection({ onProceedWithScoring, onSkipRubric }: RubricSect
             {[
               { id: 'upload', label: 'Upload File', icon: FileText },
               { id: 'custom', label: 'Custom Rubric', icon: Sparkles },
-              { id: 'guidelines', label: 'Guidelines', icon: FileText },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -226,33 +223,6 @@ Example:
               />
               <p className="text-xs text-muted-foreground">
                 Provide detailed scoring criteria to help the AI understand your expectations
-              </p>
-            </motion.div>
-          )}
-
-          {/* Guidelines Tab */}
-          {activeTab === 'guidelines' && (
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-4"
-            >
-              <textarea
-                value={guidelines}
-                onChange={(e) => setGuidelines(e.target.value)}
-                placeholder="Enter additional scoring guidelines...
-
-Example:
-• Focus on critical thinking and analysis
-• Penalize for lack of supporting evidence
-• Reward creative solutions and original insights
-• Consider formatting and presentation
-• Emphasize clarity and conciseness"
-                className="w-full h-48 p-4 bg-background/50 backdrop-blur-sm border border-border/20 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 text-sm"
-              />
-              <p className="text-xs text-muted-foreground">
-                Additional instructions to guide the AI scoring process
               </p>
             </motion.div>
           )}

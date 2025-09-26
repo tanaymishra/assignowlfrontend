@@ -20,7 +20,9 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
     setError,
     canProceed,
     markAssignmentUploaded,
-    setAssignmentUploadError
+    setAssignmentUploadError,
+    guidelines,
+    setGuidelines
   } = useScorer();
 
   const [isUploading, setIsUploading] = useState(false);
@@ -78,10 +80,10 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
       <div className="relative z-10 space-y-6">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-foreground mb-2">
-            Upload Assignment
+            Upload Assignment & Guidelines
           </h2>
           <p className="text-muted-foreground text-sm">
-            Upload your assignment file to get started with AI-powered scoring
+            Upload your assignment file and provide any specific guidelines for AI-powered scoring
           </p>
         </div>
 
@@ -166,6 +168,30 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
             </motion.div>
           )}
 
+          {/* Guidelines Section */}
+          <div className="space-y-3">
+            <label htmlFor="guidelines" className="block text-sm font-medium text-foreground">
+              Guidelines (Optional)
+            </label>
+            <textarea
+              id="guidelines"
+              value={guidelines}
+              onChange={(e) => setGuidelines(e.target.value)}
+              placeholder="Enter any specific guidelines or criteria for scoring this assignment...
+
+Examples:
+• Focus on critical thinking and analysis
+• Penalize for lack of supporting evidence
+• Reward creative solutions and original insights
+• Consider formatting and presentation
+• Emphasize clarity and conciseness"
+              className="w-full h-32 p-3 bg-background/50 backdrop-blur-sm border border-border/20 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 text-sm"
+            />
+            <p className="text-xs text-muted-foreground">
+              Provide specific instructions to guide the AI scoring process
+            </p>
+          </div>
+
           {/* Error Display */}
           {displayError && (
             <motion.div
@@ -183,7 +209,7 @@ export function FileUploadSection({ onStartAnalysis }: FileUploadSectionProps) {
         <div className="flex justify-center pt-4">
           <Button
             onClick={onStartAnalysis}
-            disabled={!canProceed || isUploading || !assignmentFile?.uploaded}
+            disabled={!assignmentFile?.uploaded || isUploading}
             className="bg-primary hover:bg-primary/90 px-8 py-2"
             size="lg"
           >
