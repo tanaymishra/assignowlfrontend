@@ -111,9 +111,9 @@ export default function AssignmentScorer() {
       setCurrentStep('complete');
       setProcessing(false);
       
-      // Redirect to results page after showing completion
+      // Redirect to report page after showing completion
       setTimeout(() => {
-        router.push(`/results/${result.assignmentId}`);
+        router.push(`/report?id=${result.assignmentId}`);
       }, 2000); // Show completion for 2 seconds before redirect
     };
 
