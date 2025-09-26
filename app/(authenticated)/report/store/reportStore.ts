@@ -93,10 +93,9 @@ export const useReportStore = create<ReportState>()(
           const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
           const response = await fetch(`${baseUrl}/grading/results/${id}`, {
             method: 'GET',
+            credentials: 'include',
             headers: {
               'Content-Type': 'application/json',
-              // Add authorization header if needed
-              // 'Authorization': `Bearer ${token}`,
             },
           });
           
