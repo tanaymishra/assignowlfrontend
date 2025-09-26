@@ -90,8 +90,8 @@ export const useReportStore = create<ReportState>()(
         setError(null);
         
         try {
-          // Using the actual endpoint pattern from your API
-          const response = await fetch(`https://api.assignowl.com/grading/results/${id}`, {
+          const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+          const response = await fetch(`${baseUrl}/grading/results/${id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
