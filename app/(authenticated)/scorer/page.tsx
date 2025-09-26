@@ -41,15 +41,7 @@ export default function AssignmentScorer() {
     }
   }, []);
 
-  // Effect to handle automatic redirects and cleanup  
-  useEffect(() => {
-    if (currentStep === 'complete') {
-      const timer = setTimeout(() => {
-        router.push('/report');
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [currentStep, router]);
+  // Note: Redirect is now handled by grading-complete socket event
 
   // Effect to handle socket events for grading
   useEffect(() => {
@@ -81,16 +73,9 @@ export default function AssignmentScorer() {
     const handleRubricFound = (response: any) => {
       console.log('Rubric found automatically:', response);
       setProgress(75);
-      // Skip rubric step since rubric was found automatically
-      setTimeout(() => {
-        setCurrentStep('scoring');
-        // Continue to final scoring phase
-        setTimeout(() => {
-          setProgress(100);
-          setCurrentStep('complete');
-          setProcessing(false);
-        }, 3000); // Simulate scoring time
-      }, 1000);
+      // Skip rubric step since rubric was found automatically - go straight to scoring
+      setCurrentStep('scoring');
+      // Wait for grading-complete event instead of simulating
     };
 
     // Rubric required - user needs to provide rubric or skip
@@ -108,12 +93,7 @@ export default function AssignmentScorer() {
       setProcessing(true);
       setCurrentStep('scoring');
       setProgress(75);
-      // Continue to scoring
-      setTimeout(() => {
-        setProgress(100);
-        setCurrentStep('complete');
-        setProcessing(false);
-      }, 3000); // Simulate scoring time
+      // Wait for grading-complete event instead of simulating
     };
 
     // Rubric submission failed
@@ -123,6 +103,27 @@ export default function AssignmentScorer() {
       setProcessing(false);
       // Stay on rubric step for user to retry
     };
+
+    // Grading completed - redirect to results
+    const handleGradingComplete = (result: any) => {
+      console.log('Grading completed for assignment:', result.assignmentId);
+      setProgress(100);
+      setCurrentStep('complete');
+      setProcessing(false);
+      
+      // Redirect to results page after showing completion
+      setTimeout(() => {
+        router.push(`/results/${result.assignmentId}`);
+      }, 2000); // Show completion for 2 seconds before redirect
+    };
+
+    // Final grading failed
+    const handleFinalGradingFailed = (error: any) => {
+      console.error('Final grading failed:', error);
+      setError(error.error || 'Failed to complete grading process');
+      setCurrentStep('rubric'); // Go back to rubric step to allow retry
+      setProcessing(false);
+    };
     
     // Register event listeners
     socket.on('assignment:grading-triggered', handleGradingTriggered);
@@ -131,6 +132,8 @@ export default function AssignmentScorer() {
     socket.on('assignment:rubric-required', handleRubricRequired);
     socket.on('assignment:rubric-submitted', handleRubricSubmitted);
     socket.on('assignment:rubric-submit-failed', handleRubricSubmitFailed);
+    socket.on('assignment:grading-complete', handleGradingComplete);
+    socket.on('assignment:grading-failed', handleFinalGradingFailed);
     
     // Cleanup event listeners
     return () => {
@@ -140,6 +143,8 @@ export default function AssignmentScorer() {
       socket.off('assignment:rubric-required', handleRubricRequired);
       socket.off('assignment:rubric-submitted', handleRubricSubmitted);
       socket.off('assignment:rubric-submit-failed', handleRubricSubmitFailed);
+      socket.off('assignment:grading-complete', handleGradingComplete);
+      socket.off('assignment:grading-failed', handleFinalGradingFailed);
     };
   }, [socket, setError, setCurrentStep, setProcessing, setProgress]);
 
