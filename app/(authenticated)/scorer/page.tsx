@@ -64,13 +64,8 @@ export default function AssignmentScorer() {
         url.searchParams.set('id', response.assignmentId.toString());
         window.history.replaceState({}, '', url.toString());
         
-        // Continue with analysis progress
+        // Continue with analysis progress - wait for rubric analysis
         setProgress(50);
-        // You can add more progress updates or transition to next step here
-        setTimeout(() => {
-          setCurrentStep('rubric');
-          setProcessing(false);
-        }, 2000); // Simulate some processing time
       }
     };
     
@@ -81,15 +76,70 @@ export default function AssignmentScorer() {
       setCurrentStep('upload');
       setProcessing(false);
     };
+
+    // Rubric found automatically - proceed to scoring
+    const handleRubricFound = (response: any) => {
+      console.log('Rubric found automatically:', response);
+      setProgress(75);
+      // Skip rubric step since rubric was found automatically
+      setTimeout(() => {
+        setCurrentStep('scoring');
+        // Continue to final scoring phase
+        setTimeout(() => {
+          setProgress(100);
+          setCurrentStep('complete');
+          setProcessing(false);
+        }, 3000); // Simulate scoring time
+      }, 1000);
+    };
+
+    // Rubric required - user needs to provide rubric or skip
+    const handleRubricRequired = (response: any) => {
+      console.log('Rubric required:', response);
+      setProgress(60);
+      // Show rubric section for user to provide rubric or skip
+      setCurrentStep('rubric');
+      setProcessing(false);
+    };
+
+    // Rubric submitted successfully
+    const handleRubricSubmitted = (response: any) => {
+      console.log('Rubric submitted successfully:', response);
+      setProcessing(true);
+      setCurrentStep('scoring');
+      setProgress(75);
+      // Continue to scoring
+      setTimeout(() => {
+        setProgress(100);
+        setCurrentStep('complete');
+        setProcessing(false);
+      }, 3000); // Simulate scoring time
+    };
+
+    // Rubric submission failed
+    const handleRubricSubmitFailed = (error: any) => {
+      console.error('Rubric submission failed:', error);
+      setError(error.error || 'Failed to submit rubric');
+      setProcessing(false);
+      // Stay on rubric step for user to retry
+    };
     
     // Register event listeners
     socket.on('assignment:grading-triggered', handleGradingTriggered);
     socket.on('assignment:grading-failed', handleGradingFailed);
+    socket.on('assignment:rubric-found', handleRubricFound);
+    socket.on('assignment:rubric-required', handleRubricRequired);
+    socket.on('assignment:rubric-submitted', handleRubricSubmitted);
+    socket.on('assignment:rubric-submit-failed', handleRubricSubmitFailed);
     
     // Cleanup event listeners
     return () => {
       socket.off('assignment:grading-triggered', handleGradingTriggered);
       socket.off('assignment:grading-failed', handleGradingFailed);
+      socket.off('assignment:rubric-found', handleRubricFound);
+      socket.off('assignment:rubric-required', handleRubricRequired);
+      socket.off('assignment:rubric-submitted', handleRubricSubmitted);
+      socket.off('assignment:rubric-submit-failed', handleRubricSubmitFailed);
     };
   }, [socket, setError, setCurrentStep, setProcessing, setProgress]);
 
@@ -142,34 +192,78 @@ export default function AssignmentScorer() {
   };
 
   const proceedWithScoring = async () => {
-    if (!assignmentFile || !assignmentFile.uploaded || !assignmentFile.savedAs) return;
+    if (!socket) {
+      setError('Socket connection not available. Please refresh the page.');
+      return;
+    }
+
+    // Get assignment ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const assignmentId = urlParams.get('id');
+    
+    if (!assignmentId) {
+      setError('Assignment ID not found. Please restart the process.');
+      return;
+    }
     
     try {
       setProcessing(true);
-      setCurrentStep('scoring');
-      setProgress(75);
+      setError(null);
       
-      // Score the already uploaded assignment
-      const scoringResult = await scoreAssignment({
-        assignmentFileName: assignmentFile.savedAs,
-        rubricFileName: rubricFile?.uploaded ? rubricFile.savedAs : undefined,
-        guidelines: guidelines || undefined,
-        customRubric: customRubric || undefined,
-      });
+      // Check if user provided a rubric file
+      if (rubricFile?.uploaded && rubricFile.savedAs) {
+        // User provided a rubric file - submit it
+        const uploadBaseUrl = process.env.NEXT_PUBLIC_UPLOAD_URL || '';
+        const rubricUrl = `${uploadBaseUrl}/rubrics/${rubricFile.savedAs}`;
+        
+        socket.emit('assignment:submit-rubric', {
+          assignmentId: assignmentId,
+          action: 'provide',
+          rubricUrl: rubricUrl
+        });
+      } else {
+        // No rubric file provided - skip rubric
+        socket.emit('assignment:submit-rubric', {
+          assignmentId: assignmentId,
+          action: 'skip'
+        });
+      }
       
-      setScoringResult(scoringResult);
-      setProgress(100);
-      setCurrentStep('complete');
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Scoring failed');
-      setCurrentStep('rubric');
-    } finally {
+      setError(error instanceof Error ? error.message : 'Failed to submit rubric');
       setProcessing(false);
     }
   };
 
-  const skipRubric = () => {
-    proceedWithScoring();
+  const skipRubric = async () => {
+    if (!socket) {
+      setError('Socket connection not available. Please refresh the page.');
+      return;
+    }
+
+    // Get assignment ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const assignmentId = urlParams.get('id');
+    
+    if (!assignmentId) {
+      setError('Assignment ID not found. Please restart the process.');
+      return;
+    }
+    
+    try {
+      setProcessing(true);
+      setError(null);
+      
+      // Skip rubric - no rubric file needed
+      socket.emit('assignment:submit-rubric', {
+        assignmentId: assignmentId,
+        action: 'skip'
+      });
+      
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to skip rubric');
+      setProcessing(false);
+    }
   };
 
   return (
@@ -200,7 +294,7 @@ export default function AssignmentScorer() {
         {/* Step 2: AI Analyzing */}
         {currentStep === 'analyzing' && (
           <AIThinkingAnimation 
-            message="Analyzing your assignment content, structure, and quality..." 
+            message="Analyzing your assignment and detecting rubric requirements..." 
             progress={progress}
           />
         )}
