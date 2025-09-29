@@ -35,7 +35,7 @@ export class UploadError extends Error {
   constructor(
     message: string,
     public status: number = 0,
-    public response?: any
+    public response?: unknown
   ) {
     super(message);
     this.name = 'UploadError';

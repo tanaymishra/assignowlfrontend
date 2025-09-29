@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext, ReactNode } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 
@@ -106,7 +106,7 @@ export const DesktopSidebar = ({
         <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/10 to-background/30 rounded-r-2xl" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-r-2xl" />
         <div className="relative z-10 overflow-hidden">
-          {children}
+          {children as any}
         </div>
       </motion.div>
     </>
