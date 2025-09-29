@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SignInButton } from "@/components/ui/signin-button"
-import { ThemeToggle } from "@/components/theme/theme-toggle"
+// import { ThemeToggle } from "@/components/theme/theme-toggle"
 import { useAuth } from "@/lib/store"
 import { cn } from "@/lib/utils"
 import { User, LogOut, Settings } from "lucide-react"
@@ -32,7 +32,7 @@ export function Navbar({ className }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const { user, isAuthenticated, isHydrated, logout } = useAuth()
-  
+
   const handleLogout = () => {
     logout()
     setIsOpen(false)
@@ -78,7 +78,7 @@ export function Navbar({ className }: NavbarProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-          <Image className="w-30" src={"/comman/logo.svg"} width={60} height={30} alt=""></Image>
+            <Image className="w-30" src={"/comman/logo.svg"} width={60} height={30} alt=""></Image>
           </motion.div>
 
           {/* Desktop Navigation */}
@@ -104,8 +104,7 @@ export function Navbar({ className }: NavbarProps) {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <ThemeToggle />
-            
+            {/* Theme toggle removed temporarily */}
             {!isHydrated ? (
               // Loading state during hydration
               <div className="flex items-center space-x-4">
@@ -150,37 +149,37 @@ export function Navbar({ className }: NavbarProps) {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-2">
-            <ThemeToggle />
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsOpen(!isOpen)}
-              className="h-9 w-9"
-            >
-              <AnimatePresence mode="wait">
-                {isOpen ? (
-                  <motion.div
-                    key="close"
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <X className="h-5 w-5" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="menu"
-                    initial={{ rotate: 90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Menu className="h-5 w-5" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </Button>
+            {/* <ThemeToggle /> */}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsOpen(!isOpen)}
+                className="h-9 w-9"
+              >
+                <AnimatePresence mode="wait">
+                  {isOpen ? (
+                    <motion.div
+                      key="close"
+                      initial={{ rotate: -90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <X className="h-5 w-5" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="menu"
+                      initial={{ rotate: 90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: -90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Menu className="h-5 w-5" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </Button>
           </div>
         </div>
 

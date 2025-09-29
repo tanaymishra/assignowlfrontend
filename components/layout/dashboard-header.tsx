@@ -2,7 +2,7 @@
 
 import { Bell, Search, User, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { ThemeToggle } from '@/components/theme/theme-toggle'
+// import { ThemeToggle } from '@/components/theme/theme-toggle'
 import { useAuth } from '@/lib/store'
 import { motion } from 'framer-motion'
 
@@ -58,7 +58,7 @@ export default function DashboardHeader({ onMobileMenuClick }: DashboardHeaderPr
             />
           </Button>
           
-          <ThemeToggle />
+          {/* <ThemeToggle /> */}
           
           {/* User info - responsive */}
           {user && (
