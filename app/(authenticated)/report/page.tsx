@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Loader2, AlertCircle } from "lucide-react";
@@ -12,7 +12,7 @@ import {
   DownloadSection
 } from "./sections";
 
-export default function AssignmentReport() {
+function ReportContent() {
   const searchParams = useSearchParams();
   const { reportData, isLoading, error, fetchReportData } = useReportStore();
 
@@ -105,5 +105,33 @@ export default function AssignmentReport() {
       {/* PDF Download Section */}
       <DownloadSection />
     </div>
+  );
+}
+
+export default function AssignmentReport() {
+  return (
+    <Suspense 
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+            className="text-center"
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              className="mb-4"
+            >
+              <Loader2 className="h-8 w-8 text-primary mx-auto" />
+            </motion.div>
+            <p className="text-muted-foreground">Loading assignment report...</p>
+          </motion.div>
+        </div>
+      }
+    >
+      <ReportContent />
+    </Suspense>
   );
 }
