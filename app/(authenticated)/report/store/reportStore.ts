@@ -28,6 +28,7 @@ export interface ReportData {
 export interface ReportState {
   // Current report data
   reportData: ReportData | null;
+  currentId: string | null;
   
   // Loading states  
   isLoading: boolean;
@@ -47,11 +48,13 @@ export interface ReportState {
   setCurrentTab: (tab: 'overview' | 'breakdown' | 'feedback') => void;
   fetchReportData: (id: string) => Promise<void>;
   downloadPDFReport: () => Promise<void>;
+  clearReport: () => void;
   reset: () => void;
 }
 
 const initialState = {
   reportData: null,
+  currentId: null,
   isLoading: false,
   isDownloading: false,
   error: null,
@@ -86,6 +89,8 @@ export const useReportStore = create<ReportState>()(
       fetchReportData: async (id: string) => {
         const { setLoading, setError, setReportData } = get();
         
+        // Clear previous data when fetching new ID
+        set({ reportData: null, currentId: id });
         setLoading(true);
         setError(null);
         
@@ -127,6 +132,10 @@ export const useReportStore = create<ReportState>()(
         setDownloading(false);
       },
       
+      clearReport: () => {
+        set({ reportData: null, currentId: null, error: null });
+      },
+      
       reset: () => {
         set(initialState);
       },
@@ -136,6 +145,7 @@ export const useReportStore = create<ReportState>()(
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
         reportData: state.reportData,
+        currentId: state.currentId,
         currentTab: state.currentTab,
       }),
     }

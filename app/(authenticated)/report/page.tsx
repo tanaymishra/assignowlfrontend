@@ -14,16 +14,21 @@ import {
 
 function ReportContent() {
   const searchParams = useSearchParams();
-  const { reportData, isLoading, error, fetchReportData } = useReportStore();
+  const { reportData, currentId, isLoading, error, fetchReportData } = useReportStore();
 
   useEffect(() => {
     const id = searchParams?.get('id');
     console.log('Report page - ID from URL:', id);
-    if (id && !reportData) {
+    console.log('Current stored ID:', currentId);
+    
+    // Fetch data if:
+    // 1. There's an ID in the URL
+    // 2. AND either no current ID or the ID has changed
+    if (id && (!currentId || currentId !== id)) {
       console.log('Fetching report data for ID:', id);
       fetchReportData(id);
     }
-  }, [searchParams, reportData, fetchReportData]);
+  }, [searchParams, currentId, fetchReportData]);
 
   if (isLoading) {
     return (
