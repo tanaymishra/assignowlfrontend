@@ -42,7 +42,7 @@ export function FeatureSection() {
             viewport={{ once: true }}
             className="text-3xl md:text-5xl font-bold"
           >
-            AI-Powered Writing Tools
+            NEVER FAIL AN ASSIGNMENT EVER AGAIN!
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
