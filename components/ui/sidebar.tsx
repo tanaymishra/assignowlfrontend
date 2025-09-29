@@ -70,10 +70,12 @@ export const Sidebar = ({
 };
 
 export const SidebarBody = (props: React.ComponentProps<typeof motion.div>) => {
+  const { children, ...motionProps } = props;
+  const reactChildren = children as ReactNode;
   return (
     <>
-      <DesktopSidebar {...props} />
-      <MobileSidebar {...(props as React.ComponentProps<"div">)} />
+      <DesktopSidebar {...motionProps}>{reactChildren}</DesktopSidebar>
+      <MobileSidebar className={props.className}>{reactChildren}</MobileSidebar>
     </>
   );
 };
@@ -88,7 +90,7 @@ export const DesktopSidebar = ({
     <>
       <motion.div
         className={cn(
-          "h-screen px-4 lg:px-6 py-4 lg:py-6 hidden md:flex md:flex-col bg-background/20 backdrop-blur-xl border-r border-border/20 shrink-0 shadow-2xl relative sticky top-0",
+          "h-screen px-4 lg:px-6 py-4 lg:py-6 hidden md:flex md:flex-col bg-background/20 backdrop-blur-xl border-r border-border/20 shrink-0 shadow-2xl sticky top-0",
           className
         )}
         animate={{
@@ -106,7 +108,7 @@ export const DesktopSidebar = ({
         <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/10 to-background/30 rounded-r-2xl" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-r-2xl" />
         <div className="relative z-10 overflow-hidden">
-          {children as any}
+          {children as ReactNode}
         </div>
       </motion.div>
     </>
@@ -117,7 +119,10 @@ export const MobileSidebar = ({
   className,
   children,
   ...props
-}: React.ComponentProps<"div">) => {
+}: {
+  className?: string;
+  children?: ReactNode;
+} & React.ComponentProps<"div">) => {
   const { open, setOpen } = useSidebar();
   return (
     <>
@@ -148,7 +153,6 @@ export const MobileSidebar = ({
                 "fixed left-0 top-0 h-full w-[280px] bg-background/95 backdrop-blur-xl border-r border-border/40 z-[100] flex flex-col justify-between p-6 md:hidden shadow-2xl",
                 className
               )}
-              {...props}
             >
               {/* Glassy overlay */}
               <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/10 to-background/30" />
