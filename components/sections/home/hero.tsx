@@ -93,11 +93,11 @@ export default function HeroSection() {
               className="text-4xl md:text-5xl lg:text-6xl font-bold"
             >
               <span className="text-white">
-                AI Assignment
+                Assignment
               </span>
               <br />
               <ContainerTextFlip
-                words={["Writer", "Helper", "Referencer"]}
+                words={["Proofreading", "Scoring", "Feedback"]}
                 className="text-4xl md:text-5xl lg:text-6xl font-bold mt-5"
               />            </motion.h1>
 
@@ -108,7 +108,7 @@ export default function HeroSection() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="text-lg md:text-xl text-muted-foreground max-w-lg leading-relaxed"
             >
-              Create high-quality assignments with AI assistance. Professional, fast, and reliable academic writing service for students worldwide.
+              Create high-quality assignment report with AI assistance. Trained and tested on 1000+ assignments.
             </motion.p>
 
             {/* CTA Buttons */}
