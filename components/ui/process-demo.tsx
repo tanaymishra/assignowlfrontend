@@ -17,19 +17,19 @@ export function ProcessDemo() {
     },
     { 
       icon: Loader2, 
-      title: "Generate References", 
+      title: "Analyze assignment", 
       description: "Finding relevant sources",
       color: "text-orange-500"
     },
     { 
       icon: CheckCircle, 
-      title: "Verify Relevance", 
+      title: "Check Readiness", 
       description: "Checking reference quality",
       color: "text-purple-500"
     },
     { 
       icon: Download, 
-      title: "Generate Assignment", 
+      title: "Download Feedback", 
       description: "Creating final document",
       color: "text-green-500"
     }
