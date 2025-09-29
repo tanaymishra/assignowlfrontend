@@ -101,7 +101,10 @@ export default function AssignmentScorer() {
       console.error('Rubric submission failed:', error);
       setError(error.error || 'Failed to submit rubric');
       setProcessing(false);
-      // Stay on rubric step for user to retry
+      // Rollback to rubric step if we had optimistically advanced
+      if (currentStep === 'scoring') {
+        setCurrentStep('rubric');
+      }
     };
 
     // Grading completed - redirect to results
@@ -206,8 +209,13 @@ export default function AssignmentScorer() {
       return;
     }
     
+    // Store current state for potential rollback
+    const previousStep = currentStep;
+    const wasProcessing = isProcessing;
+    
     try {
-      setProcessing(true);
+      // Optimistic UI: Immediately advance to scoring step
+      setCurrentStep('scoring');
       setError(null);
       
       // Check if user provided a rubric file
@@ -226,9 +234,13 @@ export default function AssignmentScorer() {
         });
       }
       
+      // No need to setProcessing(false) here as the socket listener will handle state transitions
+      
     } catch (error) {
+      // Rollback on immediate error
+      setCurrentStep(previousStep);
+      setProcessing(wasProcessing);
       setError(error instanceof Error ? error.message : 'Failed to submit rubric');
-      setProcessing(false);
     }
   };
 
@@ -247,19 +259,28 @@ export default function AssignmentScorer() {
       return;
     }
     
+    // Store current state for potential rollback
+    const previousStep = currentStep;
+    const wasProcessing = isProcessing;
+    
     try {
-      setProcessing(true);
+      // Optimistic UI: Immediately advance to next step
+      setCurrentStep('scoring');
       setError(null);
       
-      // Skip rubric - no rubric file needed
+      // Send the skip request in background
       socket.emit('assignment:submit-rubric', {
         assignmentId: assignmentId,
         action: 'skip'
       });
       
+      // No need to setProcessing(false) here as the socket listener will handle state transitions
+      
     } catch (error) {
+      // Rollback on immediate error
+      setCurrentStep(previousStep);
+      setProcessing(wasProcessing);
       setError(error instanceof Error ? error.message : 'Failed to skip rubric');
-      setProcessing(false);
     }
   };
 
