@@ -118,7 +118,6 @@ export function DownloadSection() {
                   <motion.div
                     whileHover={{ y: -2 }}
                     transition={{ duration: 0.2 }}
-                    onClick={()=>{window.open(process.env.NEXT_PUBLIC_BASE_URL+"/users/getReports/"+useSearchParams().get('id'))}}
                   >
                     <Download className="h-5 w-5 mr-3" />
                   </motion.div>
