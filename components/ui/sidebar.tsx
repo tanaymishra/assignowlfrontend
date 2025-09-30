@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import React, { useState, createContext, useContext, ReactNode } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { IconMenu2, IconX } from "@tabler/icons-react";
+import Link from "next/link";
 
 interface Links {
   label: string;
@@ -191,23 +192,23 @@ export const SidebarLink = ({
   const isLogout = link.label === "Logout";
   
   return (
-    <motion.a
-      href={link.href}
-      className={cn(
-        "flex items-center justify-start gap-3 group/sidebar py-3 px-3 rounded-xl transition-all duration-300 relative overflow-hidden min-h-[44px] touch-manipulation",
-        isLogout 
-          ? "hover:bg-destructive/20 hover:backdrop-blur-sm text-muted-foreground hover:text-destructive hover:shadow-lg hover:shadow-destructive/10 active:bg-destructive/30" 
-          : "hover:bg-background/30 hover:backdrop-blur-sm text-muted-foreground hover:text-foreground hover:shadow-lg hover:shadow-primary/10 active:bg-background/40",
-        className
-      )}
-      whileHover={{ 
-        scale: 1.02,
-        x: 4
-      }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ duration: 0.2 }}
-      {...props}
-    >
+    <Link href={link.href} className="block">
+      <motion.div
+        className={cn(
+          "flex items-center justify-start gap-3 group/sidebar py-3 px-3 rounded-xl transition-all duration-300 relative overflow-hidden min-h-[44px] touch-manipulation cursor-pointer",
+          isLogout 
+            ? "hover:bg-destructive/20 hover:backdrop-blur-sm text-muted-foreground hover:text-destructive hover:shadow-lg hover:shadow-destructive/10 active:bg-destructive/30" 
+            : "hover:bg-background/30 hover:backdrop-blur-sm text-muted-foreground hover:text-foreground hover:shadow-lg hover:shadow-primary/10 active:bg-background/40",
+          className
+        )}
+        whileHover={{ 
+          scale: 1.02,
+          x: 4
+        }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ duration: 0.2 }}
+        {...props}
+      >
       {/* Glassy hover effect */}
       <motion.div
         className={cn(
@@ -240,6 +241,7 @@ export const SidebarLink = ({
       >
         {link.label}
       </motion.span>
-    </motion.a>
+      </motion.div>
+    </Link>
   );
 };
