@@ -6,7 +6,6 @@ import {
   IconBrandTabler,
   IconSettings,
   IconUserBolt,
-  IconFileText,
   IconChartBar,
   IconClipboardCheck,
   IconArrowLeft,
@@ -26,27 +25,6 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
   
   const links = [
     {
-      label: "Dashboard",
-      href: "/dashboard",
-      icon: (
-        <IconBrandTabler className="h-5 w-5 shrink-0 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
-      ),
-    },
-    {
-      label: "Assignments",
-      href: "/assignments",
-      icon: (
-        <IconFileText className="h-5 w-5 shrink-0 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
-      ),
-    },
-    {
-      label: "Analytics",
-      href: "/analytics",
-      icon: (
-        <IconChartBar className="h-5 w-5 shrink-0 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
-      ),
-    },
-    {
       label: "Assignment Scorer",
       href: "/scorer",
       icon: (
@@ -54,17 +32,17 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
       ),
     },
     {
-      label: "Previous Marks",
-      href: "/previous-marks",
+      label: "Dashboard",
+      href: "/dashboard",
       icon: (
-        <IconChartBar className="h-5 w-5 shrink-0 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
+        <IconBrandTabler className="h-5 w-5 shrink-0 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
       ),
     },
     {
-      label: "Profile",
-      href: "/profile",
+      label: "History",
+      href: "/previous-marks",
       icon: (
-        <IconUserBolt className="h-5 w-5 shrink-0 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
+        <IconChartBar className="h-5 w-5 shrink-0 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
       ),
     },
     {

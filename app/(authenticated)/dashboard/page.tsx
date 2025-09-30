@@ -5,11 +5,8 @@ import {
   TrendingUp, 
   Clock, 
   CheckCircle, 
-  BarChart3, 
-  Users, 
   Award,
   Calendar,
-  Plus,
   ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -231,14 +228,6 @@ export default function Dashboard() {
             <div className="relative z-10">
               <h3 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h3>
               <div className="space-y-3">
-                <Button className="w-full justify-start tap-target" variant="outline">
-                  <Plus className="h-4 w-4 mr-2" />
-                  New Assignment
-                </Button>
-                <Button className="w-full justify-start tap-target" variant="outline">
-                  <BarChart3 className="h-4 w-4 mr-2" />
-                  View Analytics
-                </Button>
                 <Button className="w-full justify-start tap-target" variant="outline">
                   <Award className="h-4 w-4 mr-2" />
                   Score Assignment

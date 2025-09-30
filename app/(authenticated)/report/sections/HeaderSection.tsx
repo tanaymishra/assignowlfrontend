@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { ArrowLeft, Share2, Printer } from "lucide-react";
+import { ArrowLeft, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useReportStore } from "../store";
@@ -39,10 +39,6 @@ export function HeaderSection() {
         <Button variant="outline" size="sm" className="tap-target">
           <Share2 className="h-4 w-4 mr-2" />
           Share
-        </Button>
-        <Button variant="outline" size="sm" className="tap-target">
-          <Printer className="h-4 w-4 mr-2" />
-          Print
         </Button>
       </div>
     </motion.div>

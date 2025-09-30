@@ -6,7 +6,6 @@ import {
   IconBrandTabler,
   IconSettings,
   IconUserBolt,
-  IconFileText,
   IconChartBar,
   IconClipboardCheck,
 } from "@tabler/icons-react";
@@ -20,27 +19,6 @@ export default function DashboardSidebar() {
   
   const links = [
     {
-      label: "Dashboard",
-      href: "/dashboard",
-      icon: (
-        <IconBrandTabler className="h-5 w-5 shrink-0 text-muted-foreground group-hover/sidebar:text-primary transition-colors duration-300" />
-      ),
-    },
-    {
-      label: "Assignments",
-      href: "/assignments",
-      icon: (
-        <IconFileText className="h-5 w-5 shrink-0 text-muted-foreground group-hover/sidebar:text-primary transition-colors duration-300" />
-      ),
-    },
-    {
-      label: "Analytics",
-      href: "/analytics",
-      icon: (
-        <IconChartBar className="h-5 w-5 shrink-0 text-muted-foreground group-hover/sidebar:text-primary transition-colors duration-300" />
-      ),
-    },
-    {
       label: "Assignment Scorer",
       href: "/scorer",
       icon: (
@@ -48,17 +26,17 @@ export default function DashboardSidebar() {
       ),
     },
     {
-      label: "Previous Marks",
-      href: "/previous-marks",
+      label: "Dashboard",
+      href: "/dashboard",
       icon: (
-        <IconChartBar className="h-5 w-5 shrink-0 text-muted-foreground group-hover/sidebar:text-primary transition-colors duration-300" />
+        <IconBrandTabler className="h-5 w-5 shrink-0 text-muted-foreground group-hover/sidebar:text-primary transition-colors duration-300" />
       ),
     },
     {
-      label: "Profile",
-      href: "/profile",
+      label: "History",
+      href: "/previous-marks",
       icon: (
-        <IconUserBolt className="h-5 w-5 shrink-0 text-muted-foreground group-hover/sidebar:text-primary transition-colors duration-300" />
+        <IconChartBar className="h-5 w-5 shrink-0 text-muted-foreground group-hover/sidebar:text-primary transition-colors duration-300" />
       ),
     },
     {
@@ -158,21 +136,26 @@ export default function DashboardSidebar() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            <SidebarLink
-              link={{
-                label: user.name,
-                href: "/profile",
-                icon: (
-                  <motion.div 
-                    className="h-8 w-8 shrink-0 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center border border-primary/20"
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <IconUserBolt className="h-4 w-4 text-primary" />
-                  </motion.div>
-                ),
-              }}
-            />
+            <div className="flex items-center space-x-3 px-3 py-2">
+              <motion.div 
+                className="h-8 w-8 shrink-0 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center border border-primary/20"
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.2 }}
+              >
+                <IconUserBolt className="h-4 w-4 text-primary" />
+              </motion.div>
+              <motion.span
+                animate={{
+                  display: open ? "inline-block" : "none",
+                  opacity: open ? 1 : 0,
+                  x: open ? 0 : -10,
+                }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="text-sm font-medium text-foreground"
+              >
+                {user.name}
+              </motion.span>
+            </div>
           </motion.div>
         )}
       </SidebarBody>
