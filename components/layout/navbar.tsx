@@ -10,6 +10,8 @@ import { useAuth } from "@/lib/store"
 import { cn } from "@/lib/utils"
 import { User, LogOut, Settings } from "lucide-react"
 import Image from "next/image"
+import { useLogin } from "@/components/providers/LoginProvider"
+import { useRouter } from "next/navigation"
 
 interface NavItem {
   label: string
@@ -32,10 +34,20 @@ export function Navbar({ className }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const { user, isAuthenticated, isHydrated, logout } = useAuth()
+  const { openLogin } = useLogin()
+  const router = useRouter()
 
   const handleLogout = () => {
     logout()
     setIsOpen(false)
+  }
+
+  const handleGetStarted = () => {
+    if (isAuthenticated) {
+      router.push('/scorer');
+    } else {
+      openLogin();
+    }
   }
 
   useEffect(() => {
@@ -140,7 +152,7 @@ export function Navbar({ className }: NavbarProps) {
                   size="sm"
                   className="border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
                 />
-                <Button size="sm" className="bg-primary hover:bg-primary/90">
+                <Button size="sm" className="bg-primary hover:bg-primary/90" onClick={handleGetStarted}>
                   Get Started
                 </Button>
               </>
@@ -242,7 +254,7 @@ export function Navbar({ className }: NavbarProps) {
                         variant="outline"
                         className="w-full border-border/40 bg-background/95"
                       />
-                      <Button className="w-full bg-primary hover:bg-primary/90">
+                      <Button className="w-full bg-primary hover:bg-primary/90" onClick={handleGetStarted}>
                         Get Started
                       </Button>
                     </>

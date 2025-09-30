@@ -7,6 +7,9 @@ import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect
 import { ContainerTextFlip } from "@/components/ui/container-text-flip";
 import { ProcessDemo } from "@/components/ui/process-demo";
 import { AnimatedTooltip } from "@/components/ui/animated-tooltip";
+import { useAuth } from "@/lib/store";
+import { useLogin } from "@/components/providers/LoginProvider";
+import { useRouter } from "next/navigation";
 const people = [
   {
     id: 1,
@@ -53,12 +56,24 @@ const people = [
 ];
 
 export default function HeroSection() {
+  const { isAuthenticated } = useAuth();
+  const { openLogin } = useLogin();
+  const router = useRouter();
+  
   const scrollToSection = (href: string) => {
     if (href.startsWith("#")) {
       const element = document.querySelector(href);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
+    }
+  };
+  
+  const handleGetStarted = () => {
+    if (isAuthenticated) {
+      router.push('/scorer');
+    } else {
+      openLogin();
     }
   };
 
@@ -125,10 +140,10 @@ export default function HeroSection() {
               >
                 <Button
                   size="lg"
-                  onClick={() => scrollToSection("#features")}
+                  onClick={handleGetStarted}
                   className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
                 >
-                  Start Writing Now
+                  {isAuthenticated ? 'Start Scoring' : 'Get Started'}
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </motion.div>
