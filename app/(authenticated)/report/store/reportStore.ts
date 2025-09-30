@@ -119,17 +119,52 @@ export const useReportStore = create<ReportState>()(
       },
       
       downloadPDFReport: async () => {
-        const { setDownloading } = get();
+        const { setDownloading, currentId } = get();
+        
+        if (!currentId) {
+          console.error('No report ID available for download');
+          return;
+        }
         
         setDownloading(true);
         
-        // Simulate download delay for now
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        // TODO: Implement actual PDF download endpoint later
-        console.log("PDF download functionality will be implemented later");
-        
-        setDownloading(false);
+        try {
+          const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+          const downloadUrl = `${baseUrl}/users/getReport/${currentId}`;
+          
+          // Create a temporary link to trigger download
+          const link = document.createElement('a');
+          link.href = downloadUrl;
+          link.download = `assignment-report-${currentId}.pdf`;
+          link.style.display = 'none';
+          
+          // Add credentials for authenticated request
+          const response = await fetch(downloadUrl, {
+            method: 'GET',
+            credentials: 'include',
+          });
+          
+          if (!response.ok) {
+            throw new Error(`Download failed: ${response.statusText}`);
+          }
+          
+          // Get the blob and create download link
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          link.href = url;
+          
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          
+          // Clean up the object URL
+          window.URL.revokeObjectURL(url);
+          
+        } catch (error) {
+          console.error('Error downloading report:', error);
+        } finally {
+          setDownloading(false);
+        }
       },
       
       clearReport: () => {
