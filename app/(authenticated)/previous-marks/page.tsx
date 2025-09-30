@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { FileText, Download, Eye, Trash2, Search, Filter, Calendar, TrendingUp } from "lucide-react";
+import { FileText, Download, Eye, Trash2, Search, Filter, Calendar, TrendingUp, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { 
   Table, 
@@ -10,93 +10,117 @@ import {
   TableHeader, 
   TableRow 
 } from "@/components/ui/table";
-import { useState } from "react";
-import { getGradeFromScore } from "../report/store";
+import { useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { 
+  useHistoryStore, 
+  getGradeFromHistoryScore, 
+  formatHistoryDate, 
+  extractSubjectFromFileName 
+} from "./store";
 
 export default function PreviousMarks() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
+  const router = useRouter();
+  
+  const { 
+    assignments, 
+    isLoading, 
+    isDownloading, 
+    error, 
+    fetchHistory, 
+    downloadReport 
+  } = useHistoryStore();
 
-  // Mock data for previous scores
-  const previousScores = [
-    {
-      id: 1,
-      fileName: "React_Component_Analysis.pdf",
-      subject: "Computer Science",
-      uploadDate: "2024-01-15",
-      score: 85,
-      maxScore: 100,
-      status: "Completed",
-      feedback: "Excellent understanding of React concepts and component lifecycle. Good use of hooks and state management.",
-      grade: getGradeFromScore(85)
-    },
-    {
-      id: 2,
-      fileName: "Database_Design_Project.docx",
-      subject: "Information Systems",
-      uploadDate: "2024-01-12",
-      score: 92,
-      maxScore: 100,
-      status: "Completed",
-      feedback: "Outstanding database normalization and ER diagram design. Clear documentation and well-structured queries.",
-      grade: getGradeFromScore(92)
-    },
-    {
-      id: 3,
-      fileName: "API_Documentation.pdf",
-      subject: "Software Engineering",
-      uploadDate: "2024-01-10",
-      score: 78,
-      maxScore: 100,
-      status: "Completed",
-      feedback: "Good documentation structure but missing some endpoint details. Consider adding more examples.",
-      grade: getGradeFromScore(78)
-    },
-    {
-      id: 4,
-      fileName: "UI_UX_Research.pdf",
-      subject: "Design",
-      uploadDate: "2024-01-08",
-      score: 68,
-      maxScore: 100,
-      status: "Completed",
-      feedback: "Comprehensive user research with good insights. Wireframes could be more detailed.",
-      grade: getGradeFromScore(68)
-    },
-    {
-      id: 5,
-      fileName: "Machine_Learning_Essay.docx",
-      subject: "Artificial Intelligence",
-      uploadDate: "2024-01-05",
-      score: 95,
-      maxScore: 100,
-      status: "Completed",
-      feedback: "Exceptional analysis of ML algorithms with practical examples. Well-cited and structured.",
-      grade: getGradeFromScore(95)
-    },
-    {
-      id: 6,
-      fileName: "Network_Security_Report.pdf",
-      subject: "Cybersecurity",
-      uploadDate: "2024-01-03",
-      score: 45,
-      maxScore: 100,
-      status: "Completed",
-      feedback: "Good coverage of security protocols. Could benefit from more real-world case studies.",
-      grade: getGradeFromScore(45)
-    }
-  ];
+  // Fetch history data on component mount
+  useEffect(() => {
+    fetchHistory();
+  }, [fetchHistory]);
 
-  const filteredScores = previousScores.filter(score => {
+  // Process assignments data for display
+  const processedScores = useMemo(() => {
+    return assignments.map(assignment => ({
+      id: assignment.id,
+      fileName: assignment.name.replace(/^Assignment Scoring - /, ''),
+      subject: extractSubjectFromFileName(assignment.name),
+      uploadDate: formatHistoryDate(assignment.date),
+      score: assignment.grade ? parseFloat(assignment.grade) : null,
+      maxScore: 100,
+      status: assignment.status === 'graded' ? 'Completed' : 
+              assignment.status === 'pending' ? 'Pending' : 'Processing',
+      grade: getGradeFromHistoryScore(assignment.grade),
+      rawGrade: assignment.grade
+    }));
+  }, [assignments]);
+
+  const filteredScores = processedScores.filter(score => {
     const matchesSearch = score.fileName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          score.subject.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterStatus === "all" || score.status.toLowerCase() === filterStatus.toLowerCase();
     return matchesSearch && matchesFilter;
   });
 
-  const averageScore = Math.round(previousScores.reduce((sum, score) => sum + score.score, 0) / previousScores.length);
-  const totalAssignments = previousScores.length;
-  const completedAssignments = previousScores.filter(score => score.status === "Completed").length;
+  const completedScores = processedScores.filter(score => score.score !== null);
+  const averageScore = completedScores.length > 0 
+    ? Math.round(completedScores.reduce((sum, score) => sum + (score.score || 0), 0) / completedScores.length)
+    : 0;
+  const totalAssignments = processedScores.length;
+  const completedAssignments = processedScores.filter(score => score.status === "Completed").length;
+
+  const handleDownload = async (id: number) => {
+    await downloadReport(id);
+  };
+
+  const handleViewReport = (id: number) => {
+    router.push(`/report?id=${id}`);
+  };
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="space-y-6 sm:space-y-8">
+        <div className="px-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+            Previous Marks
+          </h1>
+          <p className="text-muted-foreground mt-2 text-sm sm:text-base">
+            View and manage your assignment scores and feedback
+          </p>
+        </div>
+        <div className="flex items-center justify-center py-12">
+          <div className="flex items-center space-x-2">
+            <Loader2 className="h-6 w-6 animate-spin" />
+            <span className="text-muted-foreground">The owl is gathering your assignment history...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="space-y-6 sm:space-y-8">
+        <div className="px-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+            Previous Marks
+          </h1>
+          <p className="text-muted-foreground mt-2 text-sm sm:text-base">
+            View and manage your assignment scores and feedback
+          </p>
+        </div>
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <p className="text-red-500 mb-4">{error}</p>
+            <Button onClick={fetchHistory} variant="outline">
+              Try Again
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -258,12 +282,13 @@ export default function PreviousMarks() {
                       <TableCell>
                         <div className="flex items-center space-x-2">
                           <span className={`font-semibold ${
+                            !score.score ? 'text-muted-foreground' :
                             score.score >= 70 ? 'text-green-500' :  // Distinction
                             score.score >= 60 ? 'text-blue-500' :   // Merit
                             score.score >= 50 ? 'text-orange-500' : // Just pass
                             'text-red-500'  // Fail
                           }`}>
-                            {score.score}
+                            {score.score || 'N/A'}
                           </span>
                           <span className="text-muted-foreground">/ {score.maxScore}</span>
                         </div>
@@ -289,11 +314,23 @@ export default function PreviousMarks() {
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center space-x-1">
-                          <Button variant="ghost" size="sm" className="tap-target">
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="tap-target"
+                            onClick={() => handleViewReport(score.id)}
+                            disabled={score.status !== 'Completed'}
+                          >
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="sm" className="tap-target">
-                            <Download className="h-4 w-4" />
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="tap-target"
+                            onClick={() => handleDownload(score.id)}
+                            disabled={isDownloading || score.status !== 'Completed'}
+                          >
+                            {isDownloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
                           </Button>
                           <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive tap-target">
                             <Trash2 className="h-4 w-4" />
@@ -342,12 +379,13 @@ export default function PreviousMarks() {
                       </div>
                       <div className="flex items-center space-x-2">
                         <span className={`font-semibold ${
+                          !score.score ? 'text-muted-foreground' :
                           score.score >= 70 ? 'text-green-500' :  // Distinction
                           score.score >= 60 ? 'text-blue-500' :   // Merit
                           score.score >= 50 ? 'text-orange-500' : // Just pass
                           'text-red-500'  // Fail
                         }`}>
-                          {score.score}%
+                          {score.score ? `${score.score}%` : 'N/A'}
                         </span>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                           score.grade === 'Distinction' ? 'bg-green-500/10 text-green-500 border border-green-500/20' :
@@ -361,11 +399,23 @@ export default function PreviousMarks() {
                     </div>
                     
                     <div className="flex items-center space-x-1">
-                      <Button variant="ghost" size="sm" className="tap-target">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="tap-target"
+                        onClick={() => handleViewReport(score.id)}
+                        disabled={score.status !== 'Completed'}
+                      >
                         <Eye className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" className="tap-target">
-                        <Download className="h-4 w-4" />
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="tap-target"
+                        onClick={() => handleDownload(score.id)}
+                        disabled={isDownloading || score.status !== 'Completed'}
+                      >
+                        {isDownloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
                       </Button>
                       <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive tap-target">
                         <Trash2 className="h-4 w-4" />
@@ -373,10 +423,12 @@ export default function PreviousMarks() {
                     </div>
                   </div>
 
-                  {/* Feedback preview */}
+                  {/* Status indicator */}
                   <div className="pt-2 border-t border-border/20">
-                    <p className="text-xs text-muted-foreground line-clamp-2">
-                      {score.feedback}
+                    <p className="text-xs text-muted-foreground">
+                      {score.status === 'Completed' ? 'Grading completed' : 
+                       score.status === 'Pending' ? 'Awaiting grading' : 
+                       'Processing...'}
                     </p>
                   </div>
                 </motion.div>
