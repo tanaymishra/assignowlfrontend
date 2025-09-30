@@ -14,7 +14,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export function ThemeProvider({
   children,
-  defaultTheme = "light",
+  defaultTheme = "dark",
   storageKey = "ui-theme",
 }: {
   children: React.ReactNode
@@ -32,9 +32,8 @@ export function ThemeProvider({
       if (storedTheme && (storedTheme === "light" || storedTheme === "dark")) {
         setTheme(storedTheme)
       } else {
-        // Check system preference
-        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-        setTheme(systemTheme)
+        // Default to dark theme for new users
+        setTheme(defaultTheme)
       }
     } catch (error) {
       console.warn("Failed to load theme from localStorage:", error)
