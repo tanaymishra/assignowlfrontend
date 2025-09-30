@@ -127,7 +127,7 @@ export default function PoliciesPage() {
                       <li>• Withdraw consent for certain processing.</li>
                     </ul>
                     <p className="text-muted-foreground">
-                      You can reach us anytime at: <span className="text-primary">[insert contact email]</span>.
+                      You can reach us anytime at: <span className="text-primary">support@assignowl.com</span>.
                     </p>
                   </div>
 
@@ -160,7 +160,6 @@ export default function PoliciesPage() {
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-foreground">Payment Policy</h2>
-                  <p className="text-sm text-muted-foreground">Effective Date: [Insert Date]</p>
                 </div>
               </div>
 
