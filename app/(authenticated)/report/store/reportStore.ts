@@ -189,30 +189,22 @@ export const useReportStore = create<ReportState>()(
 
 // Helper functions for score colors and styling
 export const getScoreColor = (score: number): string => {
-  if (score >= 90) return 'text-green-500';
-  if (score >= 80) return 'text-blue-500'; 
-  if (score >= 70) return 'text-orange-500';
-  return 'text-red-500';
+  if (score >= 70) return 'text-green-500'; // Distinction
+  if (score >= 60) return 'text-blue-500';  // Merit
+  if (score >= 50) return 'text-orange-500'; // Just pass
+  return 'text-red-500'; // Fail
 };
 
 export const getScoreBgColor = (score: number): string => {
-  if (score >= 90) return 'bg-green-500/10 border-green-500/20 text-green-600';
-  if (score >= 80) return 'bg-blue-500/10 border-blue-500/20 text-blue-600';
-  if (score >= 70) return 'bg-orange-500/10 border-orange-500/20 text-orange-600';
-  return 'bg-red-500/10 border-red-500/20 text-red-600';
+  if (score >= 70) return 'bg-green-500/10 border-green-500/20 text-green-600'; // Distinction
+  if (score >= 60) return 'bg-blue-500/10 border-blue-500/20 text-blue-600';   // Merit
+  if (score >= 50) return 'bg-orange-500/10 border-orange-500/20 text-orange-600'; // Just pass
+  return 'bg-red-500/10 border-red-500/20 text-red-600'; // Fail
 };
 
 export const getGradeFromScore = (score: number): string => {
-  if (score >= 97) return 'A+';
-  if (score >= 93) return 'A';
-  if (score >= 90) return 'A-';
-  if (score >= 87) return 'B+';
-  if (score >= 83) return 'B';
-  if (score >= 80) return 'B-';
-  if (score >= 77) return 'C+';
-  if (score >= 73) return 'C';
-  if (score >= 70) return 'C-';
-  if (score >= 67) return 'D+';
-  if (score >= 65) return 'D';
-  return 'F';
+  if (score >= 70) return 'Distinction';
+  if (score >= 60) return 'Merit';
+  if (score >= 50) return 'Just Pass';
+  return 'Fail';
 };

@@ -11,6 +11,7 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { useState } from "react";
+import { getGradeFromScore } from "../report/store";
 
 export default function PreviousMarks() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,7 +28,7 @@ export default function PreviousMarks() {
       maxScore: 100,
       status: "Completed",
       feedback: "Excellent understanding of React concepts and component lifecycle. Good use of hooks and state management.",
-      grade: "A-"
+      grade: getGradeFromScore(85)
     },
     {
       id: 2,
@@ -38,7 +39,7 @@ export default function PreviousMarks() {
       maxScore: 100,
       status: "Completed",
       feedback: "Outstanding database normalization and ER diagram design. Clear documentation and well-structured queries.",
-      grade: "A"
+      grade: getGradeFromScore(92)
     },
     {
       id: 3,
@@ -49,18 +50,18 @@ export default function PreviousMarks() {
       maxScore: 100,
       status: "Completed",
       feedback: "Good documentation structure but missing some endpoint details. Consider adding more examples.",
-      grade: "B+"
+      grade: getGradeFromScore(78)
     },
     {
       id: 4,
       fileName: "UI_UX_Research.pdf",
       subject: "Design",
       uploadDate: "2024-01-08",
-      score: 88,
+      score: 68,
       maxScore: 100,
       status: "Completed",
       feedback: "Comprehensive user research with good insights. Wireframes could be more detailed.",
-      grade: "B+"
+      grade: getGradeFromScore(68)
     },
     {
       id: 5,
@@ -71,18 +72,18 @@ export default function PreviousMarks() {
       maxScore: 100,
       status: "Completed",
       feedback: "Exceptional analysis of ML algorithms with practical examples. Well-cited and structured.",
-      grade: "A+"
+      grade: getGradeFromScore(95)
     },
     {
       id: 6,
       fileName: "Network_Security_Report.pdf",
       subject: "Cybersecurity",
       uploadDate: "2024-01-03",
-      score: 82,
+      score: 45,
       maxScore: 100,
       status: "Completed",
       feedback: "Good coverage of security protocols. Could benefit from more real-world case studies.",
-      grade: "B+"
+      grade: getGradeFromScore(45)
     }
   ];
 
@@ -257,10 +258,10 @@ export default function PreviousMarks() {
                       <TableCell>
                         <div className="flex items-center space-x-2">
                           <span className={`font-semibold ${
-                            score.score >= 90 ? 'text-green-500' :
-                            score.score >= 80 ? 'text-blue-500' :
-                            score.score >= 70 ? 'text-orange-500' :
-                            'text-red-500'
+                            score.score >= 70 ? 'text-green-500' :  // Distinction
+                            score.score >= 60 ? 'text-blue-500' :   // Merit
+                            score.score >= 50 ? 'text-orange-500' : // Just pass
+                            'text-red-500'  // Fail
                           }`}>
                             {score.score}
                           </span>
@@ -269,9 +270,10 @@ export default function PreviousMarks() {
                       </TableCell>
                       <TableCell>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          score.grade.startsWith('A') ? 'bg-green-500/10 text-green-500 border border-green-500/20' :
-                          score.grade.startsWith('B') ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20' :
-                          'bg-orange-500/10 text-orange-500 border border-orange-500/20'
+                          score.grade === 'Distinction' ? 'bg-green-500/10 text-green-500 border border-green-500/20' :
+                          score.grade === 'Merit' ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20' :
+                          score.grade === 'Just Pass' ? 'bg-orange-500/10 text-orange-500 border border-orange-500/20' :
+                          'bg-red-500/10 text-red-500 border border-red-500/20'
                         }`}>
                           {score.grade}
                         </span>
@@ -340,17 +342,18 @@ export default function PreviousMarks() {
                       </div>
                       <div className="flex items-center space-x-2">
                         <span className={`font-semibold ${
-                          score.score >= 90 ? 'text-green-500' :
-                          score.score >= 80 ? 'text-blue-500' :
-                          score.score >= 70 ? 'text-orange-500' :
-                          'text-red-500'
+                          score.score >= 70 ? 'text-green-500' :  // Distinction
+                          score.score >= 60 ? 'text-blue-500' :   // Merit
+                          score.score >= 50 ? 'text-orange-500' : // Just pass
+                          'text-red-500'  // Fail
                         }`}>
                           {score.score}%
                         </span>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          score.grade.startsWith('A') ? 'bg-green-500/10 text-green-500 border border-green-500/20' :
-                          score.grade.startsWith('B') ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20' :
-                          'bg-orange-500/10 text-orange-500 border border-orange-500/20'
+                          score.grade === 'Distinction' ? 'bg-green-500/10 text-green-500 border border-green-500/20' :
+                          score.grade === 'Merit' ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20' :
+                          score.grade === 'Just Pass' ? 'bg-orange-500/10 text-orange-500 border border-orange-500/20' :
+                          'bg-red-500/10 text-red-500 border border-red-500/20'
                         }`}>
                           {score.grade}
                         </span>

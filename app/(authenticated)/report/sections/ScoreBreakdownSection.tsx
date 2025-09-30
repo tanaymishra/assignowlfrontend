@@ -102,10 +102,10 @@ export function ScoreBreakdownSection() {
                         }}
                         style={{
                           background: `linear-gradient(90deg, ${
-                            percentage >= 90 ? '#10b981, #059669' :
-                            percentage >= 80 ? '#3b82f6, #1d4ed8' :
-                            percentage >= 70 ? '#f59e0b, #d97706' :
-                            '#ef4444, #dc2626'
+                            percentage >= 70 ? '#10b981, #059669' : // Distinction (green)
+                            percentage >= 60 ? '#3b82f6, #1d4ed8' : // Merit (blue)
+                            percentage >= 50 ? '#f59e0b, #d97706' : // Just pass (orange)
+                            '#ef4444, #dc2626' // Fail (red)
                           })`
                         }}
                       >
@@ -127,10 +127,10 @@ export function ScoreBreakdownSection() {
                     {/* Progress indicator dot */}
                     <motion.div
                       className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-background shadow-lg ${
-                        percentage >= 90 ? 'bg-green-500' :
-                        percentage >= 80 ? 'bg-blue-500' :
-                        percentage >= 70 ? 'bg-orange-500' :
-                        'bg-red-500'
+                        percentage >= 70 ? 'bg-green-500' : // Distinction
+                        percentage >= 60 ? 'bg-blue-500' :  // Merit
+                        percentage >= 50 ? 'bg-orange-500' : // Just pass
+                        'bg-red-500' // Fail
                       }`}
                       initial={{ left: 0 }}
                       animate={{ left: `calc(${percentage}% - 8px)` }}

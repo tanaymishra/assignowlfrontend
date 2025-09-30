@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { Download, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useReportStore, getScoreColor } from "../store";
+import { useReportStore, getScoreColor, getGradeFromScore } from "../store";
 import { useSearchParams } from "next/navigation";
 
 export function DownloadSection() {
@@ -16,17 +16,7 @@ export function DownloadSection() {
   if (!reportData) return null;
 
   const percentage = parseFloat(reportData.percentage);
-  const grade = percentage >= 97 ? 'A+' : 
-                percentage >= 93 ? 'A' : 
-                percentage >= 90 ? 'A-' : 
-                percentage >= 87 ? 'B+' : 
-                percentage >= 83 ? 'B' : 
-                percentage >= 80 ? 'B-' : 
-                percentage >= 77 ? 'C+' : 
-                percentage >= 73 ? 'C' : 
-                percentage >= 70 ? 'C-' : 
-                percentage >= 67 ? 'D+' : 
-                percentage >= 65 ? 'D' : 'F';
+  const grade = getGradeFromScore(percentage);
 
   return (
     <motion.div
