@@ -110,7 +110,7 @@ export function DownloadSection() {
                     animate={{ opacity: [0.7, 1, 0.7] }}
                     transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
                   >
-                    Generating PDF...
+                    The owl is crafting your PDF...
                   </motion.span>
                 </>
               ) : (

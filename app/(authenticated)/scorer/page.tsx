@@ -312,7 +312,7 @@ export default function AssignmentScorer() {
         {/* Step 2: AI Analyzing */}
         {currentStep === 'analyzing' && (
           <AIThinkingAnimation 
-            message="Analyzing your assignment and detecting rubric requirements..." 
+            message="Go for a walk, the owl is scanning your assignment and detecting rubric requirements..." 
             progress={progress}
           />
         )}
@@ -328,7 +328,7 @@ export default function AssignmentScorer() {
         {/* Step 4: AI Scoring */}
         {currentStep === 'scoring' && (
           <AIThinkingAnimation 
-            message="Scoring your assignment and generating detailed feedback report..." 
+            message="Go for a walk, the owl is carefully scoring your assignment and generating detailed feedback report..." 
             progress={progress}
           />
         )}

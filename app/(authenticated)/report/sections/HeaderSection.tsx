@@ -30,7 +30,7 @@ export function HeaderSection() {
             Assignment Report
           </h1>
           <p className="text-muted-foreground text-sm sm:text-base">
-            {reportData?.title || "Loading assignment details..."}
+            {reportData?.title || "The owl is gathering assignment details..."}
           </p>
         </div>
       </div>

@@ -46,7 +46,7 @@ function ReportContent() {
           >
             <Loader2 className="h-8 w-8 text-primary mx-auto" />
           </motion.div>
-          <p className="text-muted-foreground">Loading assignment report...</p>
+          <p className="text-muted-foreground">The owl is preparing your assignment report...</p>
         </motion.div>
       </div>
     );
@@ -131,7 +131,7 @@ export default function AssignmentReport() {
             >
               <Loader2 className="h-8 w-8 text-primary mx-auto" />
             </motion.div>
-            <p className="text-muted-foreground">Loading assignment report...</p>
+            <p className="text-muted-foreground">The owl is preparing your assignment report...</p>
           </motion.div>
         </div>
       }
