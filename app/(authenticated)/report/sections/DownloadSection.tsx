@@ -3,9 +3,11 @@ import { motion } from "framer-motion";
 import { Download, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useReportStore, getScoreColor } from "../store";
+import { useSearchParams } from "next/navigation";
 
 export function DownloadSection() {
   const { reportData, isDownloading, downloadPDFReport } = useReportStore();
+  const searchParams = useSearchParams();
 
   const handleDownloadPDF = async () => {
     await downloadPDFReport();
@@ -116,6 +118,7 @@ export function DownloadSection() {
                   <motion.div
                     whileHover={{ y: -2 }}
                     transition={{ duration: 0.2 }}
+                    onClick={()=>{window.open(process.env.NEXT_PUBLIC_BASE_URL+"/users/getReports/"+useSearchParams().get('id'))}}
                   >
                     <Download className="h-5 w-5 mr-3" />
                   </motion.div>
