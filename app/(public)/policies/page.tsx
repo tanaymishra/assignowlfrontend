@@ -64,9 +64,7 @@ export default function PoliciesPage() {
                   <Shield className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground">Privacy Policy</h2>
-                  <p className="text-sm text-muted-foreground">Effective Date: [Insert Date]</p>
-                </div>
+                  <h2 className="text-2xl font-bold text-foreground">Privacy Policy</h2>                </div>
               </div>
 
               <div className="prose prose-neutral dark:prose-invert max-w-none">
