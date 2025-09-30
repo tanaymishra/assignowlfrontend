@@ -30,7 +30,7 @@ export default function PoliciesPage() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-3xl md:text-4xl font-bold text-foreground mb-4"
           >
-            AssignOwl Policies
+            AssignOwl by Greenguide Solutions Pvt Limited
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -38,7 +38,7 @@ export default function PoliciesPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-muted-foreground text-lg max-w-2xl mx-auto"
           >
-            Learn about our privacy practices and payment policies
+            Privacy and Payment Policies - Learn about our practices and policies
           </motion.p>
         </div>
       </motion.div>
@@ -46,6 +46,55 @@ export default function PoliciesPage() {
       {/* Content */}
       <div className="container mx-auto px-4 pb-16">
         <div className="max-w-4xl mx-auto space-y-12">
+          
+          {/* Company Information */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="bg-background/20 backdrop-blur-xl border border-border/20 rounded-2xl p-8 shadow-2xl relative overflow-hidden"
+          >
+            {/* Glassy overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-background/30 via-background/10 to-background/30 rounded-2xl" />
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent rounded-2xl" />
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                  <Shield className="h-6 w-6 text-emerald-500" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-foreground">Company Information</h2>
+                </div>
+              </div>
+
+              <div className="prose prose-neutral dark:prose-invert max-w-none">
+                <div className="bg-muted/20 rounded-lg p-6 border border-border/20">
+                  <h3 className="text-lg font-semibold text-foreground mb-4">Service Provider Details</h3>
+                  <div className="space-y-3 text-muted-foreground">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                      <span className="font-medium text-foreground min-w-[120px]">Company Name:</span>
+                      <span>Greenguide Solutions Pvt Limited</span>
+                    </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                      <span className="font-medium text-foreground min-w-[120px]">Service Name:</span>
+                      <span>AssignOwl - AI Assignment Evaluation Platform</span>
+                    </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                      <span className="font-medium text-foreground min-w-[120px]">Service Type:</span>
+                      <span>Educational Technology & AI-powered Assignment Analysis</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <p className="text-muted-foreground leading-relaxed mt-6">
+                  AssignOwl is a service provided by Greenguide Solutions Pvt Limited. All transactions, 
+                  data processing, and service delivery are conducted under the legal framework and 
+                  policies of Greenguide Solutions Pvt Limited.
+                </p>
+              </div>
+            </div>
+          </motion.div>
           
           {/* Privacy Policy */}
           <motion.div
@@ -64,12 +113,14 @@ export default function PoliciesPage() {
                   <Shield className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground">Privacy Policy</h2>                </div>
+                  <h2 className="text-2xl font-bold text-foreground">Privacy Policy</h2>
+                  <p className="text-sm text-muted-foreground">Effective Date: January 1, 2025</p>
+                </div>
               </div>
 
               <div className="prose prose-neutral dark:prose-invert max-w-none">
                 <p className="text-muted-foreground leading-relaxed mb-6">
-                  AssignOwl ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our platform to upload assignments, receive reports, and make payments.
+                  AssignOwl, operated by <strong>Greenguide Solutions Pvt Limited</strong> ("we," "our," or "us"), is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our platform to upload assignments, receive reports, and make payments.
                 </p>
 
                 <div className="space-y-6">
@@ -160,12 +211,13 @@ export default function PoliciesPage() {
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-foreground">Payment Policy</h2>
+                  <p className="text-sm text-muted-foreground">Effective Date: January 1, 2025</p>
                 </div>
               </div>
 
               <div className="prose prose-neutral dark:prose-invert max-w-none">
                 <p className="text-muted-foreground leading-relaxed mb-6">
-                  This Payment Policy explains how payments work when you use AssignOwl's services.
+                  This Payment Policy explains how payments work when you use AssignOwl's services, operated by <strong>Greenguide Solutions Pvt Limited</strong>.
                 </p>
 
                 <div className="space-y-6">
@@ -179,7 +231,18 @@ export default function PoliciesPage() {
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-foreground mb-3">2. Payment Methods</h3>
+                    <h3 className="text-lg font-semibold text-foreground mb-3">2. Payment Processing Entity</h3>
+                    <div className="bg-muted/20 rounded-lg p-4 border border-border/20">
+                      <ul className="space-y-1 text-muted-foreground">
+                        <li>• All payments are processed by <strong>Greenguide Solutions Pvt Limited</strong>.</li>
+                        <li>• Your payment receipts and invoices will be issued under this company name.</li>
+                        <li>• For payment-related inquiries, contact Greenguide Solutions Pvt Limited support.</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-semibold text-foreground mb-3">3. Payment Methods</h3>
                     <ul className="space-y-1 text-muted-foreground">
                       <li>• We accept payments via secure third-party payment providers (e.g., Stripe, PayPal, or other gateways).</li>
                       <li>• AssignOwl does not store your complete credit card or bank details.</li>
@@ -187,7 +250,7 @@ export default function PoliciesPage() {
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-foreground mb-3">3. Refunds & Cancellations</h3>
+                    <h3 className="text-lg font-semibold text-foreground mb-3">4. Refunds & Cancellations</h3>
                     <ul className="space-y-1 text-muted-foreground">
                       <li>• Payments are non-refundable once a report has been generated and delivered.</li>
                       <li>• If a payment was made in error or you did not receive your report due to a technical issue, please contact us within 7 days for resolution.</li>
@@ -195,7 +258,7 @@ export default function PoliciesPage() {
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-foreground mb-3">4. Failed or Disputed Payments</h3>
+                    <h3 className="text-lg font-semibold text-foreground mb-3">5. Failed or Disputed Payments</h3>
                     <ul className="space-y-1 text-muted-foreground">
                       <li>• If your payment fails, the assignment will not be processed.</li>
                       <li>• In case of chargebacks or disputes, we may temporarily suspend your account until the issue is resolved.</li>
@@ -203,7 +266,7 @@ export default function PoliciesPage() {
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-foreground mb-3">5. Currency & Conversion</h3>
+                    <h3 className="text-lg font-semibold text-foreground mb-3">6. Currency & Conversion</h3>
                     <ul className="space-y-1 text-muted-foreground">
                       <li>• All charges are made in USD.</li>
                       <li>• If you are outside the United States, your bank or provider may charge conversion fees.</li>
@@ -211,7 +274,7 @@ export default function PoliciesPage() {
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-foreground mb-3">6. Updates</h3>
+                    <h3 className="text-lg font-semibold text-foreground mb-3">7. Updates</h3>
                     <p className="text-muted-foreground">
                       We may update this Payment Policy from time to time. The latest version will always be available on our website.
                     </p>
