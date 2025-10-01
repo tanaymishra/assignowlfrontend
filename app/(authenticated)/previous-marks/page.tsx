@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { FileText, Download, Eye, Trash2, Search, Filter, Calendar, TrendingUp, Loader2 } from "lucide-react";
+import { FileText, Download, Search, Filter, Calendar, TrendingUp, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { 
   Table, 
@@ -11,7 +11,6 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
 import { 
   useHistoryStore, 
   getGradeFromHistoryScore, 
@@ -22,7 +21,6 @@ import {
 export default function PreviousMarks() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
-  const router = useRouter();
   
   const { 
     assignments, 
@@ -70,10 +68,6 @@ export default function PreviousMarks() {
 
   const handleDownload = async (id: number) => {
     await downloadReport(id);
-  };
-
-  const handleViewReport = (id: number) => {
-    router.push(`/report?id=${id}`);
   };
 
   // Loading state
@@ -313,16 +307,7 @@ export default function PreviousMarks() {
                         </span>
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center space-x-1">
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="tap-target"
-                            onClick={() => handleViewReport(score.id)}
-                            disabled={score.status !== 'Completed'}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
+                        <div className="flex items-center justify-end">
                           <Button 
                             variant="ghost" 
                             size="sm" 
@@ -331,9 +316,6 @@ export default function PreviousMarks() {
                             disabled={isDownloading || score.status !== 'Completed'}
                           >
                             {isDownloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-                          </Button>
-                          <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive tap-target">
-                            <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
                       </TableCell>
@@ -398,16 +380,7 @@ export default function PreviousMarks() {
                       </div>
                     </div>
                     
-                    <div className="flex items-center space-x-1">
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="tap-target"
-                        onClick={() => handleViewReport(score.id)}
-                        disabled={score.status !== 'Completed'}
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
+                    <div className="flex items-center">
                       <Button 
                         variant="ghost" 
                         size="sm" 
@@ -416,9 +389,6 @@ export default function PreviousMarks() {
                         disabled={isDownloading || score.status !== 'Completed'}
                       >
                         {isDownloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-                      </Button>
-                      <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive tap-target">
-                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
