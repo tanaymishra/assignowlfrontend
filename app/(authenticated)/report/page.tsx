@@ -82,12 +82,19 @@ function ReportContent() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
           className="text-center"
         >
-          <p className="text-muted-foreground">No report data available.</p>
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            className="mb-4"
+          >
+            <Loader2 className="h-8 w-8 text-primary mx-auto" />
+          </motion.div>
+          <p className="text-muted-foreground">The owl is fetching your report data...</p>
         </motion.div>
       </div>
     );

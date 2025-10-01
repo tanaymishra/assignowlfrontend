@@ -1,6 +1,6 @@
 "use client"
 
-import { Bell, Search, User, Menu } from 'lucide-react'
+import { Search, User, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 // import { ThemeToggle } from '@/components/theme/theme-toggle'
 import { useAuth } from '@/lib/store'
@@ -45,17 +45,6 @@ export default function DashboardHeader({ onMobileMenuClick }: DashboardHeaderPr
           {/* Search - hidden on small mobile */}
           <Button variant="ghost" size="icon" className="relative hidden xs:flex h-9 w-9">
             <Search className="h-4 w-4 sm:h-5 sm:w-5" />
-          </Button>
-          
-          {/* Notifications */}
-          <Button variant="ghost" size="icon" className="relative h-9 w-9">
-            <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
-            <motion.span 
-              className="absolute -top-1 -right-1 h-2 w-2 sm:h-3 sm:w-3 bg-primary rounded-full"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.5, type: "spring" }}
-            />
           </Button>
           
           {/* <ThemeToggle /> */}

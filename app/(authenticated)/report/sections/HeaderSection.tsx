@@ -7,7 +7,34 @@ import { useReportStore } from "../store";
 
 export function HeaderSection() {
   const router = useRouter();
-  const { reportData } = useReportStore();
+  const { reportData, currentId } = useReportStore();
+
+  const handleShare = async () => {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    const downloadUrl = `${baseUrl}/users/getReport/${currentId}`;
+    const shareText = `Here is the report: ${downloadUrl}`;
+
+    // Check if Web Share API is available
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Assignment Report',
+          text: shareText,
+        });
+      } catch (error) {
+        // User cancelled or error occurred
+        console.log('Share cancelled or failed:', error);
+      }
+    } else {
+      // Fallback: Copy to clipboard
+      try {
+        await navigator.clipboard.writeText(shareText);
+        alert('Download link copied to clipboard!');
+      } catch (error) {
+        console.error('Failed to copy:', error);
+      }
+    }
+  };
 
   return (
     <motion.div
@@ -36,7 +63,12 @@ export function HeaderSection() {
       </div>
       
       <div className="flex items-center space-x-2">
-        <Button variant="outline" size="sm" className="tap-target">
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="tap-target"
+          onClick={handleShare}
+        >
           <Share2 className="h-4 w-4 mr-2" />
           Share
         </Button>
