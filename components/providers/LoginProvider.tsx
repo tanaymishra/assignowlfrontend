@@ -4,11 +4,10 @@ import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import Drawer from '../custom-Components/drawer/Drawer';
 import { LoginFormCore } from '../auth/loginCore';
 import { SignupFormCore } from '../auth/signUpCore';
-import { OtpCore } from '../auth/otpCore';
 import { customToast } from '../ui/custom-toast';
 import './auth-transitions.css';
 
-type AuthStep = 'login' | 'signup' | 'otp';
+type AuthStep = 'login' | 'signup';
 
 interface LoginContextType {
   isLoginOpen: boolean;
@@ -35,8 +34,6 @@ interface LoginProviderProps {
 export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState<AuthStep>('login');
-  const [userEmail, setUserEmail] = useState('');
-  const [userData, setUserData] = useState<any>(null);
   const nodeRef = useRef(null);
 
   const openLogin = () => {
@@ -49,8 +46,6 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
     // Reset to login after closing
     setTimeout(() => {
       setCurrentStep('login');
-      setUserEmail('');
-      setUserData(null);
     }, 300);
   };
 
@@ -63,23 +58,12 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
   };
 
   const handleSignupSuccess = (email: string, data: any) => {
-    setUserEmail(email);
-    setUserData(data);
-    setCurrentStep('otp');
+    // Signup success is now handled within SignupFormCore
+    // No need to switch to OTP step
   };
 
   const handleLoginSuccess = () => {
     closeLogin();
-  };
-
-  const handleOtpVerify = (otp: string) => {
-    // Handle successful verification
-    customToast.success(`Welcome ${userData?.name}! Your account is ready.`);
-    closeLogin();
-  };
-
-  const handleOtpBack = () => {
-    setCurrentStep('signup');
   };
 
   const renderCurrentStep = () => {
@@ -96,14 +80,6 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
           <SignupFormCore 
             onSwitchToLogin={switchToLogin}
             onSignupSuccess={handleSignupSuccess}
-          />
-        );
-      case 'otp':
-        return (
-          <OtpCore 
-            email={userEmail}
-            onBack={handleOtpBack}
-            onVerify={handleOtpVerify}
           />
         );
       default:

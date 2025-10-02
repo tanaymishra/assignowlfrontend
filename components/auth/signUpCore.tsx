@@ -1,13 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { IconBrandGoogle } from "@tabler/icons-react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Mail, CheckCircle } from "lucide-react";
 import { customToast } from "../ui/custom-toast";
 import { useAuth } from "@/lib/store";
 import { AuthError } from "@/lib/auth";
+import { useRouter } from "next/navigation";
 
 interface SignupFormCoreProps {
   onSwitchToLogin?: () => void;
@@ -22,8 +23,23 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
     password: "",
     confirmPassword: "",
   });
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [countdown, setCountdown] = useState(3);
+  const router = useRouter();
 
   const { signup, isLoading } = useAuth();
+
+  // Countdown timer effect
+  useEffect(() => {
+    if (showSuccess && countdown > 0) {
+      const timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (showSuccess && countdown === 0) {
+      router.push('/scorer');
+    }
+  }, [showSuccess, countdown, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -59,11 +75,9 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
       });
       
       if (result.requiresVerification) {
-        customToast.success("Account created! Please verify your email by clicking the link sent to your email.");
-        onSignupSuccess?.(formData.email, {
-          name: `${formData.firstName} ${formData.lastName}`,
-          email: formData.email,
-        });
+        customToast.success("Account created! Please check your email to verify your account.");
+        setShowSuccess(true);
+        setCountdown(3);
       }
     } catch (error) {
       if (error instanceof AuthError) {
@@ -73,6 +87,51 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
       }
     }
   };
+  
+  // Show success screen with countdown
+  if (showSuccess) {
+    return (
+      <div className="mx-auto w-full max-w-md rounded-none bg-background p-4 md:rounded-2xl md:p-8">
+        <div className="text-center space-y-6">
+          <div className="flex justify-center">
+            <div className="rounded-full bg-green-500/10 p-4">
+              <Mail className="h-12 w-12 text-green-500" />
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold text-foreground flex items-center justify-center gap-2">
+              <CheckCircle className="h-6 w-6 text-green-500" />
+              Account Created!
+            </h2>
+            <p className="text-muted-foreground">
+              Please check your email <span className="font-semibold text-foreground">{formData.email}</span> and click the verification link to activate your account.
+            </p>
+          </div>
+
+          <div className="bg-muted/50 rounded-lg p-4 space-y-2">
+            <p className="text-sm text-muted-foreground">
+              Redirecting to scorer in
+            </p>
+            <p className="text-4xl font-bold text-primary">
+              {countdown}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              You can start using the platform while waiting for email verification
+            </p>
+          </div>
+
+          <button
+            onClick={() => router.push('/scorer')}
+            className="text-sm text-primary hover:text-primary/80 transition-colors font-medium"
+          >
+            Go to scorer now
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto w-full max-w-md rounded-none bg-background p-4 md:rounded-2xl md:p-8">
       {/* Header */}
