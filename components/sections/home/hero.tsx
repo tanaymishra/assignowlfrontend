@@ -149,7 +149,7 @@ export default function HeroSection() {
               </motion.div>
 
               {/* Secondary Button */}
-              <motion.div
+              {/* <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -162,7 +162,7 @@ export default function HeroSection() {
                   <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
                   Watch Demo
                 </Button>
-              </motion.div>
+              </motion.div> */}
             </motion.div>
 
             {/* Stats */}
