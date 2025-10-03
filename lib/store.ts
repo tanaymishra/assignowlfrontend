@@ -2,7 +2,8 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { 
   loginUser, 
-  signupUser, 
+  signupUser,
+  signupWithGoogle as signupWithGoogleAPI,
   type User, 
   type LoginRequest, 
   type SignupRequest,
@@ -21,6 +22,7 @@ interface AuthState {
   // Actions
   login: (credentials: LoginRequest) => Promise<void>;
   signup: (userData: SignupRequest) => Promise<{ requiresVerification: boolean }>;
+  signupWithGoogle: (googleToken: string) => Promise<{ requiresVerification: boolean }>;
   logout: () => void;
   clearError: () => void;
   setUser: (user: User) => void;
@@ -99,6 +101,38 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
+      // Google Signup action
+      signupWithGoogle: async (googleToken: string) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          const response = await signupWithGoogleAPI(googleToken);
+          
+          // Store the user data from signup response
+          set({
+            user: response.user,
+            isAuthenticated: true,
+            isLoading: false,
+            error: null,
+          });
+
+          return { requiresVerification: response.requiresVerification };
+        } catch (error) {
+          const errorMessage = error instanceof AuthError 
+            ? error.message 
+            : 'Google signup failed. Please try again.';
+          
+          set({
+            user: null,
+            isAuthenticated: false,
+            isLoading: false,
+            error: errorMessage,
+          });
+          
+          throw error; // Re-throw for component handling
+        }
+      },
+
       // Logout action
       logout: () => {
         set({
@@ -158,6 +192,7 @@ export const useAuth = () => {
     // Actions
     login: store.login,
     signup: store.signup,
+    signupWithGoogle: store.signupWithGoogle,
     logout: store.logout,
     clearError: store.clearError,
     setUser: store.setUser,
@@ -170,6 +205,7 @@ export const useAuthActions = () => {
   return {
     login: store.login,
     signup: store.signup,
+    signupWithGoogle: store.signupWithGoogle,
     logout: store.logout,
     clearError: store.clearError,
     setUser: store.setUser,

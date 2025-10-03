@@ -17,6 +17,10 @@ export interface SignupRequest {
   password: string;
 }
 
+export interface GoogleSignupRequest {
+  googleToken: string;
+}
+
 export interface User {
   id: number;
   name: string;
@@ -114,6 +118,14 @@ export async function signupUser(userData: SignupRequest): Promise<SignupRespons
   return apiRequest<SignupResponse>('/auth/signup', {
     method: 'POST',
     body: JSON.stringify(userData),
+  });
+}
+
+// Google signup function
+export async function signupWithGoogle(googleToken: string): Promise<SignupResponse> {
+  return apiRequest<SignupResponse>('/auth/signup', {
+    method: 'POST',
+    body: JSON.stringify({ googleToken }),
   });
 }
 

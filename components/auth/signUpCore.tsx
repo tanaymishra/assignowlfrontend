@@ -10,6 +10,13 @@ import { useAuth } from "@/lib/store";
 import { AuthError } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 
+// Declare Google types
+declare global {
+  interface Window {
+    google: any;
+  }
+}
+
 interface SignupFormCoreProps {
   onSwitchToLogin?: () => void;
   onSignupSuccess?: (email: string, userData: any) => void;
@@ -27,7 +34,20 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
   const [countdown, setCountdown] = useState(3);
   const router = useRouter();
 
-  const { signup, isLoading } = useAuth();
+  const { signup, signupWithGoogle, isLoading } = useAuth();
+
+  // Load Google Sign-In script
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   // Countdown timer effect
   useEffect(() => {
@@ -84,6 +104,45 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
         customToast.error(error.message);
       } else {
         customToast.error("Failed to create account. Please try again.");
+      }
+    }
+  };
+  
+  // Handle Google Sign-In
+  const handleGoogleSignIn = () => {
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    
+    if (!clientId) {
+      customToast.error("Google Sign-In is not configured");
+      return;
+    }
+
+    if (typeof window !== 'undefined' && window.google) {
+      window.google.accounts.id.initialize({
+        client_id: clientId,
+        callback: handleGoogleCallback,
+      });
+      
+      window.google.accounts.id.prompt();
+    } else {
+      customToast.error("Google Sign-In is loading. Please try again.");
+    }
+  };
+
+  const handleGoogleCallback = async (response: any) => {
+    try {
+      const result = await signupWithGoogle(response.credential);
+      
+      if (result.requiresVerification) {
+        customToast.success("Account created with Google! Please check your email to verify your account.");
+        setShowSuccess(true);
+        setCountdown(3);
+      }
+    } catch (error) {
+      if (error instanceof AuthError) {
+        customToast.error(error.message);
+      } else {
+        customToast.error("Failed to sign up with Google. Please try again.");
       }
     }
   };
@@ -238,8 +297,10 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
         <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-border to-transparent" />
 
         <button
-          className="group/btn shadow-sm relative flex h-10 w-full items-center justify-center space-x-2 rounded-md bg-secondary hover:bg-secondary/80 px-4 font-medium text-secondary-foreground transition-colors"
+          className="group/btn shadow-sm relative flex h-10 w-full items-center justify-center space-x-2 rounded-md bg-secondary hover:bg-secondary/80 px-4 font-medium text-secondary-foreground transition-colors disabled:opacity-50"
           type="button"
+          onClick={handleGoogleSignIn}
+          disabled={isLoading}
         >
           <IconBrandGoogle className="h-4 w-4 text-muted-foreground" />
           <span className="text-sm">Continue with Google</span>
