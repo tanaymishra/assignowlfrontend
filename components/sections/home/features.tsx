@@ -238,24 +238,24 @@ const SkeletonFour = () => {
         variants={first}
         className="h-full w-1/3 rounded-2xl bg-white p-4 dark:bg-black dark:border-white/[0.1] border border-neutral-200 flex flex-col items-center justify-center"
       >
-        <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mb-3">
+        <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center mb-3">
           <Trophy className="h-6 w-6 text-white" />
         </div>
         <p className="sm:text-sm text-xs text-center font-semibold text-neutral-600 dark:text-neutral-300 mb-2">
           Your Score
         </p>
-        <p className="border border-green-300 dark:border-green-600 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-sm font-bold rounded-full px-3 py-1">
-          85/100
+        <p className="border border-yellow-300 dark:border-yellow-600 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 text-sm font-bold rounded-full px-3 py-1">
+          65/100
         </p>
       </motion.div>
       <motion.div className="h-full relative z-20 w-1/3 rounded-2xl bg-white p-4 dark:bg-black dark:border-white/[0.1] border border-neutral-200 flex flex-col items-center justify-center">
-        <div className="h-12 w-12 rounded-2xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-3">
-          <BookOpen className="h-6 w-6 text-neutral-600 dark:text-neutral-400" />
+        <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mb-3">
+          <BookOpen className="h-6 w-6 text-white" />
         </div>
         <p className="sm:text-sm text-xs text-center font-semibold text-neutral-600 dark:text-neutral-300 mb-2">
           Trained Dataset
         </p>
-        <p className="border border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs rounded-full px-2 py-0.5">
+        <p className="border border-blue-300 dark:border-blue-600 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded-full px-2 py-0.5">
           50M+ Papers
         </p>
       </motion.div>
@@ -263,14 +263,14 @@ const SkeletonFour = () => {
         variants={second}
         className="h-full w-1/3 rounded-2xl bg-white p-4 dark:bg-black dark:border-white/[0.1] border border-neutral-200 flex flex-col items-center justify-center"
       >
-        <div className="h-12 w-12 rounded-2xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-3">
-          <Trophy className="h-6 w-6 text-neutral-600 dark:text-neutral-400" />
+        <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center mb-3">
+          <Download className="h-6 w-6 text-white" />
         </div>
         <p className="sm:text-sm text-xs text-center font-semibold text-neutral-600 dark:text-neutral-300 mb-2">
-          Best Assignment
+          Quality Feedback Report
         </p>
-        <p className="border border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs rounded-full px-2 py-0.5">
-          A+ Grade
+        <p className="border border-purple-300 dark:border-purple-600 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-xs rounded-full px-2 py-0.5">
+          PDF Available
         </p>
       </motion.div>
     </motion.div>
