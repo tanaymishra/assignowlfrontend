@@ -12,7 +12,7 @@ import { User, LogOut, Settings } from "lucide-react"
 import Image from "next/image"
 import { useLogin } from "@/components/providers/LoginProvider"
 import { useRouter } from "next/navigation"
-
+import Link from "next/link"
 interface NavItem {
   label: string
   href: string
@@ -93,7 +93,9 @@ export function Navbar({ className }: NavbarProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
+            <Link href={'/'}>
             <Image className="w-30" src={"/comman/logo.svg"} width={60} height={30} alt=""></Image>
+            </Link>
           </motion.div>
 
           {/* Desktop Navigation */}
