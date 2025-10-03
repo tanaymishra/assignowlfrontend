@@ -1,6 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { motion, MotionValue, useTransform } from "framer-motion"
+import Link from "next/link";
 import React from "react";
 
 const transition = {
@@ -41,9 +42,9 @@ export const GoogleGeminiEffect = ({
           works!`}
         </p>
         <div className="w-full flex items-center justify-center">
-          <button className="font-bold bg-white rounded-full md:px-4 md:py-2 px-2 py-1 md:mt-24 mt-8 z-10 md:text-base text-black text-xs  w-fit mx-auto ">
+          <Link href={'/scorer'} className="font-bold bg-white rounded-full md:px-4 md:py-2 px-2 py-1 md:mt-24 mt-8 z-10 md:text-base text-black text-xs  w-fit mx-auto ">
             Get Started
-          </button>
+          </Link>
         </div>
       </div>
       <svg
