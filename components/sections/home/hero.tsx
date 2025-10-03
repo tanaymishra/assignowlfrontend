@@ -173,9 +173,9 @@ export default function HeroSection() {
               className="grid grid-cols-3 gap-8 pt-6 max-w-md"
             >
               {[
-                { number: "50K+", label: "Students Helped" },
-                { number: "98%", label: "Success Rate" },
-                { number: "24/7", label: "Support Available" },
+                { number: "5K+", label: "Assignments Graded" },
+                { number: "90%", label: "Success Rate" },
+                { number: "100%", label: "Reliable" },
               ].map((stat, index) => (
                 <motion.div
                   key={stat.label}
