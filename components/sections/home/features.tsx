@@ -42,7 +42,7 @@ export function FeatureSection() {
             viewport={{ once: true }}
             className="text-3xl md:text-5xl font-bold"
           >
-            NEVER FAIL AN ASSIGNMENT EVER AGAIN!
+            Get Perfect Grades with AI Scoring
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -51,7 +51,7 @@ export function FeatureSection() {
             viewport={{ once: true }}
             className="text-lg text-muted-foreground max-w-2xl mx-auto"
           >
-            Discover the advanced features that make academic writing effortless and professional.
+            Upload your assignment and rubric, get instant AI-powered grading with detailed feedback to achieve excellence.
           </motion.p>
         </motion.div>
 
@@ -237,14 +237,14 @@ const SkeletonFour = () => {
         variants={first}
         className="h-full w-1/3 rounded-2xl bg-white p-4 dark:bg-black dark:border-white/[0.1] border border-neutral-200 flex flex-col items-center justify-center"
       >
-        <div className="h-12 w-12 rounded-2xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-3">
-          <Brain className="h-6 w-6 text-neutral-600 dark:text-neutral-400" />
+        <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mb-3">
+          <Trophy className="h-6 w-6 text-white" />
         </div>
         <p className="sm:text-sm text-xs text-center font-semibold text-neutral-600 dark:text-neutral-300 mb-2">
-          Relevance Score
+          Your Score
         </p>
-        <p className="border border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs rounded-full px-2 py-0.5">
-          98.5%
+        <p className="border border-green-300 dark:border-green-600 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-sm font-bold rounded-full px-3 py-1">
+          85/100
         </p>
       </motion.div>
       <motion.div className="h-full relative z-20 w-1/3 rounded-2xl bg-white p-4 dark:bg-black dark:border-white/[0.1] border border-neutral-200 flex flex-col items-center justify-center">
@@ -313,7 +313,7 @@ const SkeletonFive = () => {
       >
       <CircleUser size={18}/>
         <p className="text-xs text-neutral-500">
-          Make My mangement assignment 
+          Grade my assignment
         </p>
       </motion.div>
       <motion.div
@@ -332,10 +332,10 @@ const SkeletonFive = () => {
 };
 const items = [
   {
-    title: "AI Content Generation",
+    title: "Instant Grading",
     description: (
       <span className="text-sm">
-        Experience the power of AI in generating unique content.
+        Upload your assignment and get instant AI-powered grading based on your rubric criteria.
       </span>
     ),
     header: <SkeletonOne />,
@@ -343,10 +343,10 @@ const items = [
     icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
   },
   {
-    title: "Automated Proofreading",
+    title: "Detailed Feedback",
     description: (
       <span className="text-sm">
-        Let AI handle the proofreading of your documents.
+        Receive comprehensive feedback on every aspect of your assignment with actionable improvement suggestions.
       </span>
     ),
     header: <SkeletonTwo />,
@@ -354,10 +354,10 @@ const items = [
     icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
   },
   {
-    title: "Contextual Suggestions",
+    title: "Rubric-Based Scoring",
     description: (
       <span className="text-sm">
-        Get AI-powered suggestions based on your writing context.
+        Upload your custom rubric and get precise scoring aligned with your professor's grading criteria.
       </span>
     ),
     header: <SkeletonThree />,
@@ -365,10 +365,10 @@ const items = [
     icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
   },
   {
-    title: "AI Performance Metrics",
+    title: "Performance Analytics",
     description: (
       <span className="text-sm text-neutral-600 dark:text-neutral-300">
-        Track your assignment quality with advanced AI metrics. Get relevance scores, access to our massive academic dataset, and achieve top grades consistently.
+        Track your assignment scores with detailed metrics. See grade breakdowns, identify weak areas, and improve consistently with AI-powered insights.
       </span>
     ),
     header: <SkeletonFour />,
@@ -377,10 +377,10 @@ const items = [
   },
 
   {
-    title: "Text Summarization",
+    title: "Downloadable Reports",
     description: (
       <span className="text-sm">
-        Summarize your lengthy documents with AI technology.
+        Get professional PDF reports with your scores, feedback, and improvement suggestions to review anytime.
       </span>
     ),
     header: <SkeletonFive />,
