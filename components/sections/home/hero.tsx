@@ -60,15 +60,6 @@ export default function HeroSection() {
   const { openLogin } = useLogin();
   const router = useRouter();
   
-  const scrollToSection = (href: string) => {
-    if (href.startsWith("#")) {
-      const element = document.querySelector(href);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  };
-  
   const handleGetStarted = () => {
     if (isAuthenticated) {
       router.push('/scorer');
