@@ -17,8 +17,8 @@ export interface SignupRequest {
   password: string;
 }
 
-export interface GoogleSignupRequest {
-  googleToken: string;
+export interface GoogleAuthRequest {
+  token: string;
 }
 
 export interface User {
@@ -121,11 +121,11 @@ export async function signupUser(userData: SignupRequest): Promise<SignupRespons
   });
 }
 
-// Google signup function
-export async function signupWithGoogle(googleToken: string): Promise<SignupResponse> {
-  return apiRequest<SignupResponse>('/auth/signup', {
+// Google Auth function (handles both signup and login)
+export async function googleAuth(googleToken: string): Promise<LoginResponse> {
+  return apiRequest<LoginResponse>('/auth/google', {
     method: 'POST',
-    body: JSON.stringify({ googleToken }),
+    body: JSON.stringify({ token: googleToken }),
   });
 }
 

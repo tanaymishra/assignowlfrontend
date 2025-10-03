@@ -34,7 +34,7 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
   const [countdown, setCountdown] = useState(3);
   const router = useRouter();
 
-  const { signup, signupWithGoogle, isLoading } = useAuth();
+  const { signup, loginWithGoogle, isLoading } = useAuth();
 
   // Load Google Sign-In script
   useEffect(() => {
@@ -131,18 +131,19 @@ export function SignupFormCore({ onSwitchToLogin, onSignupSuccess }: SignupFormC
 
   const handleGoogleCallback = async (response: any) => {
     try {
-      const result = await signupWithGoogle(response.credential);
+      await loginWithGoogle(response.credential);
       
-      if (result.requiresVerification) {
-        customToast.success("Account created with Google! Please check your email to verify your account.");
-        setShowSuccess(true);
-        setCountdown(3);
+      customToast.success("Successfully signed in with Google!");
+      // Close the modal/drawer after successful Google auth
+      if (onSignupSuccess) {
+        // This will trigger the parent to close the modal
+        onSignupSuccess("", { googleAuth: true });
       }
     } catch (error) {
       if (error instanceof AuthError) {
         customToast.error(error.message);
       } else {
-        customToast.error("Failed to sign up with Google. Please try again.");
+        customToast.error("Failed to authenticate with Google. Please try again.");
       }
     }
   };

@@ -3,7 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { 
   loginUser, 
   signupUser,
-  signupWithGoogle as signupWithGoogleAPI,
+  googleAuth,
   type User, 
   type LoginRequest, 
   type SignupRequest,
@@ -22,7 +22,7 @@ interface AuthState {
   // Actions
   login: (credentials: LoginRequest) => Promise<void>;
   signup: (userData: SignupRequest) => Promise<{ requiresVerification: boolean }>;
-  signupWithGoogle: (googleToken: string) => Promise<{ requiresVerification: boolean }>;
+  loginWithGoogle: (googleToken: string) => Promise<void>;
   logout: () => void;
   clearError: () => void;
   setUser: (user: User) => void;
@@ -101,26 +101,24 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      // Google Signup action
-      signupWithGoogle: async (googleToken: string) => {
+      // Google Auth action (handles both signup and login)
+      loginWithGoogle: async (googleToken: string) => {
         set({ isLoading: true, error: null });
         
         try {
-          const response = await signupWithGoogleAPI(googleToken);
+          const response = await googleAuth(googleToken);
           
-          // Store the user data from signup response
+          // Store the user data from Google auth response
           set({
             user: response.user,
             isAuthenticated: true,
             isLoading: false,
             error: null,
           });
-
-          return { requiresVerification: response.requiresVerification };
         } catch (error) {
           const errorMessage = error instanceof AuthError 
             ? error.message 
-            : 'Google signup failed. Please try again.';
+            : 'Google authentication failed. Please try again.';
           
           set({
             user: null,
@@ -192,7 +190,7 @@ export const useAuth = () => {
     // Actions
     login: store.login,
     signup: store.signup,
-    signupWithGoogle: store.signupWithGoogle,
+    loginWithGoogle: store.loginWithGoogle,
     logout: store.logout,
     clearError: store.clearError,
     setUser: store.setUser,
@@ -205,7 +203,7 @@ export const useAuthActions = () => {
   return {
     login: store.login,
     signup: store.signup,
-    signupWithGoogle: store.signupWithGoogle,
+    loginWithGoogle: store.loginWithGoogle,
     logout: store.logout,
     clearError: store.clearError,
     setUser: store.setUser,
