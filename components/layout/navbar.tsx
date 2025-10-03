@@ -26,8 +26,8 @@ interface NavbarProps {
 const navItems: NavItem[] = [
   { label: "Home", href: "#home" },
   { label: "Features", href: "#features" },
-  { label: "About", href: "#about" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "About", href: "/about" },
+  { label: "Policy", href: "/policy" },
 ]
 
 export function Navbar({ className }: NavbarProps) {
@@ -65,6 +65,9 @@ export function Navbar({ className }: NavbarProps) {
       if (element) {
         element.scrollIntoView({ behavior: "smooth" })
       }
+    } else {
+      // Navigate to page routes
+      router.push(href)
     }
     setIsOpen(false)
   }

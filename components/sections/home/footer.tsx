@@ -16,10 +16,10 @@ const footerLinks = [
     title: "Features",
     href: "#",
   },
-  {
-    title: "Pricing",
-    href: "#",
-  },
+  // {
+  //   title: "Pricing",
+  //   href: "#",
+  // },
   {
     title: "Careers",
     href: "#",
@@ -28,10 +28,10 @@ const footerLinks = [
     title: "Help",
     href: "#",
   },
-  {
-    title: "Policy",
-    href: "/policy",
-  },
+  // {
+  //   title: "Policy",
+  //   href: "/policy",
+  // },
 ];
 
 const Footer05Page = () => {
