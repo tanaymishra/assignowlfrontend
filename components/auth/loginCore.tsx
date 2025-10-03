@@ -89,12 +89,34 @@ export function LoginFormCore({ onSwitchToSignup, onLoginSuccess }: LoginFormCor
     }
 
     if (typeof window !== 'undefined' && window.google) {
+      // Create a temporary container for the button
+      const tempDiv = document.createElement('div');
+      tempDiv.style.position = 'absolute';
+      tempDiv.style.top = '-9999px';
+      document.body.appendChild(tempDiv);
+
       window.google.accounts.id.initialize({
         client_id: clientId,
         callback: handleGoogleCallback,
+        ux_mode: 'popup', // Force popup mode
       });
       
-      window.google.accounts.id.prompt();
+      // Render a button and trigger it immediately
+      window.google.accounts.id.renderButton(tempDiv, {
+        type: 'standard',
+        theme: 'outline',
+        size: 'large',
+      });
+      
+      // Trigger click on the rendered button
+      setTimeout(() => {
+        const googleButton = tempDiv.querySelector('div[role="button"]') as HTMLElement;
+        if (googleButton) {
+          googleButton.click();
+        }
+        // Clean up
+        setTimeout(() => document.body.removeChild(tempDiv), 100);
+      }, 100);
     } else {
       customToast.error("Google Sign-In is loading. Please try again.");
     }
