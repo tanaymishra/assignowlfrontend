@@ -29,8 +29,9 @@ export default function BuildWithUs() {
           pathLengthFourth,
           pathLengthFifth,
         ]}
-        title="Build With AssignOwl"
+        title="Grade With AssignOwl"
         scrollProgress={scrollYProgress}
+        description="One mission - Never fail again"
       />
     </div>
   );
