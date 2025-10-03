@@ -12,28 +12,28 @@ export default function About() {
           </p>
           <div className="grid grid-cols-2 gap-4">
             <img
-              src="https://assets.aceternity.com/templates/startup-1.webp"
+              src="/sections/upload.png"
               alt="upload documents"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
-              src="https://assets.aceternity.com/templates/startup-2.webp"
+              src="/sections/upload.png"
               alt="document processing"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
-              src="https://assets.aceternity.com/templates/startup-3.webp"
+              src="/sections/upload.png"
               alt="rubric upload"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
-              src="https://assets.aceternity.com/templates/startup-4.webp"
+              src="/sections/upload.png"
               alt="guidelines"
               width={500}
               height={500}
@@ -55,28 +55,28 @@ export default function About() {
           </p>
           <div className="grid grid-cols-2 gap-4">
             <img
-              src="https://assets.aceternity.com/pro/hero-sections.png"
+              src="/sections/analyze.png"
               alt="AI analysis"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
-              src="https://assets.aceternity.com/features-section.png"
+              src="/sections/analyze1.png"
               alt="grading report"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
-              src="https://assets.aceternity.com/pro/bento-grids.png"
+              src="/sections/analyze2.png"
               alt="detailed feedback"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
-              src="https://assets.aceternity.com/cards.png"
+              src="/sections/analyze3.png"
               alt="scoring breakdown"
               width={500}
               height={500}
@@ -112,28 +112,28 @@ export default function About() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <img
-              src="https://assets.aceternity.com/pro/hero-sections.png"
+              src="/sections/assignment-report-87_pages-to-jpg-0001.jpg"
               alt="review report"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
-              src="https://assets.aceternity.com/features-section.png"
+              src="/sections/assignment-report-87_pages-to-jpg-0002.jpg"
               alt="improve assignment"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
-              src="https://assets.aceternity.com/pro/bento-grids.png"
+              src="/sections/assignment-report-87_pages-to-jpg-0003.jpg"
               alt="share feedback"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
-              src="https://assets.aceternity.com/cards.png"
+              src="/sections/assignment-report-87_pages-to-jpg-0004.jpg"
               alt="validate changes"
               width={500}
               height={500}
