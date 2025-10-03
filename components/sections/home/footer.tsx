@@ -29,8 +29,8 @@ const footerLinks = [
     href: "#",
   },
   {
-    title: "Privacy",
-    href: "#",
+    title: "Policy",
+    href: "/policy",
   },
 ];
 
