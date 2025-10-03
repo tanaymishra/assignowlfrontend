@@ -42,7 +42,8 @@ export function FeatureSection() {
             viewport={{ once: true }}
             className="text-3xl md:text-5xl font-bold"
           >
-            Get Perfect Grades with AI Scoring
+            Never fail an assignment ever again.
+
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -51,7 +52,7 @@ export function FeatureSection() {
             viewport={{ once: true }}
             className="text-lg text-muted-foreground max-w-2xl mx-auto"
           >
-            Upload your assignment and rubric, get instant AI-powered grading with detailed feedback to achieve excellence.
+            Upload your assignment and rubric, get instant grading with detailed feedback to achieve excellence.
           </motion.p>
         </motion.div>
 
@@ -311,7 +312,7 @@ const SkeletonFive = () => {
         variants={variants}
         className="flex flex-row rounded-2xl border border-neutral-100 dark:border-white/[0.2] p-2  items-start space-x-2 bg-white dark:bg-black items-center"
       >
-      <CircleUser size={18}/>
+        <CircleUser size={18} />
         <p className="text-xs text-neutral-500">
           Grade my assignment
         </p>
@@ -321,11 +322,11 @@ const SkeletonFive = () => {
         className="flex flex-row rounded-full border border-neutral-100 dark:border-white/[0.2] p-2 items-center justify-end space-x-2 w-3/4 ml-auto bg-white dark:bg-black"
       >
         <p className="text-xs text-neutral-500 flex items-center gap-2">
-          <Download size={15}/>
+          <Download size={15} />
           Download.</p>
 
-        <div className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 shrink-0 flex items-center justify-center"> <Sparkles size={10}/></div>
-      </motion.div> 
+        <div className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 shrink-0 flex items-center justify-center"> <Sparkles size={10} /></div>
+      </motion.div>
 
     </motion.div>
   );
@@ -335,7 +336,7 @@ const items = [
     title: "Instant Grading",
     description: (
       <span className="text-sm">
-        Upload your assignment and get instant AI-powered grading based on your rubric criteria.
+        Upload your assignment and get instant grading based on your rubric criteria.
       </span>
     ),
     header: <SkeletonOne />,

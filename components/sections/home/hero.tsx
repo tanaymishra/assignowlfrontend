@@ -123,7 +123,7 @@ export default function HeroSection() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="text-lg md:text-xl text-muted-foreground max-w-lg leading-relaxed"
             >
-              Create high-quality assignment report with AI assistance. Trained and tested on 1000+ assignments.
+              Create high-quality assignment report. Trained and tested on 1000+ assignments.
             </motion.p>
 
             {/* CTA Buttons */}
