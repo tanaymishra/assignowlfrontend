@@ -4,37 +4,37 @@ import { Timeline } from "@/components/ui/timeline";
 export default function About() {
   const data = [
     {
-      title: "Step 1: Problem Statement & Drafting",
+      title: "Step 1: Upload Your Documents",
       content: (
         <div>
           <p className="mb-8 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
-            Every great assignment begins with understanding the problem. Our AI analyzes your assignment requirements, identifies key themes, and creates a comprehensive outline with clear problem statements and initial drafts.
+            Gather all your assignment materials in one place. Upload your completed assignment, university guidelines, and rubrics (marking scheme) if available. Our platform accepts multiple document formats for seamless processing.
           </p>
           <div className="grid grid-cols-2 gap-4">
             <img
               src="https://assets.aceternity.com/templates/startup-1.webp"
-              alt="startup template"
+              alt="upload documents"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
               src="https://assets.aceternity.com/templates/startup-2.webp"
-              alt="startup template"
+              alt="document processing"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
               src="https://assets.aceternity.com/templates/startup-3.webp"
-              alt="startup template"
+              alt="rubric upload"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
               src="https://assets.aceternity.com/templates/startup-4.webp"
-              alt="startup template"
+              alt="guidelines"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
@@ -44,40 +44,40 @@ export default function About() {
       ),
     },
     {
-      title: "Step 2: Research & Literature Review",
+      title: "Step 2: Analysis & Grading",
       content: (
         <div>
           <p className="mb-8 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
-            Our AI scours through millions of academic papers, journals, and credible sources to gather relevant information for your topic. It identifies key research gaps and builds a solid foundation of evidence.
+            Your assignment is analyzed against the provided rubric and university guidelines with 90% accuracy. Get comprehensive grading with marks per section, identifying strengths and areas for improvement.
           </p>
           <p className="mb-8 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
-            The system analyzes citation patterns, extracts key findings, and organizes research materials in a structured format that supports your argument development and ensures academic rigor.
+            The system evaluates content quality, structure, academic rigor, citation accuracy, and adherence to guidelines. Each section receives detailed feedback with specific suggestions for enhancement.
           </p>
           <div className="grid grid-cols-2 gap-4">
             <img
               src="https://assets.aceternity.com/pro/hero-sections.png"
-              alt="hero template"
+              alt="AI analysis"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
               src="https://assets.aceternity.com/features-section.png"
-              alt="feature template"
+              alt="grading report"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
               src="https://assets.aceternity.com/pro/bento-grids.png"
-              alt="bento template"
+              alt="detailed feedback"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
               src="https://assets.aceternity.com/cards.png"
-              alt="cards template"
+              alt="scoring breakdown"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
@@ -87,54 +87,54 @@ export default function About() {
       ),
     },
     {
-      title: "Step 3: Generation & Paraphrasing",
+      title: "Step 3: Review, Improve & Validate",
       content: (
         <div>
           <p className="mb-4 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
-            The final stage combines research insights with intelligent content generation and sophisticated paraphrasing techniques to create original, high-quality assignments.
+            Review your detailed Assignowl report, work on the feedback to improve your assignment, and validate your changes with peers and professors before final submission.
           </p>
           <div className="mb-8">
             <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              AI-powered content generation with academic tone
+              📊 Section-wise marks breakdown with grade classification
             </div>
             <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              Advanced paraphrasing to ensure originality
+              💡 Actionable feedback with specific improvement suggestions
             </div>
             <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              Proper citation integration and formatting
+              📄 Downloadable PDF report for easy sharing
             </div>
             <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              Grammar and style optimization
+              👥 Share with friends and professors for second opinions
             </div>
             <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              Plagiarism-free content verification
+              ✅ Identify and address gaps before final submission
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <img
               src="https://assets.aceternity.com/pro/hero-sections.png"
-              alt="hero template"
+              alt="review report"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
               src="https://assets.aceternity.com/features-section.png"
-              alt="feature template"
+              alt="improve assignment"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
               src="https://assets.aceternity.com/pro/bento-grids.png"
-              alt="bento template"
+              alt="share feedback"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
             />
             <img
               src="https://assets.aceternity.com/cards.png"
-              alt="cards template"
+              alt="validate changes"
               width={500}
               height={500}
               className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
