@@ -9,7 +9,8 @@ const exemptedRoutes = [
   '/_next/*',       // Next.js static assets
   '/public/*',      // Public assets
   '/favicon.ico',   // Favicon
-  '/comman/*'
+  '/comman/*',
+  'sections/*'
 ]
 
 export function middleware(request: NextRequest) {
