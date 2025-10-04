@@ -10,7 +10,7 @@ const exemptedRoutes = [
   '/public/*',      // Public assets
   '/favicon.ico',   // Favicon
   '/comman/*',
-  'sections/*'
+  '/sections/*'
 ]
 
 export function middleware(request: NextRequest) {
