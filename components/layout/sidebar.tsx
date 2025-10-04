@@ -13,9 +13,11 @@ import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/store";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function DashboardSidebar() {
   const { user, logout } = useAuth();
+  const router = useRouter();
   
   const links = [
     {
@@ -52,7 +54,7 @@ export default function DashboardSidebar() {
 
   const handleLogout = () => {
     logout();
-    // Redirect will be handled by the auth system
+    router.push('/');
   };
 
   return (

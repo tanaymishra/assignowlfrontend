@@ -82,58 +82,42 @@ export function FeatureSection() {
 }
 
 const SkeletonOne = () => {
-  const variants = {
-    initial: {
-      x: 0,
-    },
-    animate: {
-      x: 10,
-      rotate: 5,
-      transition: {
-        duration: 0.2,
-      },
-    },
-  };
-  const variantsSecond = {
-    initial: {
-      x: 0,
-    },
-    animate: {
-      x: -10,
-      rotate: -5,
-      transition: {
-        duration: 0.2,
-      },
-    },
-  };
+  const testimonials = [
+    {
+      text: "I literally got saved because of this report",
+      author: "Student, University of Melbourne"
+    }
+  ];
 
   return (
     <motion.div
       initial="initial"
       whileHover="animate"
-      className="flex flex-1 w-full h-full min-h-[6rem] dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex-col space-y-2"
+      className="flex flex-1 w-full h-full min-h-[6rem] dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex-col space-y-3 p-4 justify-center"
     >
-      <motion.div
-        variants={variants}
-        className="flex flex-row rounded-full border border-neutral-100 dark:border-white/[0.2] p-2  items-center space-x-2 bg-white dark:bg-black"
-      >
-        <div className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 shrink-0" />
-        <div className="w-full bg-gray-100 h-4 rounded-full dark:bg-neutral-900" ></div>
-      </motion.div>
-      <motion.div
-        variants={variantsSecond}
-        className="flex flex-row rounded-full border border-neutral-100 dark:border-white/[0.2] p-2 items-center space-x-2 w-3/4 ml-auto bg-white dark:bg-black"
-      >
-        <div className="w-full bg-gray-100 h-4 rounded-full dark:bg-neutral-900" />
-        <div className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 shrink-0" />
-      </motion.div>
-      <motion.div
-        variants={variants}
-        className="flex flex-row rounded-full border border-neutral-100 dark:border-white/[0.2] p-2 items-center space-x-2 bg-white dark:bg-black"
-      >
-        <div className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 shrink-0" />
-        <div className="w-full bg-gray-100 h-4 rounded-full dark:bg-neutral-900" />
-      </motion.div>
+      {testimonials.map((testimonial, index) => (
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.2 }}
+          className="flex flex-col space-y-1 rounded-lg border border-neutral-100 dark:border-white/[0.2] p-3 bg-white dark:bg-black"
+        >
+          <div className="flex items-start space-x-2">
+            <div className="h-8 w-8 rounded-full bg-gradient-to-r from-primary/80 to-primary shrink-0 flex items-center justify-center">
+              <User className="h-4 w-4 text-primary-foreground" />
+            </div>
+            <div className="flex-1">
+              <p className="text-xs md:text-sm text-neutral-700 dark:text-neutral-300 italic">
+                "{testimonial.text}"
+              </p>
+              <p className="text-[10px] md:text-xs text-muted-foreground mt-1">
+                — {testimonial.author}
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      ))}
     </motion.div>
   );
 };
@@ -256,7 +240,7 @@ const SkeletonFour = () => {
           Trained Dataset
         </p>
         <p className="border border-blue-300 dark:border-blue-600 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded-full px-2 py-0.5">
-          50M+ Papers
+          Academic Papers
         </p>
       </motion.div>
       <motion.div
@@ -310,7 +294,7 @@ const SkeletonFive = () => {
     >
       <motion.div
         variants={variants}
-        className="flex flex-row rounded-2xl border border-neutral-100 dark:border-white/[0.2] p-2  items-start space-x-2 bg-white dark:bg-black items-center"
+        className="flex flex-row rounded-2xl border border-neutral-100 dark:border-white/[0.2] p-2 items-center space-x-2 bg-white dark:bg-black"
       >
         <CircleUser size={18} />
         <p className="text-xs text-neutral-500">
@@ -333,10 +317,10 @@ const SkeletonFive = () => {
 };
 const items = [
   {
-    title: "Instant Grading",
+    title: "Student Testimonials",
     description: (
       <span className="text-sm">
-        Upload your assignment and get instant grading based on your rubric criteria.
+        See what students are saying about how Assignowl helped them improve their grades and understand expectations.
       </span>
     ),
     header: <SkeletonOne />,

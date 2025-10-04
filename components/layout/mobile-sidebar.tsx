@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/store";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface MobileSidebarProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ interface MobileSidebarProps {
 
 export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
   const { user, logout } = useAuth();
+  const router = useRouter();
   
   const links = [
     {
@@ -57,6 +59,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
   const handleLogout = () => {
     logout();
     onClose();
+    router.push('/');
   };
 
   const handleLinkClick = () => {

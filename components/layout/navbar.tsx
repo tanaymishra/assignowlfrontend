@@ -40,6 +40,7 @@ export function Navbar({ className }: NavbarProps) {
   const handleLogout = () => {
     logout()
     setIsOpen(false)
+    router.push('/')
   }
 
   const handleGetStarted = () => {
